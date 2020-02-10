@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>CJ&#39;S BLOG</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://cjay.life/"/>
+  <updated>2020-02-10T10:33:59.621Z</updated>
+  <id>https://cjay.life/</id>
+  
+  <author>
+    <name>Cjay</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="https://cjay.life/2020/02/10/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
+    <id>https://cjay.life/2020/02/10/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</id>
+    <published>2020-02-10T08:26:08.000Z</published>
+    <updated>2020-02-10T10:33:59.621Z</updated>
+    
+    <content type="html"><![CDATA[<p>用了几天的时间把博客搭建起来了，此博客打算用于记录生活和学习过程，分享一些喜欢的音乐、书籍和电影。</p><p>此博客还需要不断完善，目前先总结一下搭建过程。</p><a id="more"></a><h1 id="1-域名和解析"><a href="#1-域名和解析" class="headerlink" title="1.域名和解析"></a>1.域名和解析</h1><h2 id="1-1-域名购买"><a href="#1-1-域名购买" class="headerlink" title="1.1 域名购买"></a>1.1 域名购买</h2><p>这是<a href="https://www.namesilo.com/" target="_blank" rel="noopener">域名购买地址</a>，这个域名提供商免费提供whois信息保护，所以就选择了这家。</p><h2 id="1-2-DNS解析设置"><a href="#1-2-DNS解析设置" class="headerlink" title="1.2 DNS解析设置"></a>1.2 DNS解析设置</h2><p>因为我的博客是同时部署到了Github pages和coding page，所以dns服务设置了阿里云的dns服务，将国内流量导向coding，将国外的流量导向github，同时将github和coding设置为强制开始https。<br><img src="/2020/02/10/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.jpg" alt="域名解析"></p><h1 id="2-博客搭建"><a href="#2-博客搭建" class="headerlink" title="2.博客搭建"></a>2.博客搭建</h1><h2 id="2-1-环境配置"><a href="#2-1-环境配置" class="headerlink" title="2.1 环境配置"></a>2.1 环境配置</h2><p>本博客基于Hexo NexT主题，所以要先安装<a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a>和<a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a>。配置完成后，在git bash中输入</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure><p>hexo就安装完成了，接着在指定文件夹（blog搭建的地方）打开git bash输入</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure><p>这样就搭建起了一个初始的blog，所以非常便捷。</p><h2 id="2-2-常用操作"><a href="#2-2-常用操作" class="headerlink" title="2.2 常用操作"></a>2.2 常用操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;&quot;&#x2F;&#x2F;新文章，&quot;&quot;里面是文章名&#96;</span><br><span class="line">hexo g&#x2F;&#x2F;生成静态文件&#96;</span><br><span class="line">hexo clean &#x2F;&#x2F;清除缓存</span><br><span class="line">hexo s&#x2F;&#x2F;启动服务器</span><br><span class="line">hexo d&#x2F;&#x2F;部署</span><br></pre></td></tr></table></figure><h2 id="2-3-更改博客主题"><a href="#2-3-更改博客主题" class="headerlink" title="2.3 更改博客主题"></a>2.3 更改博客主题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &lt;blog-path&gt;  #定位到 Hexo 博客目录</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next &#x2F;themes&#x2F;next</span><br></pre></td></tr></table></figure><p>然后修改博客根目录_config.yml配置文件,将theme对应的值改为nexT即可。</p><h2 id="2-4更多详细配置"><a href="#2-4更多详细配置" class="headerlink" title="2.4更多详细配置"></a>2.4更多详细配置</h2><p>可参看:</p><ul><li><p><a href="https://hexo.io/zh-cn/docs/commands.html" target="_blank" rel="noopener">Hexo文档</a></p></li><li><p><a href="https://theme-next.org/docs/" target="_blank" rel="noopener">NexT文档</a></p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;用了几天的时间把博客搭建起来了，此博客打算用于记录生活和学习过程，分享一些喜欢的音乐、书籍和电影。&lt;/p&gt;
+&lt;p&gt;此博客还需要不断完善，目前先总结一下搭建过程。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="blog" scheme="https://cjay.life/categories/blog/"/>
+    
+    
+      <category term="blog" scheme="https://cjay.life/tags/blog/"/>
+    
+  </entry>
+  
+</feed>
