@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>git clone加速</title>
+    <url>/2020/02/11/git-clone%E5%8A%A0%E9%80%9F/</url>
+    <content><![CDATA[<p><strong><em>解决方案</em></strong></p>
+<a id="more"></a>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config --global http.proxy socks5:&#x2F;&#x2F;127.0.0.1:1080</span><br><span class="line">git config --global https.proxy socks5:&#x2F;&#x2F;127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>此方案前提需要代理</em></strong></p>
+]]></content>
+      <categories>
+        <category>技巧</category>
+      </categories>
+      <tags>
+        <tag>技巧</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2020/02/10/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<p>用了几天的时间把博客搭建起来了，此博客打算用于记录生活和学习过程，分享一些喜欢的音乐、书籍和电影。</p>

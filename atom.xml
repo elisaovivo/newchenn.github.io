@@ -6,15 +6,38 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://cjay.life/"/>
-  <updated>2020-02-10T10:33:59.621Z</updated>
+  <updated>2020-02-11T03:56:15.497Z</updated>
   <id>https://cjay.life/</id>
   
   <author>
-    <name>Cjay</name>
+    <name>CJ</name>
     
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>git clone加速</title>
+    <link href="https://cjay.life/2020/02/11/git-clone%E5%8A%A0%E9%80%9F/"/>
+    <id>https://cjay.life/2020/02/11/git-clone%E5%8A%A0%E9%80%9F/</id>
+    <published>2020-02-11T03:50:24.000Z</published>
+    <updated>2020-02-11T03:56:15.497Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong><em>解决方案</em></strong></p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy socks5:&#x2F;&#x2F;127.0.0.1:1080</span><br><span class="line">git config --global https.proxy socks5:&#x2F;&#x2F;127.0.0.1:1080</span><br></pre></td></tr></table></figure><p><strong><em>此方案前提需要代理</em></strong></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;解决方案&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="技巧" scheme="https://cjay.life/categories/%E6%8A%80%E5%B7%A7/"/>
+    
+    
+      <category term="技巧" scheme="https://cjay.life/tags/%E6%8A%80%E5%B7%A7/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
