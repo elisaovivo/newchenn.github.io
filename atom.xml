@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://cjay.life/"/>
-  <updated>2020-02-12T06:10:56.363Z</updated>
+  <updated>2020-02-13T11:01:17.305Z</updated>
   <id>https://cjay.life/</id>
   
   <author>
@@ -15,6 +15,76 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>集成MyBatis实现数据持久化保存</title>
+    <link href="https://cjay.life/2020/02/13/%E9%9B%86%E6%88%90MyBatis%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E4%BF%9D%E5%AD%98/"/>
+    <id>https://cjay.life/2020/02/13/%E9%9B%86%E6%88%90MyBatis%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E4%BF%9D%E5%AD%98/</id>
+    <published>2020-02-13T10:28:38.000Z</published>
+    <updated>2020-02-13T11:01:17.305Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="简要"><a href="#简要" class="headerlink" title="简要"></a>简要</h1><p>对应SpringBoot需要使用MyBatis-Spring-Boot-Starter来连接数据库，这里我使用H2数据库。</p><p>官方文档：</p><p><a href="http://www.h2database.com/html/main.html" target="_blank" rel="noopener">H2</a></p><p><a href="https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/" target="_blank" rel="noopener">MyBatis-Spring-Boot-Starter</a></p><p><a href="https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support" target="_blank" rel="noopener">配置文件文档</a></p><p>整体思路：</p><p>1、添加H2的maven依赖，这种数据库可以内置在里面，直接idea直接来创建数据库</p><p>2、MyBatis-Spring-Boot-Starter的maven依赖</p><p>3、写对应配置文件</p><p>4、写mapper</p><hr><a id="more"></a><h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><p>对应配置文件添加：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spring.datasource.url&#x3D;jdbc:h2:路径</span><br><span class="line">spring.datasource.username&#x3D;用户名</span><br><span class="line">spring.datasource.password&#x3D;密码</span><br><span class="line">spring.datasource.driver-class-name&#x3D;org.h2.Driver</span><br></pre></td></tr></table></figure><h1 id="mapper"><a href="#mapper" class="headerlink" title="mapper"></a>mapper</h1><p>mapper:</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> life.cj.community.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> life.cj.community.model.User;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Insert;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Mapper;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Insert</span>(<span class="string">"insert into user (name,account_id,token,gmt_create,gmt_modified) values (#&#123;name&#125;,#&#123;accountId&#125;,#&#123;token&#125;,#&#123;gmtCreate&#125;,#&#123;gmtModified&#125;)"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(User user)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1 id="User数据结构"><a href="#User数据结构" class="headerlink" title="User数据结构"></a>User数据结构</h1><p>对于存储在服务器内部的数据结构，创建model包（区别与dto）</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> life.cj.community.model;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String accountId;</span><br><span class="line">    <span class="keyword">private</span> String token;</span><br><span class="line">    <span class="keyword">private</span> Long gmtCreate;</span><br><span class="line">    <span class="keyword">private</span> Long gmtModified;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAccountId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> accountId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAccountId</span><span class="params">(String accountId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.accountId = accountId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getToken</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> token;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setToken</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.token = token;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getGmtCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> gmtCreate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setGmtCreate</span><span class="params">(Long gmtCreate)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.gmtCreate = gmtCreate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getGmtModified</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> gmtModified;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setGmtModified</span><span class="params">(Long gmtModified)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.gmtModified = gmtModified;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;简要&quot;&gt;&lt;a href=&quot;#简要&quot; class=&quot;headerlink&quot; title=&quot;简要&quot;&gt;&lt;/a&gt;简要&lt;/h1&gt;&lt;p&gt;对应SpringBoot需要使用MyBatis-Spring-Boot-Starter来连接数据库，这里我使用H2数据库。&lt;/p&gt;
+&lt;p&gt;官方文档：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.h2database.com/html/main.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;H2&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;MyBatis-Spring-Boot-Starter&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;配置文件文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;整体思路：&lt;/p&gt;
+&lt;p&gt;1、添加H2的maven依赖，这种数据库可以内置在里面，直接idea直接来创建数据库&lt;/p&gt;
+&lt;p&gt;2、MyBatis-Spring-Boot-Starter的maven依赖&lt;/p&gt;
+&lt;p&gt;3、写对应配置文件&lt;/p&gt;
+&lt;p&gt;4、写mapper&lt;/p&gt;
+&lt;hr&gt;
+    
+    </summary>
+    
+    
+      <category term="Spring Boot" scheme="https://cjay.life/categories/Spring-Boot/"/>
+    
+    
+      <category term="Spring Boot" scheme="https://cjay.life/tags/Spring-Boot/"/>
+    
+      <category term="H2" scheme="https://cjay.life/tags/H2/"/>
+    
+      <category term="MyBatis" scheme="https://cjay.life/tags/MyBatis/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于SpringBoot下的Session和Cookies</title>
+    <link href="https://cjay.life/2020/02/13/%E5%85%B3%E4%BA%8ESpringBoot%E4%B8%8B%E7%9A%84session%E5%92%8CCookies/"/>
+    <id>https://cjay.life/2020/02/13/%E5%85%B3%E4%BA%8ESpringBoot%E4%B8%8B%E7%9A%84session%E5%92%8CCookies/</id>
+    <published>2020-02-13T09:51:47.000Z</published>
+    <updated>2020-02-13T10:19:24.995Z</updated>
+    
+    <content type="html"><![CDATA[<p>简要描述：</p><p>服务器就是一家银行。</p><p>Session就是在该银行下开通的户口。</p><p>Cookies就是给该户口办理的银行卡。</p><p>用户可以拿着银行卡给该银行，银行可以凭借该银行卡找到该户口，知道了用户的身份。</p><p>给用户开户：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request.getSession().setAttribute(<span class="string">"user"</span>,githubUser);</span><br></pre></td></tr></table></figure><p>SpringBoot有这种机制，直接返回时，会自动加入对应的Cookies(银行卡)给用户，只是这是随机，不能指定。</p><hr><p>thymeleaf的语法</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">th:if&#x3D;&quot;$&#123;session.user!&#x3D; null&#125;</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">th:text&#x3D;&quot;$&#123;session.user.getName()&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;简要描述：&lt;/p&gt;
+&lt;p&gt;服务器就是一家银行。&lt;/p&gt;
+&lt;p&gt;Session就是在该银行下开通的户口。&lt;/p&gt;
+&lt;p&gt;Cookies就是给该户口办理的银行卡。&lt;/p&gt;
+&lt;p&gt;用户可以拿着银行卡给该银行，银行可以凭借该银行卡找到该户口，知道了用户的身份。&lt;/p&gt;
+&lt;p&gt;给用户
+      
+    
+    </summary>
+    
+    
+      <category term="Spring Boot" scheme="https://cjay.life/categories/Spring-Boot/"/>
+    
+    
+      <category term="Spring Boot" scheme="https://cjay.life/tags/Spring-Boot/"/>
+    
+      <category term="Cookies，Session" scheme="https://cjay.life/tags/Cookies%EF%BC%8CSession/"/>
+    
+  </entry>
   
   <entry>
     <title>调用github接口实现登录功能</title>
