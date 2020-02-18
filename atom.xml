@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://cjay.life/"/>
-  <updated>2020-02-13T11:01:17.305Z</updated>
+  <updated>2020-02-18T04:25:32.647Z</updated>
   <id>https://cjay.life/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>看到网上一句话记录一下</title>
+    <link href="https://cjay.life/2020/02/18/%E7%9C%8B%E5%88%B0%E7%BD%91%E4%B8%8A%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B/"/>
+    <id>https://cjay.life/2020/02/18/%E7%9C%8B%E5%88%B0%E7%BD%91%E4%B8%8A%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B/</id>
+    <published>2020-02-18T04:23:10.000Z</published>
+    <updated>2020-02-18T04:25:32.647Z</updated>
+    
+    <content type="html"><![CDATA[<p>引用：</p><p>屌丝何苦为难屌丝 屌丝却只能为难屌丝 寰宇之大 眼界却只能停留在琐碎 格局实在太小 是时运之不幸 更是能力之不治</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;引用：&lt;/p&gt;
+&lt;p&gt;屌丝何苦为难屌丝 屌丝却只能为难屌丝 寰宇之大 眼界却只能停留在琐碎 格局实在太小 是时运之不幸 更是能力之不治&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="生活日常" scheme="https://cjay.life/categories/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%B8%B8/"/>
+    
+    
+      <category term="生活日常" scheme="https://cjay.life/tags/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%B8%B8/"/>
+    
+  </entry>
   
   <entry>
     <title>集成MyBatis实现数据持久化保存</title>

@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>看到网上一句话记录一下</title>
+    <url>/2020/02/18/%E7%9C%8B%E5%88%B0%E7%BD%91%E4%B8%8A%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B/</url>
+    <content><![CDATA[<p>引用：</p>
+<p>屌丝何苦为难屌丝 屌丝却只能为难屌丝 寰宇之大 眼界却只能停留在琐碎 格局实在太小 是时运之不幸 更是能力之不治</p>
+]]></content>
+      <categories>
+        <category>生活日常</category>
+      </categories>
+      <tags>
+        <tag>生活日常</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>集成MyBatis实现数据持久化保存</title>
     <url>/2020/02/13/%E9%9B%86%E6%88%90MyBatis%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E4%BF%9D%E5%AD%98/</url>
     <content><![CDATA[<h1 id="简要"><a href="#简要" class="headerlink" title="简要"></a>简要</h1><p>对应SpringBoot需要使用MyBatis-Spring-Boot-Starter来连接数据库，这里我使用H2数据库。</p>
