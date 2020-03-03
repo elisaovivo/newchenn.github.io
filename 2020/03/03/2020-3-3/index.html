@@ -52,22 +52,20 @@
   };
 </script>
 
-  <meta name="description" content="简要对应SpringBoot需要使用MyBatis-Spring-Boot-Starter来连接数据库，这里我使用H2数据库。 官方文档： H2 MyBatis-Spring-Boot-Starter 配置文件文档 整体思路： 1、添加H2的maven依赖，这种数据库可以内置在里面，直接idea直接来创建数据库 2、MyBatis-Spring-Boot-Starter的maven依赖 3、写对应">
+  <meta name="description" content="距离考研结束已经很久了，我想是时候写一篇日记作为总结了。 这一次考研过程中，由于数学考试过程中心态过于紧张，导致最后选择题忘记填上去，最后因单科线过不了而结束。现在想来还是挺难受的。数学考场上的紧张和几个夜晚的悲伤将那段时间的效用达到了顶峰。这次失败打断了未来的计划。 自己对于考研这件事情挺执着的，再加上这此失败的原因，因为会去二战。一开始很担心时间浪费了，然后今天下午跟老师做心理咨询的时候相">
 <meta property="og:type" content="article">
-<meta property="og:title" content="集成MyBatis实现数据持久化保存">
-<meta property="og:url" content="https://cjay.life/2020/02/13/%E9%9B%86%E6%88%90MyBatis%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E4%BF%9D%E5%AD%98/index.html">
+<meta property="og:title" content="2020.3.3">
+<meta property="og:url" content="https://cjay.life/2020/03/03/2020-3-3/index.html">
 <meta property="og:site_name" content="CJ&#39;S BLOG">
-<meta property="og:description" content="简要对应SpringBoot需要使用MyBatis-Spring-Boot-Starter来连接数据库，这里我使用H2数据库。 官方文档： H2 MyBatis-Spring-Boot-Starter 配置文件文档 整体思路： 1、添加H2的maven依赖，这种数据库可以内置在里面，直接idea直接来创建数据库 2、MyBatis-Spring-Boot-Starter的maven依赖 3、写对应">
+<meta property="og:description" content="距离考研结束已经很久了，我想是时候写一篇日记作为总结了。 这一次考研过程中，由于数学考试过程中心态过于紧张，导致最后选择题忘记填上去，最后因单科线过不了而结束。现在想来还是挺难受的。数学考场上的紧张和几个夜晚的悲伤将那段时间的效用达到了顶峰。这次失败打断了未来的计划。 自己对于考研这件事情挺执着的，再加上这此失败的原因，因为会去二战。一开始很担心时间浪费了，然后今天下午跟老师做心理咨询的时候相">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-02-13T10:28:38.000Z">
-<meta property="article:modified_time" content="2020-02-13T11:01:17.305Z">
+<meta property="article:published_time" content="2020-03-03T15:46:27.000Z">
+<meta property="article:modified_time" content="2020-03-03T15:49:35.815Z">
 <meta property="article:author" content="CJ">
-<meta property="article:tag" content="Spring Boot">
-<meta property="article:tag" content="H2">
-<meta property="article:tag" content="MyBatis">
+<meta property="article:tag" content="考研">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://cjay.life/2020/02/13/%E9%9B%86%E6%88%90MyBatis%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E4%BF%9D%E5%AD%98/">
+<link rel="canonical" href="https://cjay.life/2020/03/03/2020-3-3/">
 
 
 <script id="page-configurations">
@@ -81,7 +79,7 @@
   };
 </script>
 
-  <title>集成MyBatis实现数据持久化保存 | CJ'S BLOG</title>
+  <title>2020.3.3 | CJ'S BLOG</title>
   
 
 
@@ -230,7 +228,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/02/13/%E9%9B%86%E6%88%90MyBatis%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E4%BF%9D%E5%AD%98/">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/03/03/2020-3-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/cjay.png">
@@ -243,7 +241,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          集成MyBatis实现数据持久化保存
+          2020.3.3
         </h1>
 
         <div class="post-meta">
@@ -254,7 +252,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-02-13 18:28:38 / 修改时间：19:01:17" itemprop="dateCreated datePublished" datetime="2020-02-13T18:28:38+08:00">2020-02-13</time>
+              <time title="创建时间：2020-03-03 23:46:27 / 修改时间：23:49:35" itemprop="dateCreated datePublished" datetime="2020-03-03T23:46:27+08:00">2020-03-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,8 +260,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring-Boot/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring Boot</span>
+                  <a href="/categories/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%B8%B8/" itemprop="url" rel="index">
+                    <span itemprop="name">生活日常</span>
                   </a>
                 </span>
             </span>
@@ -284,8 +282,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2020/02/13/%E9%9B%86%E6%88%90MyBatis%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E4%BF%9D%E5%AD%98/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/02/13/%E9%9B%86%E6%88%90MyBatis%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E4%BF%9D%E5%AD%98/" itemprop="commentCount"></span>
+    <a title="valine" href="/2020/03/03/2020-3-3/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/03/2020-3-3/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -295,14 +293,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
+              <span>355</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -314,32 +312,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="简要"><a href="#简要" class="headerlink" title="简要"></a>简要</h1><p>对应SpringBoot需要使用MyBatis-Spring-Boot-Starter来连接数据库，这里我使用H2数据库。</p>
-<p>官方文档：</p>
-<p><a href="http://www.h2database.com/html/main.html" target="_blank" rel="noopener">H2</a></p>
-<p><a href="https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/" target="_blank" rel="noopener">MyBatis-Spring-Boot-Starter</a></p>
-<p><a href="https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support" target="_blank" rel="noopener">配置文件文档</a></p>
-<p>整体思路：</p>
-<p>1、添加H2的maven依赖，这种数据库可以内置在里面，直接idea直接来创建数据库</p>
-<p>2、MyBatis-Spring-Boot-Starter的maven依赖</p>
-<p>3、写对应配置文件</p>
-<p>4、写mapper</p>
+        <a id="more"></a>
+
+<p>距离考研结束已经很久了，我想是时候写一篇日记作为总结了。</p>
+<p>这一次考研过程中，由于数学考试过程中心态过于紧张，导致最后选择题忘记填上去，最后因单科线过不了而结束。现在想来还是挺难受的。数学考场上的紧张和几个夜晚的悲伤将那段时间的效用达到了顶峰。这次失败打断了未来的计划。</p>
+<p>自己对于考研这件事情挺执着的，再加上这此失败的原因，因为会去二战。一开始很担心时间浪费了，然后今天下午跟老师做心理咨询的时候相通了，我想每个人的进度都是不一样的，对于整个人生来说，这一年又算得了什么呢?将这一年过得充实就行了。</p>
+<p>zk，不能和你一起实现我们的梦想，真的挺遗憾的。回想起我们一起学习的日子，每天很晚从鄞州图书馆走出来，一边走过公园一边聊着各种话题，然后坐公交车离开，那段时间真正地改变了我们的人生。无论如何，后面也要加油啊。</p>
 <hr>
-<a id="more"></a>
-
-<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><p>对应配置文件添加：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spring.datasource.url&#x3D;jdbc:h2:路径</span><br><span class="line">spring.datasource.username&#x3D;用户名</span><br><span class="line">spring.datasource.password&#x3D;密码</span><br><span class="line">spring.datasource.driver-class-name&#x3D;org.h2.Driver</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="mapper"><a href="#mapper" class="headerlink" title="mapper"></a>mapper</h1><p>mapper:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> life.cj.community.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> life.cj.community.model.User;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Insert;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Mapper;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Insert</span>(<span class="string">"insert into user (name,account_id,token,gmt_create,gmt_modified) values (#&#123;name&#125;,#&#123;accountId&#125;,#&#123;token&#125;,#&#123;gmtCreate&#125;,#&#123;gmtModified&#125;)"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(User user)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="User数据结构"><a href="#User数据结构" class="headerlink" title="User数据结构"></a>User数据结构</h1><p>对于存储在服务器内部的数据结构，创建model包（区别与dto）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> life.cj.community.model;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String accountId;</span><br><span class="line">    <span class="keyword">private</span> String token;</span><br><span class="line">    <span class="keyword">private</span> Long gmtCreate;</span><br><span class="line">    <span class="keyword">private</span> Long gmtModified;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAccountId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> accountId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAccountId</span><span class="params">(String accountId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.accountId = accountId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getToken</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> token;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setToken</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.token = token;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getGmtCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> gmtCreate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setGmtCreate</span><span class="params">(Long gmtCreate)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.gmtCreate = gmtCreate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getGmtModified</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> gmtModified;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setGmtModified</span><span class="params">(Long gmtModified)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.gmtModified = gmtModified;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p>先这样吧。</p>
 
     </div>
 
@@ -370,9 +350,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/Spring-Boot/" rel="tag"><i class="fa fa-tag"></i> Spring Boot</a>
-              <a href="/tags/H2/" rel="tag"><i class="fa fa-tag"></i> H2</a>
-              <a href="/tags/MyBatis/" rel="tag"><i class="fa fa-tag"></i> MyBatis</a>
+              <a href="/tags/%E8%80%83%E7%A0%94/" rel="tag"><i class="fa fa-tag"></i> 考研</a>
           </div>
 
         
@@ -381,13 +359,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/13/%E5%85%B3%E4%BA%8ESpringBoot%E4%B8%8B%E7%9A%84session%E5%92%8CCookies/" rel="prev" title="关于SpringBoot下的Session和Cookies">
-      <i class="fa fa-chevron-left"></i> 关于SpringBoot下的Session和Cookies
+    <a href="/2020/02/26/%E3%80%8A%E7%9D%A1%E7%9C%A0%E9%9D%A9%E5%91%BD%E3%80%8B/" rel="prev" title="《睡眠革命》">
+      <i class="fa fa-chevron-left"></i> 《睡眠革命》
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/18/%E7%9C%8B%E5%88%B0%E7%BD%91%E4%B8%8A%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B/" rel="next" title="看到网上一句话记录一下">
-      看到网上一句话记录一下 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -426,7 +401,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简要"><span class="nav-number">1.</span> <span class="nav-text">简要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置文件"><span class="nav-number">2.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mapper"><span class="nav-number">3.</span> <span class="nav-text">mapper</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#User数据结构"><span class="nav-number">4.</span> <span class="nav-text">User数据结构</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
