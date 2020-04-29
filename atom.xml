@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://cjay.life/"/>
-  <updated>2020-04-29T05:51:53.483Z</updated>
+  <updated>2020-04-29T11:02:48.122Z</updated>
   <id>https://cjay.life/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mybatis generator</title>
+    <link href="https://cjay.life/2020/04/29/mybatis-generator/"/>
+    <id>https://cjay.life/2020/04/29/mybatis-generator/</id>
+    <published>2020-04-29T10:57:37.000Z</published>
+    <updated>2020-04-29T11:02:48.122Z</updated>
+    
+    <content type="html"><![CDATA[<p>使用mybatis generator来自动生成mapper和model。</p><p>发现自动生成的数据，应该是int却变为long，暂时不知道什么原因。</p><p>然后暂时解决方案如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;table tableName&#x3D;&quot;question&quot; domainObjectName&#x3D;&quot;Question&quot;&gt;</span><br><span class="line">&lt;columnOverride column&#x3D;&quot;ID&quot; javaType&#x3D;&quot;java.lang.Integer&quot; jdbcType&#x3D;&quot;INTEGER&quot;&gt;&lt;&#x2F;columnOverride&gt;</span><br><span class="line">&lt;columnOverride column&#x3D;&quot;creator&quot; javaType&#x3D;&quot;java.lang.Integer&quot; jdbcType&#x3D;&quot;INTEGER&quot;&gt;&lt;&#x2F;columnOverride&gt;</span><br><span class="line">&lt;&#x2F;table&gt;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;使用mybatis generator来自动生成mapper和model。&lt;/p&gt;
+&lt;p&gt;发现自动生成的数据，应该是int却变为long，暂时不知道什么原因。&lt;/p&gt;
+&lt;p&gt;然后暂时解决方案如下：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;t
+      
+    
+    </summary>
+    
+    
+      <category term="mybatis generator" scheme="https://cjay.life/categories/mybatis-generator/"/>
+    
+    
+      <category term="技巧" scheme="https://cjay.life/tags/%E6%8A%80%E5%B7%A7/"/>
+    
+      <category term="Spring Boot" scheme="https://cjay.life/tags/Spring-Boot/"/>
+    
+      <category term="mybatis generator" scheme="https://cjay.life/tags/mybatis-generator/"/>
+    
+  </entry>
   
   <entry>
     <title>哲学导论第2课</title>
