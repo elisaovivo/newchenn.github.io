@@ -7,11 +7,11 @@
 <h1 id="1-1-信息就是位-上下文"><a href="#1-1-信息就是位-上下文" class="headerlink" title="1.1 信息就是位+上下文"></a>1.1 信息就是位+上下文</h1><p>Hello程序在一开始仅仅只是由编辑器创建的文本文件。这些文本文件在本质上都只是比特序列。</p>
 <p><strong>比特序列是如何表示成文本字符？</strong></p>
 <p><strong>这里采用编码标准，标准有很多，这里已ASCII标准为例：ASCII标准将这些最原始的比特序列，分成以字节（8个bit）为单位来表示每个字符。相当于y = f(x),y是文本字符，x是一个字节的bit串，函数f()是ASCII标准，该函数一一映射</strong></p>
-<p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190625084643603-1395767889.png" alt></p>
+<p><img src="https://i.loli.net/2020/07/17/OKGhCnreoVE1NYX.png" alt></p>
 <p><strong>注意：文本中，每个文本行都有看不见的换行符’\n’，对应整数10</strong></p>
 <p>所以在计算机中，比特序列是通过<strong>读到数据对象时的上下文</strong>来区分不同的数据对象</p>
 <h1 id="1-2-程序被其他程序翻译成不同的格式"><a href="#1-2-程序被其他程序翻译成不同的格式" class="headerlink" title="1.2 程序被其他程序翻译成不同的格式"></a>1.2 程序被其他程序翻译成不同的格式</h1><p>源程序到目标程序（也称为可执行目标文件）转变过程如下：</p>
-<p><img src="https://nullcc.github.io/assets/images/post_imgs/compilation_system.png" alt></p>
+<p><img src="https://i.loli.net/2020/07/18/kDML9f4TUYNvcIZ.jpg" alt></p>
 <ul>
 <li>预处理阶段：修改原始C程序，比如将#include&lt;stdio.h&gt;中的stdio.h的内容直接插入程序文本中。最后将扩展名改为.i</li>
 <li>编译阶段：通过编译器，转成了汇编语言程序。</li>
@@ -32,11 +32,11 @@
 <li>处理器：是届时或执行存储在内存中指令的引擎。存储器核心是一个大小为一个字的寄存器，称为程序计数器PC，用于指向内存中某条机器语言指令。</li>
 </ol>
 <h2 id="1-4-2-运行hello程序"><a href="#1-4-2-运行hello程序" class="headerlink" title="1.4.2 运行hello程序"></a>1.4.2 运行hello程序</h2><p>初始时，shell程序执行它的指令，等待我们输入一个命令。当在键盘上输入“./hello”后，shell程序将字符逐一读入寄存器，再把它放到内存中</p>
-<p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190626182409229-914940200.png" alt></p>
+<p><img src="https://i.loli.net/2020/07/18/ygsBjpQWza2c8mK.png" alt></p>
 <p>当输入回车，shell知道我们结束了命令的输入。然后shell执行一系列指令加载并执行hello文件，将这个文件复制到主存。</p>
-<p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190626182731361-479664359.png" alt></p>
+<p><img src="https://i.loli.net/2020/07/18/sE1g2olaPY3XStk.png" alt></p>
 <p>处理器就开始执行这些机器语言指令。“Hello world”字符串从主存复制到寄存器文件，再从寄存器文件复制到显示设备。</p>
-<p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190626184237882-1227164304.png" alt></p>
+<p><img src="https://i.loli.net/2020/07/18/req7AfVIOmHBhJl.png" alt></p>
 <h2 id="1-5-高速缓存至关重要"><a href="#1-5-高速缓存至关重要" class="headerlink" title="1.5 高速缓存至关重要"></a>1.5 高速缓存至关重要</h2><p>高速缓存通过静态随机访问存储器（SRAM）的硬件技术实现。</p>
 <h2 id="1-6-存储设备形成层次结构"><a href="#1-6-存储设备形成层次结构" class="headerlink" title="1.6 存储设备形成层次结构"></a>1.6 存储设备形成层次结构</h2><p>主要思想是上一层的存储器作为第一层存储器的高速缓存。</p>
 <h2 id="1-7-操作系统管理硬件"><a href="#1-7-操作系统管理硬件" class="headerlink" title="1.7 操作系统管理硬件"></a>1.7 操作系统管理硬件</h2><p>shell与hello程序都没有直接访问硬件，取而代之是由操作系统提供服务。</p>
@@ -51,16 +51,16 @@
 <li>虚拟内存对主存和磁盘I/O设备的抽象表示</li>
 <li>进程则是对处理器、主存和I/O设备的抽象表示</li>
 </ol>
-<p><img src="https://bloggg-1254259681.cos.na-siliconvalley.myqcloud.com/5tpq2.jpg" alt></p>
+<p><img src="https://i.loli.net/2020/07/18/IdOl8L1XK7VxJn6.jpg" alt></p>
 <h2 id="1-7-1-进程"><a href="#1-7-1-进程" class="headerlink" title="1.7.1 进程"></a>1.7.1 进程</h2><p>进程是操作系统对一个正在运行的程序一种抽象。有了这种抽象，一个系统上可以并发多个进程。这种并发执行，通过处理器来进程间切换来实现的。操作系统实行这种交错执行的机制称为<strong>上下文切换</strong>。</p>
 <p><strong>上下文是指操作系统跟踪进程运行所需要的状态信息，比如PC和寄存器的当前值，以及主存的内容</strong></p>
 <p>上下文切换其实就是保存当前进程的上下文，恢复新进程的上下文，然后将控制区传递给新进程。</p>
 <p>对于两个并发进程：shell进程和hello进程。刚开始shell进程在运行，即等待命令行输入。</p>
 <p>当运行hello程序，shell系统调用-》系统调用将控制权从shell到给操作系统-》操作系统保存shell进程上下文-》创建hello进程上下文并将控制权给hello进程-》hello进程终止-》操作系统恢复shell上下文，并将控制区给shell</p>
-<p><img src="https://images2017.cnblogs.com/blog/997599/201709/997599-20170917182301157-2005157989.png" alt></p>
+<p><img src="https://i.loli.net/2020/07/18/sFRvVEjpfN2KTrX.png" alt></p>
 <h2 id="1-7-2-线程"><a href="#1-7-2-线程" class="headerlink" title="1.7.2 线程"></a>1.7.2 线程</h2><p>现代操作系统中，进程由多个线程的执行单元构成，每个线程运行在进程上下文中，享有同样的代码与数据。</p>
 <h2 id="1-7-3-虚拟内存"><a href="#1-7-3-虚拟内存" class="headerlink" title="1.7.3 虚拟内存"></a>1.7.3 虚拟内存</h2><p>虚拟内存是一种抽象概念，给进程提供一种假象，即每个进程都在独占使用主存。每个进程看到都是虚拟地址空间</p>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jenItbGVhcm4ub3NzLWNuLWJlaWppbmcuYWxpeXVuY3MuY29tL1JOTi8xLjEzJTIwJUU4JUJGJTlCJUU3JUE4JThCJUU3JTlBJTg0JUU4JTk5JTlBJUU2JThCJTlGJUU1JTlDJUIwJUU1JTlEJTgwJUU3JUE5JUJBJUU5JTk3JUI0LnBuZw?x-oss-process=image/format,png" alt="Linux进程的虚拟地址空间"></p>
+<p><img src="https://i.loli.net/2020/07/18/7vjezVrfUP1kngA.png" alt="Linux进程的虚拟地址空间"></p>
 <p>最低地址开始，从上介绍。</p>
 <ul>
 <li>程序代码和数据：先是代码，接着是数据。</li>
@@ -73,14 +73,14 @@
 <p>基本思想是进程虚拟内存的内容存在磁盘上，用主存作为磁盘的高速缓存。</p>
 <h2 id="1-7-4-文件"><a href="#1-7-4-文件" class="headerlink" title="1.7.4 文件"></a>1.7.4 文件</h2><p>文件本质是字节序列。但它向应用程序提供了一个统一的视图来看待各式各样的I/O设备。</p>
 <h1 id="1-8-系统之间的网络通信"><a href="#1-8-系统之间的网络通信" class="headerlink" title="1.8 系统之间的网络通信"></a>1.8 系统之间的网络通信</h1><p>系统从主存复制一串字到网络适配器时，数据流过网络到达另一台机器。同时，系统也可以从读取其他机器发送过来的数据，并复制到主存。</p>
-<p><img src="https://img2018.cnblogs.com/blog/1526080/201811/1526080-20181129202305045-102973742.png" alt></p>
+<p><img src="https://i.loli.net/2020/07/18/8SheWR1Fi7Jp5Ug.png" alt></p>
 <h1 id="重要主题"><a href="#重要主题" class="headerlink" title="重要主题"></a>重要主题</h1><h2 id="1-9-1-Amdahl定律"><a href="#1-9-1-Amdahl定律" class="headerlink" title="1.9.1 Amdahl定律"></a>1.9.1 Amdahl定律</h2><p>若系统执行某应用程序需要时间Told。假设其中某部分与整体时间的比例为a。</p>
 <p>若该部分性能提升k。则新的执行时间为：<strong>Tnew = (1-a)Told+（aTold）/k = Told[(1-a)+a/k]</strong></p>
 <p>加速比 <strong>S = Told/Tnew = 1/[(1-a)+a/k];</strong></p>
 <p><strong>若k-&gt;∞，则S = 1/（1-a）</strong>，说明想要高的加速比只有通过优化系统大部分组件才行。</p>
 <h2 id="1-9-2-并发（concurrency）与并行-parallelism"><a href="#1-9-2-并发（concurrency）与并行-parallelism" class="headerlink" title="1.9.2 并发（concurrency）与并行(parallelism)"></a>1.9.2 并发（concurrency）与并行(parallelism)</h2><ol>
 <li>线程级并发：使用线程可以在一个进程中执行多个控制流。想要实现线程级的并发，可以采用以下两个技术<ol>
-<li>多核处理器：将多个CPU集成到一个集成电路芯片上。<img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190629151543016-1999642658.png" alt></li>
+<li>多核处理器：将多个CPU集成到一个集成电路芯片上。<img src="https://i.loli.net/2020/07/18/RPd5SgyTNUwiVlf.png" alt></li>
 <li>超线程（hyperthreading）或称为同时多线程(simultaneous multi-threading)，允许一个CPU通过执行多个CPU。说是一个CPU，其实CPU里的某些硬件变成了多份，比如程序计数器和寄存器文件。平常线程切换大约需要20000个周期，而采用超线程技术后，只要一个周期。</li>
 </ol>
 </li>
@@ -89,7 +89,7 @@
 </ol>
 <h2 id="1-9-3-计算机系统中抽象的重要性"><a href="#1-9-3-计算机系统中抽象的重要性" class="headerlink" title="1.9.3 计算机系统中抽象的重要性"></a>1.9.3 计算机系统中抽象的重要性</h2><p>例如为一组函数规定简单的应用程序接口（API），使程序员无需了解它内部的工作便可使用。</p>
 <p>指令集架构就是提供了堆实际处理器硬件的抽象。使用这个抽象，机器代码程序好像运行在一个一次只执行一次指令的处理器上。</p>
-<p><img src="https://img2018.cnblogs.com/blog/1526080/201811/1526080-20181129202927009-1202675019.png" alt></p>
+<p><img src="https://i.loli.net/2020/07/18/wchIqyM1FjCWVBP.png" alt></p>
 ]]></content>
       <categories>
         <category>《深入理解计算机系统》</category>
