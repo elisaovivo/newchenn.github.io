@@ -248,6 +248,511 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/17/csapp%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/17/csapp%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/" class="post-title-link" itemprop="url">csapp第一章：计算机系统漫游</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-17 12:23:05 / 修改时间：23:40:37" itemprop="dateCreated datePublished" datetime="2020-07-17T12:23:05+08:00">2020-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E3%80%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">《深入理解计算机系统》</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/17/csapp%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/17/csapp%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本书第一章开头通过跟踪hello程序的生命周期对系统进行学习</p>
+<h1 id="1-1-信息就是位-上下文"><a href="#1-1-信息就是位-上下文" class="headerlink" title="1.1 信息就是位+上下文"></a>1.1 信息就是位+上下文</h1><p>Hello程序在一开始仅仅只是由编辑器创建的文本文件。这些文本文件在本质上都只是比特序列。</p>
+<p><strong>比特序列是如何表示成文本字符？</strong></p>
+<p><strong>这里采用编码标准，标准有很多，这里已ASCII标准为例：ASCII标准将这些最原始的比特序列，分成以字节（8个bit）为单位来表示每个字符。相当于y = f(x),y是文本字符，x是一个字节的bit串，函数f()是ASCII标准，该函数一一映射</strong></p>
+<p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190625084643603-1395767889.png" alt></p>
+<p><strong>注意：文本中，每个文本行都有看不见的换行符’\n’，对应整数10</strong></p>
+<p>所以在计算机中，比特序列是通过<strong>读到数据对象时的上下文</strong>来区分不同的数据对象</p>
+<h1 id="1-2-程序被其他程序翻译成不同的格式"><a href="#1-2-程序被其他程序翻译成不同的格式" class="headerlink" title="1.2 程序被其他程序翻译成不同的格式"></a>1.2 程序被其他程序翻译成不同的格式</h1><p>源程序到目标程序（也称为可执行目标文件）转变过程如下：</p>
+<p><img src="https://nullcc.github.io/assets/images/post_imgs/compilation_system.png" alt></p>
+<ul>
+<li>预处理阶段：修改原始C程序，比如将#include&lt;stdio.h&gt;中的stdio.h的内容直接插入程序文本中。最后将扩展名改为.i</li>
+<li>编译阶段：通过编译器，转成了汇编语言程序。</li>
+<li>汇编阶段：通过汇编器，转成了机器语言指令，把这些指令打包成可重定位目标程序（relocatable object program）的格式，保存到hello.o中</li>
+<li>链接阶段：hello程序中调用了printf函数，该阶段就是将hello.o与printf.o以某种方式合并起来</li>
+</ul>
+<h1 id="1-4-处理器读并解释存在内存中的指令"><a href="#1-4-处理器读并解释存在内存中的指令" class="headerlink" title="1.4 处理器读并解释存在内存中的指令"></a>1.4 处理器读并解释存在内存中的指令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; .&#x2F;hello</span><br><span class="line">hello,world</span><br><span class="line">linux&gt;</span><br></pre></td></tr></table></figure>
+
+<p>上图是通过shell（命令行解释器）运行了hello程序。</p>
+<h2 id="1-4-1-系统的硬件组成"><a href="#1-4-1-系统的硬件组成" class="headerlink" title="1.4.1 系统的硬件组成"></a>1.4.1 系统的硬件组成</h2><ol>
+<li>总线：总线被设计成传送定长的字节快，也就是字（word）。字长是系统的一个基本参数，每个系统中都不尽相同。大多数系统中要不32位要不64位。</li>
+<li>I/O设备：每个I/O设备都通过一个控制器或适配器与I/O总线相连。<ul>
+<li>控制器是I/O设备本身或系统的电路板上的芯片组</li>
+<li>适配器是插在主板卡槽上的卡</li>
+</ul>
+</li>
+<li>主存：由一组动态随机存取存储器（DRAM）芯片组成的。</li>
+<li>处理器：是届时或执行存储在内存中指令的引擎。存储器核心是一个大小为一个字的寄存器，称为程序计数器PC，用于指向内存中某条机器语言指令。</li>
+</ol>
+<h2 id="1-4-2-运行hello程序"><a href="#1-4-2-运行hello程序" class="headerlink" title="1.4.2 运行hello程序"></a>1.4.2 运行hello程序</h2><p>初始时，shell程序执行它的指令，等待我们输入一个命令。当在键盘上输入“./hello”后，shell程序将字符逐一读入寄存器，再把它放到内存中</p>
+<p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190626182409229-914940200.png" alt></p>
+<p>当输入回车，shell知道我们结束了命令的输入。然后shell执行一系列指令加载并执行hello文件，将这个文件复制到主存。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190626182731361-479664359.png" alt></p>
+<p>处理器就开始执行这些机器语言指令。“Hello world”字符串从主存复制到寄存器文件，再从寄存器文件复制到显示设备。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190626184237882-1227164304.png" alt></p>
+<h2 id="1-5-高速缓存至关重要"><a href="#1-5-高速缓存至关重要" class="headerlink" title="1.5 高速缓存至关重要"></a>1.5 高速缓存至关重要</h2><p>高速缓存通过静态随机访问存储器（SRAM）的硬件技术实现。</p>
+<h2 id="1-6-存储设备形成层次结构"><a href="#1-6-存储设备形成层次结构" class="headerlink" title="1.6 存储设备形成层次结构"></a>1.6 存储设备形成层次结构</h2><p>主要思想是上一层的存储器作为第一层存储器的高速缓存。</p>
+<h2 id="1-7-操作系统管理硬件"><a href="#1-7-操作系统管理硬件" class="headerlink" title="1.7 操作系统管理硬件"></a>1.7 操作系统管理硬件</h2><p>shell与hello程序都没有直接访问硬件，取而代之是由操作系统提供服务。</p>
+<p>操作系统两个基本功能：</p>
+<ol>
+<li>防止硬件被应用程序滥用</li>
+<li>向应用程序提供简单的机制来控制硬件设备</li>
+</ol>
+<p>操作系统主要采用几个抽象概念来实现上面两个功能：</p>
+<ol>
+<li>文件对I/O设备的抽象表示</li>
+<li>虚拟内存对主存和磁盘I/O设备的抽象表示</li>
+<li>进程则是对处理器、主存和I/O设备的抽象表示</li>
+</ol>
+<p><img src="https://bloggg-1254259681.cos.na-siliconvalley.myqcloud.com/5tpq2.jpg" alt></p>
+<h2 id="1-7-1-进程"><a href="#1-7-1-进程" class="headerlink" title="1.7.1 进程"></a>1.7.1 进程</h2><p>进程是操作系统对一个正在运行的程序一种抽象。有了这种抽象，一个系统上可以并发多个进程。这种并发执行，通过处理器来进程间切换来实现的。操作系统实行这种交错执行的机制称为<strong>上下文切换</strong>。</p>
+<p><strong>上下文是指操作系统跟踪进程运行所需要的状态信息，比如PC和寄存器的当前值，以及主存的内容</strong></p>
+<p>上下文切换其实就是保存当前进程的上下文，恢复新进程的上下文，然后将控制区传递给新进程。</p>
+<p>对于两个并发进程：shell进程和hello进程。刚开始shell进程在运行，即等待命令行输入。</p>
+<p>当运行hello程序，shell系统调用-》系统调用将控制权从shell到给操作系统-》操作系统保存shell进程上下文-》创建hello进程上下文并将控制权给hello进程-》hello进程终止-》操作系统恢复shell上下文，并将控制区给shell</p>
+<p><img src="https://images2017.cnblogs.com/blog/997599/201709/997599-20170917182301157-2005157989.png" alt></p>
+<h2 id="1-7-2-线程"><a href="#1-7-2-线程" class="headerlink" title="1.7.2 线程"></a>1.7.2 线程</h2><p>现代操作系统中，进程由多个线程的执行单元构成，每个线程运行在进程上下文中，享有同样的代码与数据。</p>
+<h2 id="1-7-3-虚拟内存"><a href="#1-7-3-虚拟内存" class="headerlink" title="1.7.3 虚拟内存"></a>1.7.3 虚拟内存</h2><p>虚拟内存是一种抽象概念，给进程提供一种假象，即每个进程都在独占使用主存。每个进程看到都是虚拟地址空间</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jenItbGVhcm4ub3NzLWNuLWJlaWppbmcuYWxpeXVuY3MuY29tL1JOTi8xLjEzJTIwJUU4JUJGJTlCJUU3JUE4JThCJUU3JTlBJTg0JUU4JTk5JTlBJUU2JThCJTlGJUU1JTlDJUIwJUU1JTlEJTgwJUU3JUE5JUJBJUU5JTk3JUI0LnBuZw?x-oss-process=image/format,png" alt="Linux进程的虚拟地址空间"></p>
+<p>最低地址开始，从上介绍。</p>
+<ul>
+<li>程序代码和数据：先是代码，接着是数据。</li>
+<li>堆：代码与数据在进程开始运行时就被指定了大小。但调用像malloc和free这样C标准库函数时，堆在运行时动态扩展与搜索。</li>
+<li>共享库：用来存放C标准库和数学库这样的共享库的代码和数据区域。</li>
+<li>栈：编译器用它实现函数调用，调用一个函数，栈增长，一个函数返回时，栈就会收缩。也可以动态扩展和收缩。</li>
+<li>内核虚拟内存：为内核保留</li>
+</ul>
+<p>虚拟内存的运作需要<strong>硬件和操作系统之间交互，包括堆处理器生成的每个地址的硬件翻译</strong></p>
+<p>基本思想是进程虚拟内存的内容存在磁盘上，用主存作为磁盘的高速缓存。</p>
+<h2 id="1-7-4-文件"><a href="#1-7-4-文件" class="headerlink" title="1.7.4 文件"></a>1.7.4 文件</h2><p>文件本质是字节序列。但它向应用程序提供了一个统一的视图来看待各式各样的I/O设备。</p>
+<h1 id="1-8-系统之间的网络通信"><a href="#1-8-系统之间的网络通信" class="headerlink" title="1.8 系统之间的网络通信"></a>1.8 系统之间的网络通信</h1><p>系统从主存复制一串字到网络适配器时，数据流过网络到达另一台机器。同时，系统也可以从读取其他机器发送过来的数据，并复制到主存。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1526080/201811/1526080-20181129202305045-102973742.png" alt></p>
+<h1 id="重要主题"><a href="#重要主题" class="headerlink" title="重要主题"></a>重要主题</h1><h2 id="1-9-1-Amdahl定律"><a href="#1-9-1-Amdahl定律" class="headerlink" title="1.9.1 Amdahl定律"></a>1.9.1 Amdahl定律</h2><p>若系统执行某应用程序需要时间Told。假设其中某部分与整体时间的比例为a。</p>
+<p>若该部分性能提升k。则新的执行时间为：<strong>Tnew = (1-a)Told+（aTold）/k = Told[(1-a)+a/k]</strong></p>
+<p>加速比 <strong>S = Told/Tnew = 1/[(1-a)+a/k];</strong></p>
+<p><strong>若k-&gt;∞，则S = 1/（1-a）</strong>，说明想要高的加速比只有通过优化系统大部分组件才行。</p>
+<h2 id="1-9-2-并发（concurrency）与并行-parallelism"><a href="#1-9-2-并发（concurrency）与并行-parallelism" class="headerlink" title="1.9.2 并发（concurrency）与并行(parallelism)"></a>1.9.2 并发（concurrency）与并行(parallelism)</h2><ol>
+<li>线程级并发：使用线程可以在一个进程中执行多个控制流。想要实现线程级的并发，可以采用以下两个技术<ol>
+<li>多核处理器：将多个CPU集成到一个集成电路芯片上。<img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190629151543016-1999642658.png" alt></li>
+<li>超线程（hyperthreading）或称为同时多线程(simultaneous multi-threading)，允许一个CPU通过执行多个CPU。说是一个CPU，其实CPU里的某些硬件变成了多份，比如程序计数器和寄存器文件。平常线程切换大约需要20000个周期，而采用超线程技术后，只要一个周期。</li>
+</ol>
+</li>
+<li>指令集并行：在较低抽象层次上，现代处理器可以同时执行多条指令。采用流水线(Pipelining),将一条指令分成不同步骤，将硬件组织分成一系列阶段。硬件不同部分来处理指令的不同部分。能够达到接近于一个时钟周期的执行效率。而超标量（super-scalar）处理器速度更快。</li>
+<li>单指令、多数据并行(SIMD):允许一条指令产生多个可以并行的操作。</li>
+</ol>
+<h2 id="1-9-3-计算机系统中抽象的重要性"><a href="#1-9-3-计算机系统中抽象的重要性" class="headerlink" title="1.9.3 计算机系统中抽象的重要性"></a>1.9.3 计算机系统中抽象的重要性</h2><p>例如为一组函数规定简单的应用程序接口（API），使程序员无需了解它内部的工作便可使用。</p>
+<p>指令集架构就是提供了堆实际处理器硬件的抽象。使用这个抽象，机器代码程序好像运行在一个一次只执行一次指令的处理器上。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1526080/201811/1526080-20181129202927009-1202675019.png" alt></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/17/csapp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/17/csapp/" class="post-title-link" itemprop="url">csapp</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-17 12:13:29 / 修改时间：23:41:21" itemprop="dateCreated datePublished" datetime="2020-07-17T12:13:29+08:00">2020-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E5%88%92/" itemprop="url" rel="index">
+                    <span itemprop="name">计划</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/17/csapp/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/17/csapp/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>58</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>计划:阅读CSAPP和看对应CMU课程，看完后，总结笔记。</p>
+<hr>
+<p>该篇blog用于记录实施进度。</p>
+<p>2020.7.17    1-20页</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/" class="post-title-link" itemprop="url">简单排序</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-16 22:41:31 / 修改时间：23:20:59" itemprop="dateCreated datePublished" datetime="2020-07-16T22:41:31+08:00">2020-07-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>566</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void Bubble_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(p &#x3D; N-1;p&gt;&#x3D;0;p--)&#123;</span><br><span class="line">		flag &#x3D; 0;</span><br><span class="line">		for(i &#x3D; 0;i&lt;p;i++)&#123;	&#x2F;&#x2F;一趟冒泡</span><br><span class="line">			if(A[i]&gt;A[i+1])&#123;</span><br><span class="line">				Swap(A[i],A[i+1]);</span><br><span class="line">				flag &#x3D; 1;&#x2F;&#x2F;标识发生了交换</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if(flag &#x3D;&#x3D; 0) break;&#x2F;&#x2F;全程无交换</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最好情况：顺序T=O（N）</p>
+<p>最欢情况：逆序T=O（N2）</p>
+<p>稳定，也可以应用于链表</p>
+<h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void Insertion_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(p &#x3D; 1;p&lt;N;p++)&#123;</span><br><span class="line">		Tmp &#x3D; A[p];</span><br><span class="line">		for(i &#x3D; p;i&gt;&#x3D;0&amp;&amp;tmp&lt;A[i-1];i--)</span><br><span class="line">			A[i] &#x3D; A[i-1];</span><br><span class="line">		A[i] &#x3D; Tmp;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最好情况：顺序T=O（N）；</p>
+<p>最坏情况: 逆序T=O(N2);</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/" class="post-title-link" itemprop="url">cmu csapp lecture 02 Bits,Bytes,and Integer</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-15 18:42:43" itemprop="dateCreated datePublished" datetime="2020-07-15T18:42:43+08:00">2020-07-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-17 15:18:05" itemprop="dateModified" datetime="2020-07-17T15:18:05+08:00">2020-07-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E3%80%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">《深入理解计算机系统》</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>483</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="http://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/02-03-bits-ints.pdf" target="_blank" rel="noopener">讲义地址</a></p>
+<h1 id="Representing-amp-Manipulating-Sets"><a href="#Representing-amp-Manipulating-Sets" class="headerlink" title="Representing &amp; Manipulating Sets"></a>Representing &amp; Manipulating Sets</h1><h2 id="Representing"><a href="#Representing" class="headerlink" title="Representing"></a>Representing</h2><p>01101001{0,3,5,6}</p>
+<p>01010101{0,2,4,6}</p>
+<h1 id="Operations"><a href="#Operations" class="headerlink" title="Operations"></a>Operations</h1><p>&amp; Intersection {0,6}</p>
+<p>|  Union            {0,2,3,4,5,6}</p>
+<p>^  Symmetric difference {2,3,4,5}</p>
+<p>~ Complement {1,3,5,7}</p>
+<p>上面的布尔代数运算，是从集合的角度来看。</p>
+<p>watch out for &amp;&amp; vs &amp;(and || vs |)..(Bit-level Operations and logic Operations)</p>
+<h1 id="shift-Operations"><a href="#shift-Operations" class="headerlink" title="shift Operations"></a>shift Operations</h1><h2 id="Left-Shift-x-lt-lt-y"><a href="#Left-Shift-x-lt-lt-y" class="headerlink" title="Left Shift : x &lt;&lt; y"></a>Left Shift : x &lt;&lt; y</h2><h2 id="Right-Shift-x-gt-gt-y"><a href="#Right-Shift-x-gt-gt-y" class="headerlink" title="Right Shift: x&gt;&gt;y"></a>Right Shift: x&gt;&gt;y</h2><h3 id="Logical-shift-Fill-with-0’s-on-left"><a href="#Logical-shift-Fill-with-0’s-on-left" class="headerlink" title="Logical shift:Fill with 0’s on left"></a>Logical shift:Fill with 0’s on left</h3><h3 id="Arithmetic-shift-Replicate-most-significant-bit-on-letf"><a href="#Arithmetic-shift-Replicate-most-significant-bit-on-letf" class="headerlink" title="Arithmetic shift: Replicate most significant bit on letf"></a>Arithmetic shift: Replicate most significant bit on letf</h3><h1 id="Conversion-Visualized"><a href="#Conversion-Visualized" class="headerlink" title="Conversion Visualized"></a>Conversion Visualized</h1><p><img src="/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/1.png" alt="Conversion"></p>
+<h1 id="Casting-Suprises"><a href="#Casting-Suprises" class="headerlink" title="Casting Suprises"></a>Casting Suprises</h1><p>在单一表达式中混有有符号数和无符号数，有符号数会转换成无符号数</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/14/%E4%B8%89%E7%82%B9%E5%BF%83%E5%BE%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -902,468 +1407,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">最短路径问题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-10 20:25:18" itemprop="dateCreated datePublished" datetime="2020-07-10T20:25:18+08:00">2020-07-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-13 17:09:50" itemprop="dateModified" datetime="2020-07-13T17:09:50+08:00">2020-07-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/07/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="最短路径问题的抽象"><a href="#最短路径问题的抽象" class="headerlink" title="最短路径问题的抽象"></a>最短路径问题的抽象</h1><p>最短路径就是源点（Source）和终点（Destination）之间权值之和最小的一条路径</p>
-<h1 id="问题分类"><a href="#问题分类" class="headerlink" title="问题分类"></a>问题分类</h1><ol>
-<li>单元最短路径问题：一点到其他顶点的最短路径<ol>
-<li>（有向）无权图</li>
-<li>（有向）有权图</li>
-</ol>
-</li>
-<li>多源最短路径问题：任意两点之间的最短路径</li>
-</ol>
-<h1 id="无权图的单源最短路算法"><a href="#无权图的单源最短路算法" class="headerlink" title="无权图的单源最短路算法"></a>无权图的单源最短路算法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;本质就是BFS的变型</span><br><span class="line">&#x2F;&#x2F;dist[w] &#x3D; S到W的最短距离</span><br><span class="line">&#x2F;&#x2F;dist[S] &#x3D; 0</span><br><span class="line">&#x2F;&#x2F;path[W] &#x3D; S到W的路上经过的某顶点（确切说是上个顶点）</span><br><span class="line">void Unweighted(Vertex S)&#123;</span><br><span class="line">	Enqueue(S,Q);</span><br><span class="line">	while(!IsEpmty(Q)))&#123;</span><br><span class="line">		v &#x3D; Dequeue(Q);</span><br><span class="line">		for(V 的每个邻接点 W)&#123;</span><br><span class="line">			if(dist[W] &#x3D;&#x3D; -1)&#123;</span><br><span class="line">				dist[W] &#x3D; dist[V]+1;</span><br><span class="line">				path[W] &#x3D; V;</span><br><span class="line">				enqueue(W,Q);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="有权图的单源最短路算法"><a href="#有权图的单源最短路算法" class="headerlink" title="有权图的单源最短路算法"></a>有权图的单源最短路算法</h1><p><strong><em>Dijkstra算法(按照递增的顺序找到各个顶点的最短路)</em></strong></p>
-<p><strong>前提是不存在负值圈</strong></p>
-<ol>
-<li>令S={源点s + 已经确定了最短路径的顶点vi}</li>
-<li>对不属于集合S的顶点v，定义dist[v]为s到v的最短路径长度，但该路径<em>仅仅经过S中的顶点。</em>即路径{s-&gt;(vi∈S)-&gt;v}的长度</li>
-<li>若路径是按照递增的顺序生成的，则<ol>
-<li>真正的最短路必须只经过S中的顶点（反证法：若存在另外一个结点，那也应该是这一个结点先被收录）</li>
-<li>每次从未收录的顶点中选一个dist最小的收录（贪心）</li>
-<li>增加一个v进入S，可能影响另外一个w的dist值（min{dist[w], dist[v] + &lt;v,w&gt;的权重}）</li>
-</ol>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">void Dijkstra(Vertex s)&#123;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		V &#x3D; 未收录顶点中dist最小者;</span><br><span class="line">		if(这样v不存在)</span><br><span class="line">			break;</span><br><span class="line">		collected[v] &#x3D; true;</span><br><span class="line">		for(v 的每个邻接点 W)</span><br><span class="line">			if(collected[W] &#x3D;&#x3D; false)&#123;</span><br><span class="line">				if(dist[v]+E&lt;v,w&gt; &lt; dist[W])&#123;</span><br><span class="line">					dist[W] &#x3D; dist[V] + E&lt;v,w&gt;;</span><br><span class="line">					path[W] &#x3D; v;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>若将dist的值存在数组和堆中会产生不同的效果：</p>
-<ol>
-<li>数组中 T=O（V2 + E）适合稠密图</li>
-<li>最小堆中<ol>
-<li>更新dist[w] = O(logv)</li>
-<li>T = O(VlogV + ElogV) = O(Elogv) 适合稀疏图</li>
-</ol>
-</li>
-</ol>
-<h1 id="多源最短路算法"><a href="#多源最短路算法" class="headerlink" title="多源最短路算法"></a>多源最短路算法</h1><ol>
-<li>直接将单元最短路径算法调用V遍 T = O（V3 + E*V）</li>
-<li>Floyd算法 T = O（V3）</li>
-</ol>
-<p>Floyd 算法 </p>
-<ol>
-<li>Dk[i][j] = 路径{i -&gt; {l&lt;=k} -&gt; j}的最小长度</li>
-<li>D0,D1,…,DV-1[i][j]即给出了i到j的真正最短距离</li>
-<li>最初的D-1（如果ij没边，初始化为正无穷）</li>
-<li>Dk-1已经完成，递推到Dk时：<ol>
-<li>或者k不∈最短路径{i-&gt;{l&lt;=k}-&gt;j},则Dk = Dk-1</li>
-<li>或者k∈最短路径,则该路径由两端最短路径组成：Dk[i][j] = Dk-1[i][k] + Dk-1[k][j]</li>
-</ol>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void Floyd()&#123;</span><br><span class="line">	for(i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">	 	for(j &#x3D; 0;j&lt;N;j++)&#123;</span><br><span class="line">	 		D[i][j] &#x3D; G[i][j];</span><br><span class="line">	 		path[i][j] &#x3D; -1;	&#x2F;&#x2F;用来打印路径用</span><br><span class="line">	 	&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	for(k &#x3D; 0;k&lt;N;k++)&#123;</span><br><span class="line">		for(i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">			for(j &#x3D; 0;j&lt;N;j++)&#123;</span><br><span class="line">				if(D[i][k]+ D[k][j] &lt; D[i][j])&#123;</span><br><span class="line">					D[i][j] &#x3D; D[i][k] + D[k][j];</span><br><span class="line">					path[i][j] &#x3D; k;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/09/2020-7-9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/09/2020-7-9/" class="post-title-link" itemprop="url">2020-7-9</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-09 17:31:07" itemprop="dateCreated datePublished" datetime="2020-07-09T17:31:07+08:00">2020-07-09</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/07/09/2020-7-9/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/09/2020-7-9/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/" class="post-title-link" itemprop="url">1064 Complete Binary Search Tree (30分)</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-06 23:36:25 / 修改时间：23:38:17" itemprop="dateCreated datePublished" datetime="2020-07-06T23:36:25+08:00">2020-07-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>1064 Complete Binary Search Tree (30分)</p>
-<p>A Binary Search Tree (BST) is recursively defined as a binary tree which has the following properties:</p>
-<ul>
-<li>The left subtree of a node contains only nodes with keys less than the node’s key.</li>
-<li>The right subtree of a node contains only nodes with keys greater than or equal to the node’s key.</li>
-<li>Both the left and right subtrees must also be binary search trees.</li>
-</ul>
-<p>A Complete Binary Tree (CBT) is a tree that is completely filled, with the possible exception of the bottom level, which is filled from left to right.</p>
-<p>Now given a sequence of distinct non-negative integer keys, a unique BST can be constructed if it is required that the tree must also be a CBT. You are supposed to output the level order traversal sequence of this BST.</p>
-<h3 id="Input-Specification"><a href="#Input-Specification" class="headerlink" title="Input Specification:"></a>Input Specification:</h3><p>Each input file contains one test case. For each case, the first line contains a positive integer <em>N</em> (≤1000). Then <em>N</em> distinct non-negative integer keys are given in the next line. All the numbers in a line are separated by a space and are no greater than 2000.</p>
-<h3 id="Output-Specification"><a href="#Output-Specification" class="headerlink" title="Output Specification:"></a>Output Specification:</h3><p>For each test case, print in one line the level order traversal sequence of the corresponding complete binary search tree. All the numbers in a line must be separated by a space, and there must be no extra space at the end of the line.</p>
-<h3 id="Sample-Input"><a href="#Sample-Input" class="headerlink" title="Sample Input:"></a>Sample Input:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">1 2 3 4 5 6 7 8 9 0</span><br></pre></td></tr></table></figure>
-
-<h3 id="Sample-Output"><a href="#Sample-Output" class="headerlink" title="Sample Output:"></a>Sample Output:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6 3 8 1 5 7 9 0 2 4</span><br></pre></td></tr></table></figure>
-
-<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int num[1005];</span><br><span class="line">int ans[1005];</span><br><span class="line">int N;</span><br><span class="line">int getMid(int l,int r)&#123;</span><br><span class="line">	int sum &#x3D; r-l+1;		&#x2F;&#x2F;总数</span><br><span class="line">	int layer &#x3D; floor(log(sum+1)&#x2F;log(2)); &#x2F;&#x2F;除最后一层的层数，</span><br><span class="line">	int lastlayerleaf &#x3D; sum+1-pow(2,layer);	&#x2F;&#x2F;最后一层的节点数</span><br><span class="line">	int leftnum &#x3D; pow(2,layer-1)-1+min(lastlayerleaf,(int)pow(2,layer-1));	&#x2F;&#x2F;左子树结点总数</span><br><span class="line">	return l+leftnum; &#x2F;&#x2F;根位置</span><br><span class="line">&#125; </span><br><span class="line">void solve(int l,int r,int root)&#123;</span><br><span class="line">	if(r-l+1 &#x3D;&#x3D; 0) return;</span><br><span class="line">	int mid &#x3D; getMid(l,r);</span><br><span class="line">	ans[root] &#x3D; num[mid];</span><br><span class="line">	solve(l,mid-1,root*2+1);</span><br><span class="line">	solve(mid+1,r,root*2+2); </span><br><span class="line">&#125;</span><br><span class="line">int main()&#123;</span><br><span class="line">	cin&gt;&gt;N;</span><br><span class="line">	for(int i&#x3D;0;i&lt;N;i++)</span><br><span class="line">		cin&gt;&gt;num[i];</span><br><span class="line">	sort(num,num+N);</span><br><span class="line">	solve(0,N-1,0);</span><br><span class="line">	cout&lt;&lt;ans[0];</span><br><span class="line">	for(int i &#x3D; 1;i&lt;N;i++)</span><br><span class="line">		cout&lt;&lt;&quot; &quot;&lt;&lt;ans[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/" class="post-title-link" itemprop="url">1086 Tree Traversals Again (25分)</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-06 22:31:55 / 修改时间：22:34:55" itemprop="dateCreated datePublished" datetime="2020-07-06T22:31:55+08:00">2020-07-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>An inorder binary tree traversal can be implemented in a non-recursive way with a stack. For example, suppose that when a 6-node binary tree (with the keys numbered from 1 to 6) is traversed, the stack operations are: push(1); push(2); push(3); pop(); pop(); push(4); pop(); pop(); push(5); push(6); pop(); pop(). Then a unique binary tree (shown in Figure 1) can be generated from this sequence of operations. Your task is to give the postorder traversal sequence of this tree.</p>
-<p><img src="https://images.ptausercontent.com/30" alt="img"><br>Figure 1</p>
-<h3 id="Input-Specification"><a href="#Input-Specification" class="headerlink" title="Input Specification:"></a>Input Specification:</h3><p>Each input file contains one test case. For each case, the first line contains a positive integer <em>N</em> (≤30) which is the total number of nodes in a tree (and hence the nodes are numbered from 1 to <em>N</em>). Then 2<em>N</em> lines follow, each describes a stack operation in the format: “Push X” where X is the index of the node being pushed onto the stack; or “Pop” meaning to pop one node from the stack.</p>
-<h3 id="Output-Specification"><a href="#Output-Specification" class="headerlink" title="Output Specification:"></a>Output Specification:</h3><p>For each test case, print the postorder traversal sequence of the corresponding tree in one line. A solution is guaranteed to exist. All the numbers must be separated by exactly one space, and there must be no extra space at the end of the line.</p>
-<h3 id="Sample-Input"><a href="#Sample-Input" class="headerlink" title="Sample Input:"></a>Sample Input:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">6</span><br><span class="line">Push 1</span><br><span class="line">Push 2</span><br><span class="line">Push 3</span><br><span class="line">Pop</span><br><span class="line">Pop</span><br><span class="line">Push 4</span><br><span class="line">Pop</span><br><span class="line">Pop</span><br><span class="line">Push 5</span><br><span class="line">Push 6</span><br><span class="line">Pop</span><br><span class="line">Pop</span><br></pre></td></tr></table></figure>
-
-<h3 id="Sample-Output"><a href="#Sample-Output" class="headerlink" title="Sample Output:"></a>Sample Output:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 4 2 6 5 1</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int N,n,i,j,k;</span><br><span class="line">string s;</span><br><span class="line">int preorder[35];</span><br><span class="line">int inorder[35];</span><br><span class="line">int postorder[35];</span><br><span class="line">void porder(int ileft,int iright,int pleft,int pright)&#123;	&#x2F;&#x2F;核心算法</span><br><span class="line">	if((ileft&gt;iright)||(pleft&gt;pright))</span><br><span class="line">		return;</span><br><span class="line">		</span><br><span class="line">	int i &#x3D; 0;</span><br><span class="line">	postorder[k++] &#x3D; preorder[pleft];</span><br><span class="line">	&#x2F;&#x2F;cout&lt;&lt;postorder[k-1]&lt;&lt;endl;</span><br><span class="line">	for(i &#x3D; ileft;i&lt;&#x3D;iright;i++)&#123;</span><br><span class="line">		if(inorder[i] &#x3D;&#x3D; preorder[pleft])</span><br><span class="line">			break;</span><br><span class="line">	&#125;</span><br><span class="line">	porder(i+1,iright,pleft+1+i-ileft,pright);</span><br><span class="line">	porder(ileft,i-1,pleft+1,pleft+i-ileft);</span><br><span class="line">&#125;</span><br><span class="line">int main()&#123;</span><br><span class="line">	cin&gt;&gt;N;</span><br><span class="line">	int NN &#x3D; 2*N;</span><br><span class="line">	stack&lt;int&gt; ss;</span><br><span class="line">	while(NN--)&#123;</span><br><span class="line">		cin&gt;&gt;s;</span><br><span class="line">		if(s&#x3D;&#x3D;&quot;Push&quot;)&#123;</span><br><span class="line">			cin&gt;&gt;n;</span><br><span class="line">			ss.push(n);</span><br><span class="line">			preorder[i++] &#x3D; n;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			n &#x3D; ss.top();</span><br><span class="line">			ss.pop();</span><br><span class="line">			inorder[j++] &#x3D; n;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	porder(0,N-1,0,N-1);</span><br><span class="line">	cout&lt;&lt;postorder[N-1];</span><br><span class="line">	for(int j &#x3D; N-2;j&gt;&#x3D;0;j--)&#123;</span><br><span class="line">		cout&lt;&lt;&quot; &quot;&lt;&lt;postorder[j];</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1414,20 +1457,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1486,12 +1529,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">67k</span>
+    <span title="站点总字数">71k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:01</span>
+    <span title="站点阅读时长">1:04</span>
 </div>
 
         

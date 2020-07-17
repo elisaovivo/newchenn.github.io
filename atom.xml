@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://cjay.life/"/>
-  <updated>2020-07-14T09:44:11.049Z</updated>
+  <updated>2020-07-17T15:40:37.088Z</updated>
   <id>https://cjay.life/</id>
   
   <author>
@@ -15,6 +15,115 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp第一章：计算机系统漫游</title>
+    <link href="https://cjay.life/2020/07/17/csapp%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/"/>
+    <id>https://cjay.life/2020/07/17/csapp%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/</id>
+    <published>2020-07-17T04:23:05.000Z</published>
+    <updated>2020-07-17T15:40:37.088Z</updated>
+    
+    <content type="html"><![CDATA[<p>本书第一章开头通过跟踪hello程序的生命周期对系统进行学习</p><h1 id="1-1-信息就是位-上下文"><a href="#1-1-信息就是位-上下文" class="headerlink" title="1.1 信息就是位+上下文"></a>1.1 信息就是位+上下文</h1><p>Hello程序在一开始仅仅只是由编辑器创建的文本文件。这些文本文件在本质上都只是比特序列。</p><p><strong>比特序列是如何表示成文本字符？</strong></p><p><strong>这里采用编码标准，标准有很多，这里已ASCII标准为例：ASCII标准将这些最原始的比特序列，分成以字节（8个bit）为单位来表示每个字符。相当于y = f(x),y是文本字符，x是一个字节的bit串，函数f()是ASCII标准，该函数一一映射</strong></p><p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190625084643603-1395767889.png" alt></p><p><strong>注意：文本中，每个文本行都有看不见的换行符’\n’，对应整数10</strong></p><p>所以在计算机中，比特序列是通过<strong>读到数据对象时的上下文</strong>来区分不同的数据对象</p><h1 id="1-2-程序被其他程序翻译成不同的格式"><a href="#1-2-程序被其他程序翻译成不同的格式" class="headerlink" title="1.2 程序被其他程序翻译成不同的格式"></a>1.2 程序被其他程序翻译成不同的格式</h1><p>源程序到目标程序（也称为可执行目标文件）转变过程如下：</p><p><img src="https://nullcc.github.io/assets/images/post_imgs/compilation_system.png" alt></p><ul><li>预处理阶段：修改原始C程序，比如将#include&lt;stdio.h&gt;中的stdio.h的内容直接插入程序文本中。最后将扩展名改为.i</li><li>编译阶段：通过编译器，转成了汇编语言程序。</li><li>汇编阶段：通过汇编器，转成了机器语言指令，把这些指令打包成可重定位目标程序（relocatable object program）的格式，保存到hello.o中</li><li>链接阶段：hello程序中调用了printf函数，该阶段就是将hello.o与printf.o以某种方式合并起来</li></ul><h1 id="1-4-处理器读并解释存在内存中的指令"><a href="#1-4-处理器读并解释存在内存中的指令" class="headerlink" title="1.4 处理器读并解释存在内存中的指令"></a>1.4 处理器读并解释存在内存中的指令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">linux&gt; .&#x2F;hello</span><br><span class="line">hello,world</span><br><span class="line">linux&gt;</span><br></pre></td></tr></table></figure><p>上图是通过shell（命令行解释器）运行了hello程序。</p><h2 id="1-4-1-系统的硬件组成"><a href="#1-4-1-系统的硬件组成" class="headerlink" title="1.4.1 系统的硬件组成"></a>1.4.1 系统的硬件组成</h2><ol><li>总线：总线被设计成传送定长的字节快，也就是字（word）。字长是系统的一个基本参数，每个系统中都不尽相同。大多数系统中要不32位要不64位。</li><li>I/O设备：每个I/O设备都通过一个控制器或适配器与I/O总线相连。<ul><li>控制器是I/O设备本身或系统的电路板上的芯片组</li><li>适配器是插在主板卡槽上的卡</li></ul></li><li>主存：由一组动态随机存取存储器（DRAM）芯片组成的。</li><li>处理器：是届时或执行存储在内存中指令的引擎。存储器核心是一个大小为一个字的寄存器，称为程序计数器PC，用于指向内存中某条机器语言指令。</li></ol><h2 id="1-4-2-运行hello程序"><a href="#1-4-2-运行hello程序" class="headerlink" title="1.4.2 运行hello程序"></a>1.4.2 运行hello程序</h2><p>初始时，shell程序执行它的指令，等待我们输入一个命令。当在键盘上输入“./hello”后，shell程序将字符逐一读入寄存器，再把它放到内存中</p><p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190626182409229-914940200.png" alt></p><p>当输入回车，shell知道我们结束了命令的输入。然后shell执行一系列指令加载并执行hello文件，将这个文件复制到主存。</p><p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190626182731361-479664359.png" alt></p><p>处理器就开始执行这些机器语言指令。“Hello world”字符串从主存复制到寄存器文件，再从寄存器文件复制到显示设备。</p><p><img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190626184237882-1227164304.png" alt></p><h2 id="1-5-高速缓存至关重要"><a href="#1-5-高速缓存至关重要" class="headerlink" title="1.5 高速缓存至关重要"></a>1.5 高速缓存至关重要</h2><p>高速缓存通过静态随机访问存储器（SRAM）的硬件技术实现。</p><h2 id="1-6-存储设备形成层次结构"><a href="#1-6-存储设备形成层次结构" class="headerlink" title="1.6 存储设备形成层次结构"></a>1.6 存储设备形成层次结构</h2><p>主要思想是上一层的存储器作为第一层存储器的高速缓存。</p><h2 id="1-7-操作系统管理硬件"><a href="#1-7-操作系统管理硬件" class="headerlink" title="1.7 操作系统管理硬件"></a>1.7 操作系统管理硬件</h2><p>shell与hello程序都没有直接访问硬件，取而代之是由操作系统提供服务。</p><p>操作系统两个基本功能：</p><ol><li>防止硬件被应用程序滥用</li><li>向应用程序提供简单的机制来控制硬件设备</li></ol><p>操作系统主要采用几个抽象概念来实现上面两个功能：</p><ol><li>文件对I/O设备的抽象表示</li><li>虚拟内存对主存和磁盘I/O设备的抽象表示</li><li>进程则是对处理器、主存和I/O设备的抽象表示</li></ol><p><img src="https://bloggg-1254259681.cos.na-siliconvalley.myqcloud.com/5tpq2.jpg" alt></p><h2 id="1-7-1-进程"><a href="#1-7-1-进程" class="headerlink" title="1.7.1 进程"></a>1.7.1 进程</h2><p>进程是操作系统对一个正在运行的程序一种抽象。有了这种抽象，一个系统上可以并发多个进程。这种并发执行，通过处理器来进程间切换来实现的。操作系统实行这种交错执行的机制称为<strong>上下文切换</strong>。</p><p><strong>上下文是指操作系统跟踪进程运行所需要的状态信息，比如PC和寄存器的当前值，以及主存的内容</strong></p><p>上下文切换其实就是保存当前进程的上下文，恢复新进程的上下文，然后将控制区传递给新进程。</p><p>对于两个并发进程：shell进程和hello进程。刚开始shell进程在运行，即等待命令行输入。</p><p>当运行hello程序，shell系统调用-》系统调用将控制权从shell到给操作系统-》操作系统保存shell进程上下文-》创建hello进程上下文并将控制权给hello进程-》hello进程终止-》操作系统恢复shell上下文，并将控制区给shell</p><p><img src="https://images2017.cnblogs.com/blog/997599/201709/997599-20170917182301157-2005157989.png" alt></p><h2 id="1-7-2-线程"><a href="#1-7-2-线程" class="headerlink" title="1.7.2 线程"></a>1.7.2 线程</h2><p>现代操作系统中，进程由多个线程的执行单元构成，每个线程运行在进程上下文中，享有同样的代码与数据。</p><h2 id="1-7-3-虚拟内存"><a href="#1-7-3-虚拟内存" class="headerlink" title="1.7.3 虚拟内存"></a>1.7.3 虚拟内存</h2><p>虚拟内存是一种抽象概念，给进程提供一种假象，即每个进程都在独占使用主存。每个进程看到都是虚拟地址空间</p><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jenItbGVhcm4ub3NzLWNuLWJlaWppbmcuYWxpeXVuY3MuY29tL1JOTi8xLjEzJTIwJUU4JUJGJTlCJUU3JUE4JThCJUU3JTlBJTg0JUU4JTk5JTlBJUU2JThCJTlGJUU1JTlDJUIwJUU1JTlEJTgwJUU3JUE5JUJBJUU5JTk3JUI0LnBuZw?x-oss-process=image/format,png" alt="Linux进程的虚拟地址空间"></p><p>最低地址开始，从上介绍。</p><ul><li>程序代码和数据：先是代码，接着是数据。</li><li>堆：代码与数据在进程开始运行时就被指定了大小。但调用像malloc和free这样C标准库函数时，堆在运行时动态扩展与搜索。</li><li>共享库：用来存放C标准库和数学库这样的共享库的代码和数据区域。</li><li>栈：编译器用它实现函数调用，调用一个函数，栈增长，一个函数返回时，栈就会收缩。也可以动态扩展和收缩。</li><li>内核虚拟内存：为内核保留</li></ul><p>虚拟内存的运作需要<strong>硬件和操作系统之间交互，包括堆处理器生成的每个地址的硬件翻译</strong></p><p>基本思想是进程虚拟内存的内容存在磁盘上，用主存作为磁盘的高速缓存。</p><h2 id="1-7-4-文件"><a href="#1-7-4-文件" class="headerlink" title="1.7.4 文件"></a>1.7.4 文件</h2><p>文件本质是字节序列。但它向应用程序提供了一个统一的视图来看待各式各样的I/O设备。</p><h1 id="1-8-系统之间的网络通信"><a href="#1-8-系统之间的网络通信" class="headerlink" title="1.8 系统之间的网络通信"></a>1.8 系统之间的网络通信</h1><p>系统从主存复制一串字到网络适配器时，数据流过网络到达另一台机器。同时，系统也可以从读取其他机器发送过来的数据，并复制到主存。</p><p><img src="https://img2018.cnblogs.com/blog/1526080/201811/1526080-20181129202305045-102973742.png" alt></p><h1 id="重要主题"><a href="#重要主题" class="headerlink" title="重要主题"></a>重要主题</h1><h2 id="1-9-1-Amdahl定律"><a href="#1-9-1-Amdahl定律" class="headerlink" title="1.9.1 Amdahl定律"></a>1.9.1 Amdahl定律</h2><p>若系统执行某应用程序需要时间Told。假设其中某部分与整体时间的比例为a。</p><p>若该部分性能提升k。则新的执行时间为：<strong>Tnew = (1-a)Told+（aTold）/k = Told[(1-a)+a/k]</strong></p><p>加速比 <strong>S = Told/Tnew = 1/[(1-a)+a/k];</strong></p><p><strong>若k-&gt;∞，则S = 1/（1-a）</strong>，说明想要高的加速比只有通过优化系统大部分组件才行。</p><h2 id="1-9-2-并发（concurrency）与并行-parallelism"><a href="#1-9-2-并发（concurrency）与并行-parallelism" class="headerlink" title="1.9.2 并发（concurrency）与并行(parallelism)"></a>1.9.2 并发（concurrency）与并行(parallelism)</h2><ol><li>线程级并发：使用线程可以在一个进程中执行多个控制流。想要实现线程级的并发，可以采用以下两个技术<ol><li>多核处理器：将多个CPU集成到一个集成电路芯片上。<img src="https://img2018.cnblogs.com/blog/1334023/201906/1334023-20190629151543016-1999642658.png" alt></li><li>超线程（hyperthreading）或称为同时多线程(simultaneous multi-threading)，允许一个CPU通过执行多个CPU。说是一个CPU，其实CPU里的某些硬件变成了多份，比如程序计数器和寄存器文件。平常线程切换大约需要20000个周期，而采用超线程技术后，只要一个周期。</li></ol></li><li>指令集并行：在较低抽象层次上，现代处理器可以同时执行多条指令。采用流水线(Pipelining),将一条指令分成不同步骤，将硬件组织分成一系列阶段。硬件不同部分来处理指令的不同部分。能够达到接近于一个时钟周期的执行效率。而超标量（super-scalar）处理器速度更快。</li><li>单指令、多数据并行(SIMD):允许一条指令产生多个可以并行的操作。</li></ol><h2 id="1-9-3-计算机系统中抽象的重要性"><a href="#1-9-3-计算机系统中抽象的重要性" class="headerlink" title="1.9.3 计算机系统中抽象的重要性"></a>1.9.3 计算机系统中抽象的重要性</h2><p>例如为一组函数规定简单的应用程序接口（API），使程序员无需了解它内部的工作便可使用。</p><p>指令集架构就是提供了堆实际处理器硬件的抽象。使用这个抽象，机器代码程序好像运行在一个一次只执行一次指令的处理器上。</p><p><img src="https://img2018.cnblogs.com/blog/1526080/201811/1526080-20181129202927009-1202675019.png" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;本书第一章开头通过跟踪hello程序的生命周期对系统进行学习&lt;/p&gt;
+&lt;h1 id=&quot;1-1-信息就是位-上下文&quot;&gt;&lt;a href=&quot;#1-1-信息就是位-上下文&quot; class=&quot;headerlink&quot; title=&quot;1.1 信息就是位+上下文&quot;&gt;&lt;/a&gt;1.1 信息就是位
+      
+    
+    </summary>
+    
+    
+      <category term="《深入理解计算机系统》" scheme="https://cjay.life/categories/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E3%80%8B/"/>
+    
+    
+      <category term="csapp,视频课程" scheme="https://cjay.life/tags/csapp-%E8%A7%86%E9%A2%91%E8%AF%BE%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>csapp</title>
+    <link href="https://cjay.life/2020/07/17/csapp/"/>
+    <id>https://cjay.life/2020/07/17/csapp/</id>
+    <published>2020-07-17T04:13:29.000Z</published>
+    <updated>2020-07-17T15:41:21.204Z</updated>
+    
+    <content type="html"><![CDATA[<p>计划:阅读CSAPP和看对应CMU课程，看完后，总结笔记。</p><hr><p>该篇blog用于记录实施进度。</p><p>2020.7.17    1-20页</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;计划:阅读CSAPP和看对应CMU课程，看完后，总结笔记。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;该篇blog用于记录实施进度。&lt;/p&gt;
+&lt;p&gt;2020.7.17    1-20页&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="计划" scheme="https://cjay.life/categories/%E8%AE%A1%E5%88%92/"/>
+    
+    
+      <category term="计划" scheme="https://cjay.life/tags/%E8%AE%A1%E5%88%92/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>简单排序</title>
+    <link href="https://cjay.life/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/"/>
+    <id>https://cjay.life/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/</id>
+    <published>2020-07-16T14:41:31.000Z</published>
+    <updated>2020-07-16T15:20:59.680Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void Bubble_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">for(p &#x3D; N-1;p&gt;&#x3D;0;p--)&#123;</span><br><span class="line">flag &#x3D; 0;</span><br><span class="line">for(i &#x3D; 0;i&lt;p;i++)&#123;&#x2F;&#x2F;一趟冒泡</span><br><span class="line">if(A[i]&gt;A[i+1])&#123;</span><br><span class="line">Swap(A[i],A[i+1]);</span><br><span class="line">flag &#x3D; 1;&#x2F;&#x2F;标识发生了交换</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">if(flag &#x3D;&#x3D; 0) break;&#x2F;&#x2F;全程无交换</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>最好情况：顺序T=O（N）</p><p>最欢情况：逆序T=O（N2）</p><p>稳定，也可以应用于链表</p><h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void Insertion_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">for(p &#x3D; 1;p&lt;N;p++)&#123;</span><br><span class="line">Tmp &#x3D; A[p];</span><br><span class="line">for(i &#x3D; p;i&gt;&#x3D;0&amp;&amp;tmp&lt;A[i-1];i--)</span><br><span class="line">A[i] &#x3D; A[i-1];</span><br><span class="line">A[i] &#x3D; Tmp;</span><br><span class="line">&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>最好情况：顺序T=O（N）；</p><p>最坏情况: 逆序T=O(N2);</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;冒泡排序&quot;&gt;&lt;a href=&quot;#冒泡排序&quot; class=&quot;headerlink&quot; title=&quot;冒泡排序&quot;&gt;&lt;/a&gt;冒泡排序&lt;/h1&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pr
+      
+    
+    </summary>
+    
+    
+      <category term="算法与数据结构" scheme="https://cjay.life/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    
+    
+      <category term="排序" scheme="https://cjay.life/tags/%E6%8E%92%E5%BA%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>cmu csapp lecture 02 Bits,Bytes,and Integer</title>
+    <link href="https://cjay.life/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/"/>
+    <id>https://cjay.life/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/</id>
+    <published>2020-07-15T10:42:43.000Z</published>
+    <updated>2020-07-17T07:18:05.230Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="http://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/02-03-bits-ints.pdf" target="_blank" rel="noopener">讲义地址</a></p><h1 id="Representing-amp-Manipulating-Sets"><a href="#Representing-amp-Manipulating-Sets" class="headerlink" title="Representing &amp; Manipulating Sets"></a>Representing &amp; Manipulating Sets</h1><h2 id="Representing"><a href="#Representing" class="headerlink" title="Representing"></a>Representing</h2><p>01101001{0,3,5,6}</p><p>01010101{0,2,4,6}</p><h1 id="Operations"><a href="#Operations" class="headerlink" title="Operations"></a>Operations</h1><p>&amp; Intersection {0,6}</p><p>|  Union            {0,2,3,4,5,6}</p><p>^  Symmetric difference {2,3,4,5}</p><p>~ Complement {1,3,5,7}</p><p>上面的布尔代数运算，是从集合的角度来看。</p><p>watch out for &amp;&amp; vs &amp;(and || vs |)..(Bit-level Operations and logic Operations)</p><h1 id="shift-Operations"><a href="#shift-Operations" class="headerlink" title="shift Operations"></a>shift Operations</h1><h2 id="Left-Shift-x-lt-lt-y"><a href="#Left-Shift-x-lt-lt-y" class="headerlink" title="Left Shift : x &lt;&lt; y"></a>Left Shift : x &lt;&lt; y</h2><h2 id="Right-Shift-x-gt-gt-y"><a href="#Right-Shift-x-gt-gt-y" class="headerlink" title="Right Shift: x&gt;&gt;y"></a>Right Shift: x&gt;&gt;y</h2><h3 id="Logical-shift-Fill-with-0’s-on-left"><a href="#Logical-shift-Fill-with-0’s-on-left" class="headerlink" title="Logical shift:Fill with 0’s on left"></a>Logical shift:Fill with 0’s on left</h3><h3 id="Arithmetic-shift-Replicate-most-significant-bit-on-letf"><a href="#Arithmetic-shift-Replicate-most-significant-bit-on-letf" class="headerlink" title="Arithmetic shift: Replicate most significant bit on letf"></a>Arithmetic shift: Replicate most significant bit on letf</h3><h1 id="Conversion-Visualized"><a href="#Conversion-Visualized" class="headerlink" title="Conversion Visualized"></a>Conversion Visualized</h1><p><img src="/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/1.png" alt="Conversion"></p><h1 id="Casting-Suprises"><a href="#Casting-Suprises" class="headerlink" title="Casting Suprises"></a>Casting Suprises</h1><p>在单一表达式中混有有符号数和无符号数，有符号数会转换成无符号数</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;a href=&quot;http://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/02-03-bits-ints.pdf&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;讲义地址&lt;/a&gt;&lt;
+      
+    
+    </summary>
+    
+    
+      <category term="《深入理解计算机系统》" scheme="https://cjay.life/categories/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E3%80%8B/"/>
+    
+    
+      <category term="csapp,视频课程" scheme="https://cjay.life/tags/csapp-%E8%A7%86%E9%A2%91%E8%AF%BE%E7%A8%8B/"/>
+    
+  </entry>
   
   <entry>
     <title>三点心得</title>
@@ -454,114 +563,6 @@
     
     
       <category term="并查集" scheme="https://cjay.life/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>集合及运算</title>
-    <link href="https://cjay.life/2020/06/19/%E9%9B%86%E5%90%88%E5%8F%8A%E8%BF%90%E7%AE%97/"/>
-    <id>https://cjay.life/2020/06/19/%E9%9B%86%E5%90%88%E5%8F%8A%E8%BF%90%E7%AE%97/</id>
-    <published>2020-06-19T07:33:27.000Z</published>
-    <updated>2020-06-19T09:03:14.171Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h1><p>定义：集合<strong><em>并，查</em></strong>某元素属于什么集合</p><p><em>双亲表示法：孩子指向双亲(与普通树的指针刚好相反)</em></p><h1 id="并查集存储"><a href="#并查集存储" class="headerlink" title="并查集存储"></a>并查集存储</h1><p>typedef struct{</p><p>​    ElementType Data;</p><p>​    int parent;</p><p>} SetType;</p><h1 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h1><h2 id="查找某个元素所在集合"><a href="#查找某个元素所在集合" class="headerlink" title="查找某个元素所在集合"></a>查找某个元素所在集合</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int Find(SetType S[],ElementType X)&#123;</span><br><span class="line">int i;</span><br><span class="line">for(i &#x3D; 0;i&lt;MaxSize &amp;&amp; S[i].data !&#x3D; X; i++);</span><br><span class="line">if(i &gt;&#x3D; MaxSize) return -1; &#x2F;&#x2F;未找到X，返回-1</span><br><span class="line">for(;S[i].parent &gt;&#x3D; 0; i &#x3D; S[i].Parent);</span><br><span class="line">return i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="集合的并运算"><a href="#集合的并运算" class="headerlink" title="集合的并运算"></a>集合的并运算</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void Union(SetType S[], ElementType X1, ElementType X2)&#123;</span><br><span class="line">int root1, root2;</span><br><span class="line">root1 &#x3D; Find(S,X1);</span><br><span class="line">root2 &#x3D; Find(S,X2);</span><br><span class="line">if(root1!&#x3D;root2) S[root2].parent &#x3D; Root1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="路径压缩"><a href="#路径压缩" class="headerlink" title="路径压缩"></a>路径压缩</h2><p>改写Find方法。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int Find(SetType S[], ElementType X)&#123;</span><br><span class="line">if(S[X]&lt;0)</span><br><span class="line">return x;</span><br><span class="line">else return S[X] &#x3D; Find(S,S[X]);&#x2F;&#x2F;尾递归不用担心爆内存，编译器编译时会优化成循环</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;并查集&quot;&gt;&lt;a href=&quot;#并查集&quot; class=&quot;headerlink&quot; title=&quot;并查集&quot;&gt;&lt;/a&gt;并查集&lt;/h1&gt;&lt;p&gt;定义：集合&lt;strong&gt;&lt;em&gt;并，查&lt;/em&gt;&lt;/strong&gt;某元素属于什么集合&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;双亲表示法：孩子指向双
-      
-    
-    </summary>
-    
-    
-      <category term="算法与数据结构" scheme="https://cjay.life/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    
-    
-      <category term="并查集" scheme="https://cjay.life/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>哈夫曼树与哈夫曼编码</title>
-    <link href="https://cjay.life/2020/06/18/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E4%B8%8E%E5%93%88%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81/"/>
-    <id>https://cjay.life/2020/06/18/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E4%B8%8E%E5%93%88%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81/</id>
-    <published>2020-06-18T14:15:56.000Z</published>
-    <updated>2020-06-18T14:44:47.472Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="哈夫曼树定义"><a href="#哈夫曼树定义" class="headerlink" title="哈夫曼树定义"></a>哈夫曼树定义</h1><p>哈夫曼树又称为最优二叉树，是WPL最小的二叉树</p><h1 id="构建哈夫曼树"><a href="#构建哈夫曼树" class="headerlink" title="构建哈夫曼树"></a>构建哈夫曼树</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">typedef struct TreeNode *HuffmanTree;</span><br><span class="line">struct TreeNode&#123;</span><br><span class="line">int Weight;</span><br><span class="line">HuffmanTree Left,Right;</span><br><span class="line">&#125;</span><br><span class="line">HuffmanTree Huffman(MinHeap H)&#123;</span><br><span class="line">int i; HuffmanTree T;</span><br><span class="line">BuildMinHeap(H)&#x2F;&#x2F;调整为最小堆</span><br><span class="line">for(i &#x3D; 1;i&lt; H-&gt;Size;i++)&#123;&#x2F;&#x2F;做H-&gt;size-1次合并</span><br><span class="line">T &#x3D; malloc(sizeof(struct TreeNode));</span><br><span class="line">T-&gt;Left &#x3D; DeleteMin(H);</span><br><span class="line">T-&gt;Right &#x3D; DeleteMin(H);</span><br><span class="line">T-&gt;Weight &#x3D; T-&gt;Left-&gt;Weight+T-&gt;Right-&gt;Weight;</span><br><span class="line">Insert(H,T);</span><br><span class="line">&#125;</span><br><span class="line">T &#x3D; DeleteMin(H);</span><br><span class="line">return T;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>整体复杂度NlogN。</p><h1 id="哈夫曼树特点"><a href="#哈夫曼树特点" class="headerlink" title="哈夫曼树特点"></a>哈夫曼树特点</h1><h2 id="没有度为1的节点"><a href="#没有度为1的节点" class="headerlink" title="没有度为1的节点"></a>没有度为1的节点</h2><h2 id="n个叶子结点的哈夫曼树共有2n-1个结点（n2-n0-1）"><a href="#n个叶子结点的哈夫曼树共有2n-1个结点（n2-n0-1）" class="headerlink" title="n个叶子结点的哈夫曼树共有2n-1个结点（n2 = n0-1）"></a>n个叶子结点的哈夫曼树共有2n-1个结点（n2 = n0-1）</h2><h2 id="任意非叶结点的左右子树交换仍是哈夫曼树"><a href="#任意非叶结点的左右子树交换仍是哈夫曼树" class="headerlink" title="任意非叶结点的左右子树交换仍是哈夫曼树"></a>任意非叶结点的左右子树交换仍是哈夫曼树</h2><h2 id="对于同一组权值，存在着不同构的两棵哈夫曼树-1-2-3-3"><a href="#对于同一组权值，存在着不同构的两棵哈夫曼树-1-2-3-3" class="headerlink" title="对于同一组权值，存在着不同构的两棵哈夫曼树({1,2,3,3})"></a>对于同一组权值，存在着不同构的两棵哈夫曼树({1,2,3,3})</h2><h1 id="哈夫曼编码"><a href="#哈夫曼编码" class="headerlink" title="哈夫曼编码"></a>哈夫曼编码</h1><p>不等长编码，且可以避免二义性。</p><p>就是一种前缀码（prefix code）: 任何字符的编码都不是另一字符编码的前缀</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;哈夫曼树定义&quot;&gt;&lt;a href=&quot;#哈夫曼树定义&quot; class=&quot;headerlink&quot; title=&quot;哈夫曼树定义&quot;&gt;&lt;/a&gt;哈夫曼树定义&lt;/h1&gt;&lt;p&gt;哈夫曼树又称为最优二叉树，是WPL最小的二叉树&lt;/p&gt;
-&lt;h1 id=&quot;构建哈夫曼树&quot;&gt;&lt;a href=&quot;#
-      
-    
-    </summary>
-    
-    
-      <category term="算法与数据结构" scheme="https://cjay.life/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    
-    
-      <category term="哈夫曼" scheme="https://cjay.life/tags/%E5%93%88%E5%A4%AB%E6%9B%BC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>堆中的路径</title>
-    <link href="https://cjay.life/2020/06/18/%E5%A0%86%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84/"/>
-    <id>https://cjay.life/2020/06/18/%E5%A0%86%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84/</id>
-    <published>2020-06-18T10:46:13.000Z</published>
-    <updated>2020-06-18T14:34:35.307Z</updated>
-    
-    <content type="html"><![CDATA[<p>将一系列给定数字插入一个初始为空的小顶堆<code>H[]</code>。随后对任意给定的下标<code>i</code>，打印从<code>H[i]</code>到根结点的路径。</p><h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式:"></a>输入格式:</h3><p>每组测试第1行包含2个正整数<em>N</em>和<em>M</em>(≤1000)，分别是插入元素的个数、以及需要打印的路径条数。下一行给出区间[-10000, 10000]内的<em>N</em>个要被插入一个初始为空的小顶堆的整数。最后一行给出<em>M</em>个下标。</p><h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式:"></a>输出格式:</h3><p>对输入中给出的每个下标<code>i</code>，在一行中输出从<code>H[i]</code>到根结点的路径上的数据。数字间以1个空格分隔，行末不得有多余空格。</p><h3 id="输入样例"><a href="#输入样例" class="headerlink" title="输入样例:"></a>输入样例:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">5 3</span><br><span class="line">46 23 26 24 10</span><br><span class="line">5 4 3</span><br></pre></td></tr></table></figure><h3 id="输出样例"><a href="#输出样例" class="headerlink" title="输出样例:"></a>输出样例:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">24 23 10</span><br><span class="line">46 23 10</span><br><span class="line">26 10</span><br></pre></td></tr></table></figure><hr><p>一开始解这道题的时候思路是先将这N个数字存储下来，再从最后一个具有子节点的节点开始向下调整。</p><p>但是这样解错了。</p><h3 id="自己的解法（错误）"><a href="#自己的解法（错误）" class="headerlink" title="自己的解法（错误）"></a>自己的解法（错误）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int N,M;</span><br><span class="line">int a[1005],b[1005];</span><br><span class="line">void ajust(int index)&#123;</span><br><span class="line">int parent;</span><br><span class="line">int child;</span><br><span class="line">int temp &#x3D; a[index];</span><br><span class="line">for(parent &#x3D; index; parent*2&lt;&#x3D;N;parent &#x3D; child)&#123;</span><br><span class="line">child &#x3D; 2*parent;</span><br><span class="line">if((child!&#x3D;N) &amp;&amp; (a[child]&gt;a[child+1]))</span><br><span class="line">child++;</span><br><span class="line">if(temp&lt;&#x3D;a[child]) break;</span><br><span class="line">else a[parent] &#x3D; a[child];</span><br><span class="line">&#125;</span><br><span class="line">a[parent] &#x3D; temp;</span><br><span class="line">&#125;</span><br><span class="line">void buildHeap()&#123;</span><br><span class="line">for(int i &#x3D; N&#x2F;2 ;i&gt;0;i--)&#123;</span><br><span class="line">ajust(i);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">void printPath(int index)&#123;</span><br><span class="line">int flag &#x3D; 1;</span><br><span class="line">for(int i &#x3D; index;i&gt;0;i&#x3D;i&#x2F;2)&#123;</span><br><span class="line">if(flag)&#123;</span><br><span class="line">printf(&quot;%d&quot;,a[i]);</span><br><span class="line">flag &#x3D; 0;</span><br><span class="line">&#125;else&#123;</span><br><span class="line">printf(&quot; %d&quot;,a[i]);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">printf(&quot;\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line">int main()&#123;</span><br><span class="line">cin&gt;&gt;N&gt;&gt;M;</span><br><span class="line">a[0] &#x3D; -10001;</span><br><span class="line">for(int i &#x3D; 1;i&lt;&#x3D;N;i++)&#123;</span><br><span class="line">scanf(&quot;%d&quot;,&amp;a[i]);</span><br><span class="line">&#125;</span><br><span class="line">for(int i &#x3D; 1;i&lt;&#x3D;M;i++)&#123;</span><br><span class="line">scanf(&quot;%d&quot;,&amp;b[i]);</span><br><span class="line">&#125;</span><br><span class="line">buildHeap();</span><br><span class="line">&#x2F;&#x2F;for(int i &#x3D; 1;i&lt;&#x3D;N;i++)</span><br><span class="line">&#x2F;&#x2F;cout&lt;&lt; a[i];</span><br><span class="line">for(int i &#x3D; 1;i&lt;&#x3D;M;i++)&#123;</span><br><span class="line">printPath(b[i]);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="正确的解法"><a href="#正确的解法" class="headerlink" title="正确的解法"></a>正确的解法</h3><p>该题目采用建立小顶堆的方式是逐个插入，逐个调整。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int N,M;</span><br><span class="line">int a[1005];</span><br><span class="line">int size &#x3D; 0;</span><br><span class="line">int main()&#123;</span><br><span class="line">cin&gt;&gt;N&gt;&gt;M;</span><br><span class="line">a[0] &#x3D; -10001;</span><br><span class="line">for(int i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">int temp;</span><br><span class="line">scanf(&quot;%d&quot;,&amp;temp);</span><br><span class="line">int j;</span><br><span class="line">for(j &#x3D; ++size;a[j&#x2F;2]&gt;temp;j &#x3D; j&#x2F;2)&#123;</span><br><span class="line">a[j] &#x3D; a[j&#x2F;2];</span><br><span class="line">&#125;</span><br><span class="line">a[j] &#x3D; temp;</span><br><span class="line">&#125;</span><br><span class="line">for(int i &#x3D; 0;i&lt;M;i++)&#123;</span><br><span class="line">int temp;</span><br><span class="line">scanf(&quot;%d&quot;,&amp;temp);</span><br><span class="line">cout&lt;&lt;a[temp];</span><br><span class="line">while(temp!&#x3D;1)&#123;</span><br><span class="line">temp &#x3D; temp&#x2F;2;</span><br><span class="line">cout&lt;&lt;&quot; &quot;&lt;&lt;a[temp];</span><br><span class="line">&#125;</span><br><span class="line">cout&lt;&lt;&quot;\n&quot;; </span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>可以发现，分别采用这两种方式构建小顶堆，结果是不一样的。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;将一系列给定数字插入一个初始为空的小顶堆&lt;code&gt;H[]&lt;/code&gt;。随后对任意给定的下标&lt;code&gt;i&lt;/code&gt;，打印从&lt;code&gt;H[i]&lt;/code&gt;到根结点的路径。&lt;/p&gt;
-&lt;h3 id=&quot;输入格式&quot;&gt;&lt;a href=&quot;#输入格式&quot; class=&quot;heade
-      
-    
-    </summary>
-    
-    
-      <category term="算法与数据结构" scheme="https://cjay.life/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    
-    
-      <category term="堆" scheme="https://cjay.life/tags/%E5%A0%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>堆</title>
-    <link href="https://cjay.life/2020/06/17/%E5%A0%86/"/>
-    <id>https://cjay.life/2020/06/17/%E5%A0%86/</id>
-    <published>2020-06-17T14:42:56.000Z</published>
-    <updated>2020-06-18T14:34:44.709Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="什么是堆"><a href="#什么是堆" class="headerlink" title="什么是堆"></a>什么是堆</h1><p>优先队列（Priority Queue）: 取出元素的顺序按优先权大小，而不是元素进入队列的先后顺序。</p><p>若堆可以用二叉搜索树来实现，插入操作时间效率就是对数级，删除操作也是对数级，但如果不断删除最大或最小的，树会歪掉，树的高度就不再是对数级别了。</p><h1 id="堆的两个特性"><a href="#堆的两个特性" class="headerlink" title="堆的两个特性"></a>堆的两个特性</h1><p>结构性：用数组表示的完全二叉树。</p><p>有序性：任一节点的关键字是其子树所有结点的最大值（或最小值）</p><h1 id="堆的操作集"><a href="#堆的操作集" class="headerlink" title="堆的操作集"></a>堆的操作集</h1> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct HeapStruct *MaxHeap;</span><br><span class="line">struct HeapStruct&#123;</span><br><span class="line">ElementType *Elements;&#x2F;&#x2F; 存储堆元素的数组</span><br><span class="line">int Size;&#x2F;&#x2F;堆当前元素个数</span><br><span class="line">int Capacity;&#x2F;&#x2F;堆最大容量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MaxHeap Create(int MaxSize)&#123;</span><br><span class="line">MaxHeap H &#x3D; malloc(sizeof(struct HeapStruct));</span><br><span class="line">H-&gt;Elements &#x3D; malloc((MaxSize+1)*sizeof(ElementType));</span><br><span class="line">H-&gt;Size &#x3D; 0;</span><br><span class="line">H-&gt;Capacity &#x3D; MaxSize;</span><br><span class="line">H-&gt;Elements[0] &#x3D; MaxData;&#x2F;&#x2F;作为哨兵，便于以后更快操作</span><br><span class="line">return H;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void Insert(MaxHeap H,ElementType item)&#123;</span><br><span class="line">int i;</span><br><span class="line">if(isFull(H))&#123;</span><br><span class="line">printf(&quot;最大堆已满&quot;)；</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line">i &#x3D; ++H-&gt;Size;</span><br><span class="line">for(;H-&gt;Elements[i&#x2F;2] &lt; item; i&#x2F;&#x3D;2)</span><br><span class="line">H-&gt;Elements[i] &#x3D; H-&gt;Elements[i&#x2F;2];</span><br><span class="line">H-&gt;Elements[i] &#x3D; item;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ElementType DeleteMax(MaxHeap H)&#123;</span><br><span class="line">&#x2F;&#x2F;取出键值最大的元素，并删除有一个节点</span><br><span class="line">int Parent,Child;</span><br><span class="line">ElementType MaxItem,temp;</span><br><span class="line">if(isEmpty(H))&#123;</span><br><span class="line">printf(&quot;最大堆已为空&quot;);</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line">MaxItem &#x3D; H-&gt;Elements[1];</span><br><span class="line">for(Parent &#x3D; 1; Parent*2&lt;&#x3D;H-&gt;Size; Parent &#x3D; Child)&#123;</span><br><span class="line">Child &#x3D; Parent * 2;</span><br><span class="line">if((Child!&#x3D; H-&gt;Size) &amp;&amp; (H-&gt;Element[Child]&lt;H-&gt;Element[Child+1]))</span><br><span class="line">Child++;</span><br><span class="line">if( temp &gt;&#x3D; H-&gt;Elements[Child]) break;</span><br><span class="line">else H-&gt;Elements[Parent] &#x3D; H-&gt;Elements[Child];</span><br><span class="line">&#125;    </span><br><span class="line">H-&gt;Elements[Parent] &#x3D; temp;</span><br><span class="line">return MaxItem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="最大堆的建立"><a href="#最大堆的建立" class="headerlink" title="最大堆的建立"></a>最大堆的建立</h2><p>将已经存在的N个元素按最大堆的要求放在一个一维数组中。</p><p>方法1：将N个元素一个个相继插入到一个初始为空的堆中去，时间代价为NlogN。</p><p>方法2：（1）将N个元素顺序存入，先满足完全二叉树的结构特性。（2）调节各节点位置。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void PercDown(MaxHeap H,int p)&#123;</span><br><span class="line">int Parent,Child;</span><br><span class="line">ElementType X;</span><br><span class="line">X &#x3D; H-&gt;Data[p];</span><br><span class="line">for(Parent &#x3D; p; Parent*2&lt;&#x3D;H-&gt;Size; Parent &#x3D; Child)&#123;</span><br><span class="line">Child &#x3D; Parent*2;</span><br><span class="line">if((Child!&#x3D;H-&gt;Size) &amp;&amp; (H-&gt;Data[Child]&lt;H-&gt;Data[Child+1]))</span><br><span class="line">Child++;</span><br><span class="line">if(X&gt;&#x3D;H-&gt;Data[Child]) break;</span><br><span class="line">else H-&gt;Data[Parent] &#x3D; H-&gt;Data[Child];</span><br><span class="line">&#125;</span><br><span class="line">H-&gt;Data[Parent] &#x3D; X;</span><br><span class="line">&#125;</span><br><span class="line">void BuildHeap(MaxHeap H)&#123;</span><br><span class="line">int i;</span><br><span class="line">for(i &#x3D; H-&gt;Size&#x2F;2;i&gt;0;i--)</span><br><span class="line">PercDown(H,i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;什么是堆&quot;&gt;&lt;a href=&quot;#什么是堆&quot; class=&quot;headerlink&quot; title=&quot;什么是堆&quot;&gt;&lt;/a&gt;什么是堆&lt;/h1&gt;&lt;p&gt;优先队列（Priority Queue）: 取出元素的顺序按优先权大小，而不是元素进入队列的先后顺序。&lt;/p&gt;
-&lt;p&gt;若堆可
-      
-    
-    </summary>
-    
-    
-      <category term="算法与数据结构" scheme="https://cjay.life/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    
-    
-      <category term="堆" scheme="https://cjay.life/tags/%E5%A0%86/"/>
     
   </entry>
   
