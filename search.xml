@@ -170,7 +170,17 @@
 <p>图片</p>
 <h2 id="C语言中的有符号数与无符号数"><a href="#C语言中的有符号数与无符号数" class="headerlink" title="C语言中的有符号数与无符号数"></a>C语言中的有符号数与无符号数</h2><p>C语言标准没有指定有符号数采用哪种表示，但几乎所有机器都使用补码。</p>
 <p>当申明一个常量默认被当作有符号，要创建一个无符号数常量，必须加上后缀字符U</p>
-<h2 id="拓展一个数字的位表示"><a href="#拓展一个数字的位表示" class="headerlink" title="拓展一个数字的位表示"></a>拓展一个数字的位表示</h2>]]></content>
+<h2 id="拓展一个数字的位表示"><a href="#拓展一个数字的位表示" class="headerlink" title="拓展一个数字的位表示"></a>拓展一个数字的位表示</h2><ul>
+<li>无符号数的零扩展（zero extension）：高位填0就行了</li>
+<li>符号宽展（sign extension)：图片</li>
+</ul>
+<p>当short转换成unsigned时，首先要改变大小，再完成从有符号到无符号之间的转换。也就是说(unsigned)sx等价于(unsigned)(int)sx。这个规则是C语言标准要求的。</p>
+<p>对于C语言而言，无符号数移位是逻辑移位，有符号数移位是算术移位。 </p>
+<h2 id="截断数字"><a href="#截断数字" class="headerlink" title="截断数字"></a>截断数字</h2><ul>
+<li>截断无符号数：x’ = x mod 2的k次（截断为k位的结果）</li>
+<li>截断补码数值：具有相似的属性，只不过要将最高位转换为符号位。</li>
+</ul>
+<h1 id="整数运算"><a href="#整数运算" class="headerlink" title="整数运算"></a>整数运算</h1>]]></content>
       <categories>
         <category>《深入理解计算机系统》</category>
       </categories>
@@ -340,6 +350,7 @@
 <p>2020.7.17    1-20</p>
 <p>2020.7.18    20-34</p>
 <p>2020.7.19    34-54</p>
+<p>2020.7.20    54-60（没有效率的一天）</p>
 ]]></content>
       <categories>
         <category>计划</category>
