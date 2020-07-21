@@ -248,6 +248,229 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/" class="post-title-link" itemprop="url">1064 Complete Binary Search Tree (30分)</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-06 23:36:25 / 修改时间：23:38:17" itemprop="dateCreated datePublished" datetime="2020-07-06T23:36:25+08:00">2020-07-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>1064 Complete Binary Search Tree (30分)</p>
+<p>A Binary Search Tree (BST) is recursively defined as a binary tree which has the following properties:</p>
+<ul>
+<li>The left subtree of a node contains only nodes with keys less than the node’s key.</li>
+<li>The right subtree of a node contains only nodes with keys greater than or equal to the node’s key.</li>
+<li>Both the left and right subtrees must also be binary search trees.</li>
+</ul>
+<p>A Complete Binary Tree (CBT) is a tree that is completely filled, with the possible exception of the bottom level, which is filled from left to right.</p>
+<p>Now given a sequence of distinct non-negative integer keys, a unique BST can be constructed if it is required that the tree must also be a CBT. You are supposed to output the level order traversal sequence of this BST.</p>
+<h3 id="Input-Specification"><a href="#Input-Specification" class="headerlink" title="Input Specification:"></a>Input Specification:</h3><p>Each input file contains one test case. For each case, the first line contains a positive integer <em>N</em> (≤1000). Then <em>N</em> distinct non-negative integer keys are given in the next line. All the numbers in a line are separated by a space and are no greater than 2000.</p>
+<h3 id="Output-Specification"><a href="#Output-Specification" class="headerlink" title="Output Specification:"></a>Output Specification:</h3><p>For each test case, print in one line the level order traversal sequence of the corresponding complete binary search tree. All the numbers in a line must be separated by a space, and there must be no extra space at the end of the line.</p>
+<h3 id="Sample-Input"><a href="#Sample-Input" class="headerlink" title="Sample Input:"></a>Sample Input:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">1 2 3 4 5 6 7 8 9 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="Sample-Output"><a href="#Sample-Output" class="headerlink" title="Sample Output:"></a>Sample Output:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6 3 8 1 5 7 9 0 2 4</span><br></pre></td></tr></table></figure>
+
+<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int num[1005];</span><br><span class="line">int ans[1005];</span><br><span class="line">int N;</span><br><span class="line">int getMid(int l,int r)&#123;</span><br><span class="line">	int sum &#x3D; r-l+1;		&#x2F;&#x2F;总数</span><br><span class="line">	int layer &#x3D; floor(log(sum+1)&#x2F;log(2)); &#x2F;&#x2F;除最后一层的层数，</span><br><span class="line">	int lastlayerleaf &#x3D; sum+1-pow(2,layer);	&#x2F;&#x2F;最后一层的节点数</span><br><span class="line">	int leftnum &#x3D; pow(2,layer-1)-1+min(lastlayerleaf,(int)pow(2,layer-1));	&#x2F;&#x2F;左子树结点总数</span><br><span class="line">	return l+leftnum; &#x2F;&#x2F;根位置</span><br><span class="line">&#125; </span><br><span class="line">void solve(int l,int r,int root)&#123;</span><br><span class="line">	if(r-l+1 &#x3D;&#x3D; 0) return;</span><br><span class="line">	int mid &#x3D; getMid(l,r);</span><br><span class="line">	ans[root] &#x3D; num[mid];</span><br><span class="line">	solve(l,mid-1,root*2+1);</span><br><span class="line">	solve(mid+1,r,root*2+2); </span><br><span class="line">&#125;</span><br><span class="line">int main()&#123;</span><br><span class="line">	cin&gt;&gt;N;</span><br><span class="line">	for(int i&#x3D;0;i&lt;N;i++)</span><br><span class="line">		cin&gt;&gt;num[i];</span><br><span class="line">	sort(num,num+N);</span><br><span class="line">	solve(0,N-1,0);</span><br><span class="line">	cout&lt;&lt;ans[0];</span><br><span class="line">	for(int i &#x3D; 1;i&lt;N;i++)</span><br><span class="line">		cout&lt;&lt;&quot; &quot;&lt;&lt;ans[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/" class="post-title-link" itemprop="url">1086 Tree Traversals Again (25分)</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-06 22:31:55 / 修改时间：22:34:55" itemprop="dateCreated datePublished" datetime="2020-07-06T22:31:55+08:00">2020-07-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>An inorder binary tree traversal can be implemented in a non-recursive way with a stack. For example, suppose that when a 6-node binary tree (with the keys numbered from 1 to 6) is traversed, the stack operations are: push(1); push(2); push(3); pop(); pop(); push(4); pop(); pop(); push(5); push(6); pop(); pop(). Then a unique binary tree (shown in Figure 1) can be generated from this sequence of operations. Your task is to give the postorder traversal sequence of this tree.</p>
+<p><img src="https://images.ptausercontent.com/30" alt="img"><br>Figure 1</p>
+<h3 id="Input-Specification"><a href="#Input-Specification" class="headerlink" title="Input Specification:"></a>Input Specification:</h3><p>Each input file contains one test case. For each case, the first line contains a positive integer <em>N</em> (≤30) which is the total number of nodes in a tree (and hence the nodes are numbered from 1 to <em>N</em>). Then 2<em>N</em> lines follow, each describes a stack operation in the format: “Push X” where X is the index of the node being pushed onto the stack; or “Pop” meaning to pop one node from the stack.</p>
+<h3 id="Output-Specification"><a href="#Output-Specification" class="headerlink" title="Output Specification:"></a>Output Specification:</h3><p>For each test case, print the postorder traversal sequence of the corresponding tree in one line. A solution is guaranteed to exist. All the numbers must be separated by exactly one space, and there must be no extra space at the end of the line.</p>
+<h3 id="Sample-Input"><a href="#Sample-Input" class="headerlink" title="Sample Input:"></a>Sample Input:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">6</span><br><span class="line">Push 1</span><br><span class="line">Push 2</span><br><span class="line">Push 3</span><br><span class="line">Pop</span><br><span class="line">Pop</span><br><span class="line">Push 4</span><br><span class="line">Pop</span><br><span class="line">Pop</span><br><span class="line">Push 5</span><br><span class="line">Push 6</span><br><span class="line">Pop</span><br><span class="line">Pop</span><br></pre></td></tr></table></figure>
+
+<h3 id="Sample-Output"><a href="#Sample-Output" class="headerlink" title="Sample Output:"></a>Sample Output:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 4 2 6 5 1</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int N,n,i,j,k;</span><br><span class="line">string s;</span><br><span class="line">int preorder[35];</span><br><span class="line">int inorder[35];</span><br><span class="line">int postorder[35];</span><br><span class="line">void porder(int ileft,int iright,int pleft,int pright)&#123;	&#x2F;&#x2F;核心算法</span><br><span class="line">	if((ileft&gt;iright)||(pleft&gt;pright))</span><br><span class="line">		return;</span><br><span class="line">		</span><br><span class="line">	int i &#x3D; 0;</span><br><span class="line">	postorder[k++] &#x3D; preorder[pleft];</span><br><span class="line">	&#x2F;&#x2F;cout&lt;&lt;postorder[k-1]&lt;&lt;endl;</span><br><span class="line">	for(i &#x3D; ileft;i&lt;&#x3D;iright;i++)&#123;</span><br><span class="line">		if(inorder[i] &#x3D;&#x3D; preorder[pleft])</span><br><span class="line">			break;</span><br><span class="line">	&#125;</span><br><span class="line">	porder(i+1,iright,pleft+1+i-ileft,pright);</span><br><span class="line">	porder(ileft,i-1,pleft+1,pleft+i-ileft);</span><br><span class="line">&#125;</span><br><span class="line">int main()&#123;</span><br><span class="line">	cin&gt;&gt;N;</span><br><span class="line">	int NN &#x3D; 2*N;</span><br><span class="line">	stack&lt;int&gt; ss;</span><br><span class="line">	while(NN--)&#123;</span><br><span class="line">		cin&gt;&gt;s;</span><br><span class="line">		if(s&#x3D;&#x3D;&quot;Push&quot;)&#123;</span><br><span class="line">			cin&gt;&gt;n;</span><br><span class="line">			ss.push(n);</span><br><span class="line">			preorder[i++] &#x3D; n;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			n &#x3D; ss.top();</span><br><span class="line">			ss.pop();</span><br><span class="line">			inorder[j++] &#x3D; n;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	porder(0,N-1,0,N-1);</span><br><span class="line">	cout&lt;&lt;postorder[N-1];</span><br><span class="line">	for(int j &#x3D; N-2;j&gt;&#x3D;0;j--)&#123;</span><br><span class="line">		cout&lt;&lt;&quot; &quot;&lt;&lt;postorder[j];</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/06/%E5%85%B3%E4%BA%8E%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1212,243 +1435,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/06/18/%E5%A0%86%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/18/%E5%A0%86%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">堆中的路径</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-06-18 18:46:13 / 修改时间：22:34:35" itemprop="dateCreated datePublished" datetime="2020-06-18T18:46:13+08:00">2020-06-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/06/18/%E5%A0%86%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/18/%E5%A0%86%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>将一系列给定数字插入一个初始为空的小顶堆<code>H[]</code>。随后对任意给定的下标<code>i</code>，打印从<code>H[i]</code>到根结点的路径。</p>
-<h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式:"></a>输入格式:</h3><p>每组测试第1行包含2个正整数<em>N</em>和<em>M</em>(≤1000)，分别是插入元素的个数、以及需要打印的路径条数。下一行给出区间[-10000, 10000]内的<em>N</em>个要被插入一个初始为空的小顶堆的整数。最后一行给出<em>M</em>个下标。</p>
-<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式:"></a>输出格式:</h3><p>对输入中给出的每个下标<code>i</code>，在一行中输出从<code>H[i]</code>到根结点的路径上的数据。数字间以1个空格分隔，行末不得有多余空格。</p>
-<h3 id="输入样例"><a href="#输入样例" class="headerlink" title="输入样例:"></a>输入样例:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">5 3</span><br><span class="line">46 23 26 24 10</span><br><span class="line">5 4 3</span><br></pre></td></tr></table></figure>
-
-<h3 id="输出样例"><a href="#输出样例" class="headerlink" title="输出样例:"></a>输出样例:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">24 23 10</span><br><span class="line">46 23 10</span><br><span class="line">26 10</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p>一开始解这道题的时候思路是先将这N个数字存储下来，再从最后一个具有子节点的节点开始向下调整。</p>
-<p>但是这样解错了。</p>
-<h3 id="自己的解法（错误）"><a href="#自己的解法（错误）" class="headerlink" title="自己的解法（错误）"></a>自己的解法（错误）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int N,M;</span><br><span class="line">int a[1005],b[1005];</span><br><span class="line">void ajust(int index)&#123;</span><br><span class="line">	int parent;</span><br><span class="line">	int child;</span><br><span class="line">	int temp &#x3D; a[index];</span><br><span class="line">	for(parent &#x3D; index; parent*2&lt;&#x3D;N;parent &#x3D; child)&#123;</span><br><span class="line">		child &#x3D; 2*parent;</span><br><span class="line">		if((child!&#x3D;N) &amp;&amp; (a[child]&gt;a[child+1]))</span><br><span class="line">			child++;</span><br><span class="line">		if(temp&lt;&#x3D;a[child]) break;</span><br><span class="line">		else a[parent] &#x3D; a[child];</span><br><span class="line">	&#125;</span><br><span class="line">	a[parent] &#x3D; temp;</span><br><span class="line">&#125;</span><br><span class="line">void buildHeap()&#123;</span><br><span class="line">	for(int i &#x3D; N&#x2F;2 ;i&gt;0;i--)&#123;</span><br><span class="line">		ajust(i);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">void printPath(int index)&#123;</span><br><span class="line">	int flag &#x3D; 1;</span><br><span class="line">	for(int i &#x3D; index;i&gt;0;i&#x3D;i&#x2F;2)&#123;</span><br><span class="line">		if(flag)&#123;</span><br><span class="line">			printf(&quot;%d&quot;,a[i]);</span><br><span class="line">			flag &#x3D; 0;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			printf(&quot; %d&quot;,a[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	printf(&quot;\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line">int main()&#123;</span><br><span class="line">	cin&gt;&gt;N&gt;&gt;M;</span><br><span class="line">	a[0] &#x3D; -10001;</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;N;i++)&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;a[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;M;i++)&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;b[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	buildHeap();</span><br><span class="line">&#x2F;&#x2F;	for(int i &#x3D; 1;i&lt;&#x3D;N;i++)</span><br><span class="line">&#x2F;&#x2F;		cout&lt;&lt; a[i];</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;M;i++)&#123;</span><br><span class="line">		printPath(b[i]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="正确的解法"><a href="#正确的解法" class="headerlink" title="正确的解法"></a>正确的解法</h3><p>该题目采用建立小顶堆的方式是逐个插入，逐个调整。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int N,M;</span><br><span class="line">int a[1005];</span><br><span class="line">int size &#x3D; 0;</span><br><span class="line">int main()&#123;</span><br><span class="line">	cin&gt;&gt;N&gt;&gt;M;</span><br><span class="line">	a[0] &#x3D; -10001;</span><br><span class="line">	for(int i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">		int temp;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;temp);</span><br><span class="line">		int j;</span><br><span class="line">		for(j &#x3D; ++size;a[j&#x2F;2]&gt;temp;j &#x3D; j&#x2F;2)&#123;</span><br><span class="line">			a[j] &#x3D; a[j&#x2F;2];</span><br><span class="line">		&#125;</span><br><span class="line">		a[j] &#x3D; temp;</span><br><span class="line">	&#125;</span><br><span class="line">	for(int i &#x3D; 0;i&lt;M;i++)&#123;</span><br><span class="line">		int temp;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;temp);</span><br><span class="line">		cout&lt;&lt;a[temp];</span><br><span class="line">		while(temp!&#x3D;1)&#123;</span><br><span class="line">			temp &#x3D; temp&#x2F;2;</span><br><span class="line">			cout&lt;&lt;&quot; &quot;&lt;&lt;a[temp];</span><br><span class="line">		&#125;</span><br><span class="line">		cout&lt;&lt;&quot;\n&quot;; </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>可以发现，分别采用这两种方式构建小顶堆，结果是不一样的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/06/17/%E5%A0%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/17/%E5%A0%86/" class="post-title-link" itemprop="url">堆</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-06-17 22:42:56" itemprop="dateCreated datePublished" datetime="2020-06-17T22:42:56+08:00">2020-06-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-18 22:34:44" itemprop="dateModified" datetime="2020-06-18T22:34:44+08:00">2020-06-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/06/17/%E5%A0%86/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/17/%E5%A0%86/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什么是堆"><a href="#什么是堆" class="headerlink" title="什么是堆"></a>什么是堆</h1><p>优先队列（Priority Queue）: 取出元素的顺序按优先权大小，而不是元素进入队列的先后顺序。</p>
-<p>若堆可以用二叉搜索树来实现，插入操作时间效率就是对数级，删除操作也是对数级，但如果不断删除最大或最小的，树会歪掉，树的高度就不再是对数级别了。</p>
-<h1 id="堆的两个特性"><a href="#堆的两个特性" class="headerlink" title="堆的两个特性"></a>堆的两个特性</h1><p>结构性：用数组表示的完全二叉树。</p>
-<p>有序性：任一节点的关键字是其子树所有结点的最大值（或最小值）</p>
-<h1 id="堆的操作集"><a href="#堆的操作集" class="headerlink" title="堆的操作集"></a>堆的操作集</h1> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct HeapStruct *MaxHeap;</span><br><span class="line">struct HeapStruct&#123;</span><br><span class="line">	ElementType *Elements;&#x2F;&#x2F; 存储堆元素的数组</span><br><span class="line">	int Size;&#x2F;&#x2F;堆当前元素个数</span><br><span class="line">	int Capacity;&#x2F;&#x2F;堆最大容量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MaxHeap Create(int MaxSize)&#123;</span><br><span class="line">	MaxHeap H &#x3D; malloc(sizeof(struct HeapStruct));</span><br><span class="line">	H-&gt;Elements &#x3D; malloc((MaxSize+1)*sizeof(ElementType));</span><br><span class="line">	H-&gt;Size &#x3D; 0;</span><br><span class="line">	H-&gt;Capacity &#x3D; MaxSize;</span><br><span class="line">	H-&gt;Elements[0] &#x3D; MaxData;&#x2F;&#x2F;作为哨兵，便于以后更快操作</span><br><span class="line">	return H;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void Insert(MaxHeap H,ElementType item)&#123;</span><br><span class="line">	int i;</span><br><span class="line">	if(isFull(H))&#123;</span><br><span class="line">		printf(&quot;最大堆已满&quot;)；</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line">	i &#x3D; ++H-&gt;Size;</span><br><span class="line">	for(;H-&gt;Elements[i&#x2F;2] &lt; item; i&#x2F;&#x3D;2)</span><br><span class="line">		H-&gt;Elements[i] &#x3D; H-&gt;Elements[i&#x2F;2];</span><br><span class="line">	H-&gt;Elements[i] &#x3D; item;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ElementType DeleteMax(MaxHeap H)&#123;</span><br><span class="line">	&#x2F;&#x2F;取出键值最大的元素，并删除有一个节点</span><br><span class="line">	int Parent,Child;</span><br><span class="line">	ElementType MaxItem,temp;</span><br><span class="line">	if(isEmpty(H))&#123;</span><br><span class="line">		printf(&quot;最大堆已为空&quot;);</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line">	MaxItem &#x3D; H-&gt;Elements[1];</span><br><span class="line">	for(Parent &#x3D; 1; Parent*2&lt;&#x3D;H-&gt;Size; Parent &#x3D; Child)&#123;</span><br><span class="line">		Child &#x3D; Parent * 2;</span><br><span class="line">		if((Child!&#x3D; H-&gt;Size) &amp;&amp; (H-&gt;Element[Child]&lt;H-&gt;Element[Child+1]))</span><br><span class="line">			Child++;</span><br><span class="line">		if( temp &gt;&#x3D; H-&gt;Elements[Child]) break;</span><br><span class="line">		else H-&gt;Elements[Parent] &#x3D; H-&gt;Elements[Child];</span><br><span class="line">	&#125;    </span><br><span class="line">	H-&gt;Elements[Parent] &#x3D; temp;</span><br><span class="line">	return MaxItem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="最大堆的建立"><a href="#最大堆的建立" class="headerlink" title="最大堆的建立"></a>最大堆的建立</h2><p>将已经存在的N个元素按最大堆的要求放在一个一维数组中。</p>
-<p>方法1：将N个元素一个个相继插入到一个初始为空的堆中去，时间代价为NlogN。</p>
-<p>方法2：（1）将N个元素顺序存入，先满足完全二叉树的结构特性。（2）调节各节点位置。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void PercDown(MaxHeap H,int p)&#123;</span><br><span class="line">	int Parent,Child;</span><br><span class="line">	ElementType X;</span><br><span class="line">	X &#x3D; H-&gt;Data[p];</span><br><span class="line">	for(Parent &#x3D; p; Parent*2&lt;&#x3D;H-&gt;Size; Parent &#x3D; Child)&#123;</span><br><span class="line">		Child &#x3D; Parent*2;</span><br><span class="line">		if((Child!&#x3D;H-&gt;Size) &amp;&amp; (H-&gt;Data[Child]&lt;H-&gt;Data[Child+1]))</span><br><span class="line">			Child++;</span><br><span class="line">		if(X&gt;&#x3D;H-&gt;Data[Child]) break;</span><br><span class="line">		else H-&gt;Data[Parent] &#x3D; H-&gt;Data[Child];</span><br><span class="line">	&#125;</span><br><span class="line">	H-&gt;Data[Parent] &#x3D; X;</span><br><span class="line">&#125;</span><br><span class="line">void BuildHeap(MaxHeap H)&#123;</span><br><span class="line">	int i;</span><br><span class="line">	for(i &#x3D; H-&gt;Size&#x2F;2;i&gt;0;i--)</span><br><span class="line">		PercDown(H,i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1499,7 +1485,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1571,12 +1557,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">80k</span>
+    <span title="站点总字数">81k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:12</span>
+    <span title="站点阅读时长">1:14</span>
 </div>
 
         

@@ -248,6 +248,242 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/" class="post-title-link" itemprop="url">简单排序</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-16 22:41:31" itemprop="dateCreated datePublished" datetime="2020-07-16T22:41:31+08:00">2020-07-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-18 18:29:32" itemprop="dateModified" datetime="2020-07-18T18:29:32+08:00">2020-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>789</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void Bubble_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(p &#x3D; N-1;p&gt;&#x3D;0;p--)&#123;</span><br><span class="line">		flag &#x3D; 0;</span><br><span class="line">		for(i &#x3D; 0;i&lt;p;i++)&#123;	&#x2F;&#x2F;一趟冒泡</span><br><span class="line">			if(A[i]&gt;A[i+1])&#123;</span><br><span class="line">				Swap(A[i],A[i+1]);</span><br><span class="line">				flag &#x3D; 1;&#x2F;&#x2F;标识发生了交换</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if(flag &#x3D;&#x3D; 0) break;&#x2F;&#x2F;全程无交换</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最好情况：顺序T=O（N）</p>
+<p>最欢情况：逆序T=O（N2）</p>
+<p>稳定，也可以应用于链表</p>
+<h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void Insertion_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(p &#x3D; 1;p&lt;N;p++)&#123;</span><br><span class="line">		Tmp &#x3D; A[p];</span><br><span class="line">		for(i &#x3D; p;i&gt;&#x3D;0&amp;&amp;tmp&lt;A[i-1];i--)</span><br><span class="line">			A[i] &#x3D; A[i-1];</span><br><span class="line">		A[i] &#x3D; Tmp;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最好情况：顺序T=O（N）；</p>
+<p>最坏情况: 逆序T=O(N2);</p>
+<h1 id="时间复杂度下界"><a href="#时间复杂度下界" class="headerlink" title="时间复杂度下界"></a>时间复杂度下界</h1><p>对于i&lt;j,如果A[i]&gt;A[j],则称（i,j）是一对逆序对（inversion）</p>
+<p>对于简单排序，都是相邻元素交换，每交换一次正好消去1个逆序对！</p>
+<p>插入排序：T（N,I）= O（N+I），如果序列基本有序，则插入排序简单高效</p>
+<p>定理:任意N个不同元素组成的序列平均具有<strong>N（N-1）/4</strong>个逆序对。</p>
+<p>定理:任何交换相邻元素排序的算法，其平均时间为<strong>Ω（N2）</strong>。</p>
+<p>这意味着，想提高效率，必须:</p>
+<ul>
+<li>每次消去不止1个逆序对</li>
+<li>每次交换相隔较远的2个元素</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/" class="post-title-link" itemprop="url">cmu csapp lecture 02 Bits,Bytes,and Integer</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-15 18:42:43" itemprop="dateCreated datePublished" datetime="2020-07-15T18:42:43+08:00">2020-07-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-17 15:18:05" itemprop="dateModified" datetime="2020-07-17T15:18:05+08:00">2020-07-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E3%80%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">《深入理解计算机系统》</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>483</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="http://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/lectures/02-03-bits-ints.pdf" target="_blank" rel="noopener">讲义地址</a></p>
+<h1 id="Representing-amp-Manipulating-Sets"><a href="#Representing-amp-Manipulating-Sets" class="headerlink" title="Representing &amp; Manipulating Sets"></a>Representing &amp; Manipulating Sets</h1><h2 id="Representing"><a href="#Representing" class="headerlink" title="Representing"></a>Representing</h2><p>01101001{0,3,5,6}</p>
+<p>01010101{0,2,4,6}</p>
+<h1 id="Operations"><a href="#Operations" class="headerlink" title="Operations"></a>Operations</h1><p>&amp; Intersection {0,6}</p>
+<p>|  Union            {0,2,3,4,5,6}</p>
+<p>^  Symmetric difference {2,3,4,5}</p>
+<p>~ Complement {1,3,5,7}</p>
+<p>上面的布尔代数运算，是从集合的角度来看。</p>
+<p>watch out for &amp;&amp; vs &amp;(and || vs |)..(Bit-level Operations and logic Operations)</p>
+<h1 id="shift-Operations"><a href="#shift-Operations" class="headerlink" title="shift Operations"></a>shift Operations</h1><h2 id="Left-Shift-x-lt-lt-y"><a href="#Left-Shift-x-lt-lt-y" class="headerlink" title="Left Shift : x &lt;&lt; y"></a>Left Shift : x &lt;&lt; y</h2><h2 id="Right-Shift-x-gt-gt-y"><a href="#Right-Shift-x-gt-gt-y" class="headerlink" title="Right Shift: x&gt;&gt;y"></a>Right Shift: x&gt;&gt;y</h2><h3 id="Logical-shift-Fill-with-0’s-on-left"><a href="#Logical-shift-Fill-with-0’s-on-left" class="headerlink" title="Logical shift:Fill with 0’s on left"></a>Logical shift:Fill with 0’s on left</h3><h3 id="Arithmetic-shift-Replicate-most-significant-bit-on-letf"><a href="#Arithmetic-shift-Replicate-most-significant-bit-on-letf" class="headerlink" title="Arithmetic shift: Replicate most significant bit on letf"></a>Arithmetic shift: Replicate most significant bit on letf</h3><h1 id="Conversion-Visualized"><a href="#Conversion-Visualized" class="headerlink" title="Conversion Visualized"></a>Conversion Visualized</h1><p><img src="/2020/07/15/cmu-csapp-lecture-02-Bits-Bytes-and-Integer/1.png" alt="Conversion"></p>
+<h1 id="Casting-Suprises"><a href="#Casting-Suprises" class="headerlink" title="Casting Suprises"></a>Casting Suprises</h1><p>在单一表达式中混有有符号数和无符号数，有符号数会转换成无符号数</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/14/%E4%B8%89%E7%82%B9%E5%BF%83%E5%BE%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1141,229 +1377,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/" class="post-title-link" itemprop="url">1064 Complete Binary Search Tree (30分)</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-06 23:36:25 / 修改时间：23:38:17" itemprop="dateCreated datePublished" datetime="2020-07-06T23:36:25+08:00">2020-07-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/06/1064-Complete-Binary-Search-Tree-30%E5%88%86/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>1064 Complete Binary Search Tree (30分)</p>
-<p>A Binary Search Tree (BST) is recursively defined as a binary tree which has the following properties:</p>
-<ul>
-<li>The left subtree of a node contains only nodes with keys less than the node’s key.</li>
-<li>The right subtree of a node contains only nodes with keys greater than or equal to the node’s key.</li>
-<li>Both the left and right subtrees must also be binary search trees.</li>
-</ul>
-<p>A Complete Binary Tree (CBT) is a tree that is completely filled, with the possible exception of the bottom level, which is filled from left to right.</p>
-<p>Now given a sequence of distinct non-negative integer keys, a unique BST can be constructed if it is required that the tree must also be a CBT. You are supposed to output the level order traversal sequence of this BST.</p>
-<h3 id="Input-Specification"><a href="#Input-Specification" class="headerlink" title="Input Specification:"></a>Input Specification:</h3><p>Each input file contains one test case. For each case, the first line contains a positive integer <em>N</em> (≤1000). Then <em>N</em> distinct non-negative integer keys are given in the next line. All the numbers in a line are separated by a space and are no greater than 2000.</p>
-<h3 id="Output-Specification"><a href="#Output-Specification" class="headerlink" title="Output Specification:"></a>Output Specification:</h3><p>For each test case, print in one line the level order traversal sequence of the corresponding complete binary search tree. All the numbers in a line must be separated by a space, and there must be no extra space at the end of the line.</p>
-<h3 id="Sample-Input"><a href="#Sample-Input" class="headerlink" title="Sample Input:"></a>Sample Input:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">1 2 3 4 5 6 7 8 9 0</span><br></pre></td></tr></table></figure>
-
-<h3 id="Sample-Output"><a href="#Sample-Output" class="headerlink" title="Sample Output:"></a>Sample Output:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6 3 8 1 5 7 9 0 2 4</span><br></pre></td></tr></table></figure>
-
-<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int num[1005];</span><br><span class="line">int ans[1005];</span><br><span class="line">int N;</span><br><span class="line">int getMid(int l,int r)&#123;</span><br><span class="line">	int sum &#x3D; r-l+1;		&#x2F;&#x2F;总数</span><br><span class="line">	int layer &#x3D; floor(log(sum+1)&#x2F;log(2)); &#x2F;&#x2F;除最后一层的层数，</span><br><span class="line">	int lastlayerleaf &#x3D; sum+1-pow(2,layer);	&#x2F;&#x2F;最后一层的节点数</span><br><span class="line">	int leftnum &#x3D; pow(2,layer-1)-1+min(lastlayerleaf,(int)pow(2,layer-1));	&#x2F;&#x2F;左子树结点总数</span><br><span class="line">	return l+leftnum; &#x2F;&#x2F;根位置</span><br><span class="line">&#125; </span><br><span class="line">void solve(int l,int r,int root)&#123;</span><br><span class="line">	if(r-l+1 &#x3D;&#x3D; 0) return;</span><br><span class="line">	int mid &#x3D; getMid(l,r);</span><br><span class="line">	ans[root] &#x3D; num[mid];</span><br><span class="line">	solve(l,mid-1,root*2+1);</span><br><span class="line">	solve(mid+1,r,root*2+2); </span><br><span class="line">&#125;</span><br><span class="line">int main()&#123;</span><br><span class="line">	cin&gt;&gt;N;</span><br><span class="line">	for(int i&#x3D;0;i&lt;N;i++)</span><br><span class="line">		cin&gt;&gt;num[i];</span><br><span class="line">	sort(num,num+N);</span><br><span class="line">	solve(0,N-1,0);</span><br><span class="line">	cout&lt;&lt;ans[0];</span><br><span class="line">	for(int i &#x3D; 1;i&lt;N;i++)</span><br><span class="line">		cout&lt;&lt;&quot; &quot;&lt;&lt;ans[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/" class="post-title-link" itemprop="url">1086 Tree Traversals Again (25分)</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-06 22:31:55 / 修改时间：22:34:55" itemprop="dateCreated datePublished" datetime="2020-07-06T22:31:55+08:00">2020-07-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/06/1086-Tree-Traversals-Again-25%E5%88%86/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>An inorder binary tree traversal can be implemented in a non-recursive way with a stack. For example, suppose that when a 6-node binary tree (with the keys numbered from 1 to 6) is traversed, the stack operations are: push(1); push(2); push(3); pop(); pop(); push(4); pop(); pop(); push(5); push(6); pop(); pop(). Then a unique binary tree (shown in Figure 1) can be generated from this sequence of operations. Your task is to give the postorder traversal sequence of this tree.</p>
-<p><img src="https://images.ptausercontent.com/30" alt="img"><br>Figure 1</p>
-<h3 id="Input-Specification"><a href="#Input-Specification" class="headerlink" title="Input Specification:"></a>Input Specification:</h3><p>Each input file contains one test case. For each case, the first line contains a positive integer <em>N</em> (≤30) which is the total number of nodes in a tree (and hence the nodes are numbered from 1 to <em>N</em>). Then 2<em>N</em> lines follow, each describes a stack operation in the format: “Push X” where X is the index of the node being pushed onto the stack; or “Pop” meaning to pop one node from the stack.</p>
-<h3 id="Output-Specification"><a href="#Output-Specification" class="headerlink" title="Output Specification:"></a>Output Specification:</h3><p>For each test case, print the postorder traversal sequence of the corresponding tree in one line. A solution is guaranteed to exist. All the numbers must be separated by exactly one space, and there must be no extra space at the end of the line.</p>
-<h3 id="Sample-Input"><a href="#Sample-Input" class="headerlink" title="Sample Input:"></a>Sample Input:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">6</span><br><span class="line">Push 1</span><br><span class="line">Push 2</span><br><span class="line">Push 3</span><br><span class="line">Pop</span><br><span class="line">Pop</span><br><span class="line">Push 4</span><br><span class="line">Pop</span><br><span class="line">Pop</span><br><span class="line">Push 5</span><br><span class="line">Push 6</span><br><span class="line">Pop</span><br><span class="line">Pop</span><br></pre></td></tr></table></figure>
-
-<h3 id="Sample-Output"><a href="#Sample-Output" class="headerlink" title="Sample Output:"></a>Sample Output:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 4 2 6 5 1</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int N,n,i,j,k;</span><br><span class="line">string s;</span><br><span class="line">int preorder[35];</span><br><span class="line">int inorder[35];</span><br><span class="line">int postorder[35];</span><br><span class="line">void porder(int ileft,int iright,int pleft,int pright)&#123;	&#x2F;&#x2F;核心算法</span><br><span class="line">	if((ileft&gt;iright)||(pleft&gt;pright))</span><br><span class="line">		return;</span><br><span class="line">		</span><br><span class="line">	int i &#x3D; 0;</span><br><span class="line">	postorder[k++] &#x3D; preorder[pleft];</span><br><span class="line">	&#x2F;&#x2F;cout&lt;&lt;postorder[k-1]&lt;&lt;endl;</span><br><span class="line">	for(i &#x3D; ileft;i&lt;&#x3D;iright;i++)&#123;</span><br><span class="line">		if(inorder[i] &#x3D;&#x3D; preorder[pleft])</span><br><span class="line">			break;</span><br><span class="line">	&#125;</span><br><span class="line">	porder(i+1,iright,pleft+1+i-ileft,pright);</span><br><span class="line">	porder(ileft,i-1,pleft+1,pleft+i-ileft);</span><br><span class="line">&#125;</span><br><span class="line">int main()&#123;</span><br><span class="line">	cin&gt;&gt;N;</span><br><span class="line">	int NN &#x3D; 2*N;</span><br><span class="line">	stack&lt;int&gt; ss;</span><br><span class="line">	while(NN--)&#123;</span><br><span class="line">		cin&gt;&gt;s;</span><br><span class="line">		if(s&#x3D;&#x3D;&quot;Push&quot;)&#123;</span><br><span class="line">			cin&gt;&gt;n;</span><br><span class="line">			ss.push(n);</span><br><span class="line">			preorder[i++] &#x3D; n;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			n &#x3D; ss.top();</span><br><span class="line">			ss.pop();</span><br><span class="line">			inorder[j++] &#x3D; n;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	porder(0,N-1,0,N-1);</span><br><span class="line">	cout&lt;&lt;postorder[N-1];</span><br><span class="line">	for(int j &#x3D; N-2;j&gt;&#x3D;0;j--)&#123;</span><br><span class="line">		cout&lt;&lt;&quot; &quot;&lt;&lt;postorder[j];</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1414,7 +1427,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1486,12 +1499,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">80k</span>
+    <span title="站点总字数">81k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:12</span>
+    <span title="站点阅读时长">1:14</span>
 </div>
 
         

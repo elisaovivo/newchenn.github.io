@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>排序算法的比较</title>
+    <url>/2020/07/21/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83/</url>
+    <content><![CDATA[<p><img src="https://pic2.zhimg.com/80/v2-88e47948380615b5adb6e7c313a916e5_1440w.jpg" alt="浙江大学-数据结构-算法排序的比较-10.4.1 - 知乎"></p>
+]]></content>
+      <categories>
+        <category>算法与数据结构</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基数排序</title>
+    <url>/2020/07/21/%E5%9F%BA%E6%95%B0%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<h1 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h1><p>假设我们有N个学生，他们的成绩是0到100之间的整数（于是有M=101个不同的成绩值）。如何在线性时间内将学生按成绩排序?</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void Bucket_Sort(ElementType A[], int N)</span><br><span class="line">&#123;</span><br><span class="line">	count[]初始化;</span><br><span class="line">	while(读入1个学生成绩grade)</span><br><span class="line">		将该生插入count[grade]链表;</span><br><span class="line">	for(i&#x3D;0;i&lt;M;i++)&#123;</span><br><span class="line">		if(count[i])</span><br><span class="line">			输出整个count[i]链表;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;T(N,M) &#x3D; O(M+N)</span><br></pre></td></tr></table></figure>
+
+<p>若M&gt;&gt;N该怎么办?</p>
+<h1 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h1><p>假设我们有N=10个整数，而M = 1000个不同的值。还有可能在线性时间内排序吗？</p>
+<p>这里M已经等于了，N的三次方了。</p>
+<p>可以采用“次位优先”(Least Significant Dighit),T = O(P(N+B)) (P为趟数，B等价于上面的B)</p>
+<h1 id="多关键字的排序"><a href="#多关键字的排序" class="headerlink" title="多关键字的排序"></a>多关键字的排序</h1><p>例如扑克牌排序问题，用主位优先（Most Signficant Digit）排序：为花色建4个桶。</p>
+<p>在每个桶内分别排序，最后合并结果。</p>
+<p>若用次位优先排序:为面值建13个桶，将结果合并，然后再为花色建四个桶。</p>
+]]></content>
+      <categories>
+        <category>算法与数据结构</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>表排序</title>
     <url>/2020/07/19/%E8%A1%A8%E6%8E%92%E5%BA%8F/</url>
     <content><![CDATA[<h1 id="算法概述"><a href="#算法概述" class="headerlink" title="算法概述"></a>算法概述</h1><ul>
@@ -180,7 +213,27 @@
 <li>截断无符号数：x’ = x mod 2的k次（截断为k位的结果）</li>
 <li>截断补码数值：具有相似的属性，只不过要将最高位转换为符号位。</li>
 </ul>
-<h1 id="整数运算"><a href="#整数运算" class="headerlink" title="整数运算"></a>整数运算</h1>]]></content>
+<h1 id="整数运算"><a href="#整数运算" class="headerlink" title="整数运算"></a>整数运算</h1><h2 id="无符号加法"><a href="#无符号加法" class="headerlink" title="无符号加法"></a>无符号加法</h2><p>图片</p>
+<p>对于两个非负整数，满足0≤x,y≤2的w次。每个数都表示为w位无符号数字，然而计算和，可能范围为0≤x+y≤2的（w+1）次-2。</p>
+<p>一般来说，如果x+y＜2的w次，和的w+1位表示中的最高位会等于0，因此不会改变。相反另一种情况会等于1，因此丢弃它相当于从和中减去2的w次。</p>
+<p>图片*3</p>
+<p>当执行C程序时，不会将溢出作为错误而发信号。所以需要另外检测。</p>
+<p>对在范围0≤x,y≤umax中的x和y，令s = x+y，当s&lt;x或s&lt;y时，发生了溢出。另一方面，如果s确实溢出了，我们就有 s = x+y-2的w次。假设 y&lt;2的w次，我们就有 y-2的w次＜0，因此s&lt;x。</p>
+<p>无符号数取反</p>
+<p>图片</p>
+<h2 id="补码加法"><a href="#补码加法" class="headerlink" title="补码加法"></a>补码加法</h2><p>图片*3</p>
+<p>检测补码加法中的溢出：当x&lt;0,y&lt;0,但s≥0,计算s发生了负溢出。负溢出也是同样道理。</p>
+<h2 id="补码的非"><a href="#补码的非" class="headerlink" title="补码的非"></a>补码的非</h2><p>图片</p>
+<p>补码非得位级表示：在C语言中，对于任意整数x,计算-x和~x+1结果一样。</p>
+<h2 id="无符号数乘法"><a href="#无符号数乘法" class="headerlink" title="无符号数乘法"></a>无符号数乘法</h2><p>范围在0&lt;=x,y&lt;=2w-1内的整数x和y可以被表示为w位的无符号数，但是它们的乘积的取值范围为0到2的2w次-2的（w+1）次+1。这可能需要2w位来表示。不过，C语言中的无符号乘法被定义为产生w位的值，就是2w位的整数乘积的低w位表示的值。</p>
+<p>图片</p>
+<h2 id="补码乘法"><a href="#补码乘法" class="headerlink" title="补码乘法"></a>补码乘法</h2><p>补码乘法和无符号数乘法具有位级等价性。</p>
+<p>图片</p>
+<h2 id="乘以常数"><a href="#乘以常数" class="headerlink" title="乘以常数"></a>乘以常数</h2><p>大多数机器，整数乘法指令相当慢，需要10个或者更多的时钟周期，然后其他整数运算只需要1个时钟周期，所以试着用移位和加法运算的组合来代替乘以常数因子的乘法</p>
+<p>乘以2的幂：k次就是左移k个0（对于无符号和有符号都一样，最后基本等价性）</p>
+<p>需要C语言编译器试图以移位，加法和减法的组合来消除很多整数乘以常数的情况。例如：x*14，编译器将乘法重写为(x&lt;&lt;3)+(x&lt;&lt;2)+(x&lt;&lt;1)</p>
+<p>除以2的幂：整数除法比乘法更慢，需要30个或更多时钟周期。</p>
+]]></content>
       <categories>
         <category>《深入理解计算机系统》</category>
       </categories>
@@ -351,6 +404,7 @@
 <p>2020.7.18    20-34</p>
 <p>2020.7.19    34-54</p>
 <p>2020.7.20    54-60（没有效率的一天）</p>
+<p>20207.21    60-75</p>
 ]]></content>
       <categories>
         <category>计划</category>

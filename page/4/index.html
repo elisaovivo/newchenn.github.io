@@ -248,6 +248,243 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/06/18/%E5%A0%86%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/18/%E5%A0%86%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">堆中的路径</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-18 18:46:13 / 修改时间：22:34:35" itemprop="dateCreated datePublished" datetime="2020-06-18T18:46:13+08:00">2020-06-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/06/18/%E5%A0%86%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/18/%E5%A0%86%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>将一系列给定数字插入一个初始为空的小顶堆<code>H[]</code>。随后对任意给定的下标<code>i</code>，打印从<code>H[i]</code>到根结点的路径。</p>
+<h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式:"></a>输入格式:</h3><p>每组测试第1行包含2个正整数<em>N</em>和<em>M</em>(≤1000)，分别是插入元素的个数、以及需要打印的路径条数。下一行给出区间[-10000, 10000]内的<em>N</em>个要被插入一个初始为空的小顶堆的整数。最后一行给出<em>M</em>个下标。</p>
+<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式:"></a>输出格式:</h3><p>对输入中给出的每个下标<code>i</code>，在一行中输出从<code>H[i]</code>到根结点的路径上的数据。数字间以1个空格分隔，行末不得有多余空格。</p>
+<h3 id="输入样例"><a href="#输入样例" class="headerlink" title="输入样例:"></a>输入样例:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">5 3</span><br><span class="line">46 23 26 24 10</span><br><span class="line">5 4 3</span><br></pre></td></tr></table></figure>
+
+<h3 id="输出样例"><a href="#输出样例" class="headerlink" title="输出样例:"></a>输出样例:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">24 23 10</span><br><span class="line">46 23 10</span><br><span class="line">26 10</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>一开始解这道题的时候思路是先将这N个数字存储下来，再从最后一个具有子节点的节点开始向下调整。</p>
+<p>但是这样解错了。</p>
+<h3 id="自己的解法（错误）"><a href="#自己的解法（错误）" class="headerlink" title="自己的解法（错误）"></a>自己的解法（错误）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int N,M;</span><br><span class="line">int a[1005],b[1005];</span><br><span class="line">void ajust(int index)&#123;</span><br><span class="line">	int parent;</span><br><span class="line">	int child;</span><br><span class="line">	int temp &#x3D; a[index];</span><br><span class="line">	for(parent &#x3D; index; parent*2&lt;&#x3D;N;parent &#x3D; child)&#123;</span><br><span class="line">		child &#x3D; 2*parent;</span><br><span class="line">		if((child!&#x3D;N) &amp;&amp; (a[child]&gt;a[child+1]))</span><br><span class="line">			child++;</span><br><span class="line">		if(temp&lt;&#x3D;a[child]) break;</span><br><span class="line">		else a[parent] &#x3D; a[child];</span><br><span class="line">	&#125;</span><br><span class="line">	a[parent] &#x3D; temp;</span><br><span class="line">&#125;</span><br><span class="line">void buildHeap()&#123;</span><br><span class="line">	for(int i &#x3D; N&#x2F;2 ;i&gt;0;i--)&#123;</span><br><span class="line">		ajust(i);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">void printPath(int index)&#123;</span><br><span class="line">	int flag &#x3D; 1;</span><br><span class="line">	for(int i &#x3D; index;i&gt;0;i&#x3D;i&#x2F;2)&#123;</span><br><span class="line">		if(flag)&#123;</span><br><span class="line">			printf(&quot;%d&quot;,a[i]);</span><br><span class="line">			flag &#x3D; 0;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			printf(&quot; %d&quot;,a[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	printf(&quot;\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line">int main()&#123;</span><br><span class="line">	cin&gt;&gt;N&gt;&gt;M;</span><br><span class="line">	a[0] &#x3D; -10001;</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;N;i++)&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;a[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;M;i++)&#123;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;b[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	buildHeap();</span><br><span class="line">&#x2F;&#x2F;	for(int i &#x3D; 1;i&lt;&#x3D;N;i++)</span><br><span class="line">&#x2F;&#x2F;		cout&lt;&lt; a[i];</span><br><span class="line">	for(int i &#x3D; 1;i&lt;&#x3D;M;i++)&#123;</span><br><span class="line">		printPath(b[i]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="正确的解法"><a href="#正确的解法" class="headerlink" title="正确的解法"></a>正确的解法</h3><p>该题目采用建立小顶堆的方式是逐个插入，逐个调整。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int N,M;</span><br><span class="line">int a[1005];</span><br><span class="line">int size &#x3D; 0;</span><br><span class="line">int main()&#123;</span><br><span class="line">	cin&gt;&gt;N&gt;&gt;M;</span><br><span class="line">	a[0] &#x3D; -10001;</span><br><span class="line">	for(int i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">		int temp;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;temp);</span><br><span class="line">		int j;</span><br><span class="line">		for(j &#x3D; ++size;a[j&#x2F;2]&gt;temp;j &#x3D; j&#x2F;2)&#123;</span><br><span class="line">			a[j] &#x3D; a[j&#x2F;2];</span><br><span class="line">		&#125;</span><br><span class="line">		a[j] &#x3D; temp;</span><br><span class="line">	&#125;</span><br><span class="line">	for(int i &#x3D; 0;i&lt;M;i++)&#123;</span><br><span class="line">		int temp;</span><br><span class="line">		scanf(&quot;%d&quot;,&amp;temp);</span><br><span class="line">		cout&lt;&lt;a[temp];</span><br><span class="line">		while(temp!&#x3D;1)&#123;</span><br><span class="line">			temp &#x3D; temp&#x2F;2;</span><br><span class="line">			cout&lt;&lt;&quot; &quot;&lt;&lt;a[temp];</span><br><span class="line">		&#125;</span><br><span class="line">		cout&lt;&lt;&quot;\n&quot;; </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>可以发现，分别采用这两种方式构建小顶堆，结果是不一样的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/06/17/%E5%A0%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/17/%E5%A0%86/" class="post-title-link" itemprop="url">堆</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-17 22:42:56" itemprop="dateCreated datePublished" datetime="2020-06-17T22:42:56+08:00">2020-06-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-18 22:34:44" itemprop="dateModified" datetime="2020-06-18T22:34:44+08:00">2020-06-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/06/17/%E5%A0%86/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/17/%E5%A0%86/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是堆"><a href="#什么是堆" class="headerlink" title="什么是堆"></a>什么是堆</h1><p>优先队列（Priority Queue）: 取出元素的顺序按优先权大小，而不是元素进入队列的先后顺序。</p>
+<p>若堆可以用二叉搜索树来实现，插入操作时间效率就是对数级，删除操作也是对数级，但如果不断删除最大或最小的，树会歪掉，树的高度就不再是对数级别了。</p>
+<h1 id="堆的两个特性"><a href="#堆的两个特性" class="headerlink" title="堆的两个特性"></a>堆的两个特性</h1><p>结构性：用数组表示的完全二叉树。</p>
+<p>有序性：任一节点的关键字是其子树所有结点的最大值（或最小值）</p>
+<h1 id="堆的操作集"><a href="#堆的操作集" class="headerlink" title="堆的操作集"></a>堆的操作集</h1> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct HeapStruct *MaxHeap;</span><br><span class="line">struct HeapStruct&#123;</span><br><span class="line">	ElementType *Elements;&#x2F;&#x2F; 存储堆元素的数组</span><br><span class="line">	int Size;&#x2F;&#x2F;堆当前元素个数</span><br><span class="line">	int Capacity;&#x2F;&#x2F;堆最大容量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MaxHeap Create(int MaxSize)&#123;</span><br><span class="line">	MaxHeap H &#x3D; malloc(sizeof(struct HeapStruct));</span><br><span class="line">	H-&gt;Elements &#x3D; malloc((MaxSize+1)*sizeof(ElementType));</span><br><span class="line">	H-&gt;Size &#x3D; 0;</span><br><span class="line">	H-&gt;Capacity &#x3D; MaxSize;</span><br><span class="line">	H-&gt;Elements[0] &#x3D; MaxData;&#x2F;&#x2F;作为哨兵，便于以后更快操作</span><br><span class="line">	return H;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void Insert(MaxHeap H,ElementType item)&#123;</span><br><span class="line">	int i;</span><br><span class="line">	if(isFull(H))&#123;</span><br><span class="line">		printf(&quot;最大堆已满&quot;)；</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line">	i &#x3D; ++H-&gt;Size;</span><br><span class="line">	for(;H-&gt;Elements[i&#x2F;2] &lt; item; i&#x2F;&#x3D;2)</span><br><span class="line">		H-&gt;Elements[i] &#x3D; H-&gt;Elements[i&#x2F;2];</span><br><span class="line">	H-&gt;Elements[i] &#x3D; item;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ElementType DeleteMax(MaxHeap H)&#123;</span><br><span class="line">	&#x2F;&#x2F;取出键值最大的元素，并删除有一个节点</span><br><span class="line">	int Parent,Child;</span><br><span class="line">	ElementType MaxItem,temp;</span><br><span class="line">	if(isEmpty(H))&#123;</span><br><span class="line">		printf(&quot;最大堆已为空&quot;);</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line">	MaxItem &#x3D; H-&gt;Elements[1];</span><br><span class="line">	for(Parent &#x3D; 1; Parent*2&lt;&#x3D;H-&gt;Size; Parent &#x3D; Child)&#123;</span><br><span class="line">		Child &#x3D; Parent * 2;</span><br><span class="line">		if((Child!&#x3D; H-&gt;Size) &amp;&amp; (H-&gt;Element[Child]&lt;H-&gt;Element[Child+1]))</span><br><span class="line">			Child++;</span><br><span class="line">		if( temp &gt;&#x3D; H-&gt;Elements[Child]) break;</span><br><span class="line">		else H-&gt;Elements[Parent] &#x3D; H-&gt;Elements[Child];</span><br><span class="line">	&#125;    </span><br><span class="line">	H-&gt;Elements[Parent] &#x3D; temp;</span><br><span class="line">	return MaxItem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最大堆的建立"><a href="#最大堆的建立" class="headerlink" title="最大堆的建立"></a>最大堆的建立</h2><p>将已经存在的N个元素按最大堆的要求放在一个一维数组中。</p>
+<p>方法1：将N个元素一个个相继插入到一个初始为空的堆中去，时间代价为NlogN。</p>
+<p>方法2：（1）将N个元素顺序存入，先满足完全二叉树的结构特性。（2）调节各节点位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void PercDown(MaxHeap H,int p)&#123;</span><br><span class="line">	int Parent,Child;</span><br><span class="line">	ElementType X;</span><br><span class="line">	X &#x3D; H-&gt;Data[p];</span><br><span class="line">	for(Parent &#x3D; p; Parent*2&lt;&#x3D;H-&gt;Size; Parent &#x3D; Child)&#123;</span><br><span class="line">		Child &#x3D; Parent*2;</span><br><span class="line">		if((Child!&#x3D;H-&gt;Size) &amp;&amp; (H-&gt;Data[Child]&lt;H-&gt;Data[Child+1]))</span><br><span class="line">			Child++;</span><br><span class="line">		if(X&gt;&#x3D;H-&gt;Data[Child]) break;</span><br><span class="line">		else H-&gt;Data[Parent] &#x3D; H-&gt;Data[Child];</span><br><span class="line">	&#125;</span><br><span class="line">	H-&gt;Data[Parent] &#x3D; X;</span><br><span class="line">&#125;</span><br><span class="line">void BuildHeap(MaxHeap H)&#123;</span><br><span class="line">	int i;</span><br><span class="line">	for(i &#x3D; H-&gt;Size&#x2F;2;i&gt;0;i--)</span><br><span class="line">		PercDown(H,i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/06/08/Root-of-AVL-Tree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1170,230 +1407,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/05/26/Maximum-Subsequence-Sum/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/05/26/Maximum-Subsequence-Sum/" class="post-title-link" itemprop="url">Maximum Subsequence Sum</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-05-26 17:42:38" itemprop="dateCreated datePublished" datetime="2020-05-26T17:42:38+08:00">2020-05-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-28 22:04:33" itemprop="dateModified" datetime="2020-05-28T22:04:33+08:00">2020-05-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/05/26/Maximum-Subsequence-Sum/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/26/Maximum-Subsequence-Sum/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a href="https://pintia.cn/problem-sets/1211841066264109056/problems/1211848231062290433" target="_blank" rel="noopener">链接</a></p>
-<p>Given a sequence of <em>K</em> integers { <em>N</em>1, <em>N</em>2, …, <em>N**K</em> }. A continuous subsequence is defined to be { <em>N**i</em>, <em>N**i</em>+1, …, <em>N**j</em> } where 1≤<em>i</em>≤<em>j</em>≤<em>K</em>. The Maximum Subsequence is the continuous subsequence which has the largest sum of its elements. For example, given sequence { -2, 11, -4, 13, -5, -2 }, its maximum subsequence is { 11, -4, 13 } with the largest sum being 20.</p>
-<p>Now you are supposed to find the largest sum, together with the first and the last numbers of the maximum subsequence.</p>
-<h3 id="Input-Specification"><a href="#Input-Specification" class="headerlink" title="Input Specification:"></a>Input Specification:</h3><p>Each input file contains one test case. Each case occupies two lines. The first line contains a positive integer <em>K</em> (≤10000). The second line contains <em>K</em> numbers, separated by a space.</p>
-<h3 id="Output-Specification"><a href="#Output-Specification" class="headerlink" title="Output Specification:"></a>Output Specification:</h3><p>For each test case, output in one line the largest sum, together with the first and the last numbers of the maximum subsequence. The numbers must be separated by one space, but there must be no extra space at the end of a line. In case that the maximum subsequence is not unique, output the one with the smallest indices <em>i</em> and <em>j</em> (as shown by the sample case). If all the <em>K</em> numbers are negative, then its maximum sum is defined to be 0, and you are supposed to output the first and the last numbers of the whole sequence.</p>
-<h3 id="Sample-Input"><a href="#Sample-Input" class="headerlink" title="Sample Input:"></a>Sample Input:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">-10 1 2 3 4 -5 -23 3 7 -21</span><br></pre></td></tr></table></figure>
-
-<h3 id="Sample-Output"><a href="#Sample-Output" class="headerlink" title="Sample Output:"></a>Sample Output:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10 1 4</span><br></pre></td></tr></table></figure>
-
-
-
-<p>解：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int k,arr[100000];</span><br><span class="line">int cmax,rmax &#x3D; -1;</span><br><span class="line">int l,r,temp;</span><br><span class="line">int main()&#123;</span><br><span class="line">    cin&gt;&gt;k;</span><br><span class="line">    </span><br><span class="line">    for(int i &#x3D; 0;i&lt;k;i++)&#123;</span><br><span class="line">        scanf(&quot;%d&quot;,&amp;arr[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    for(int i &#x3D; 0;i&lt;k;i++)&#123;</span><br><span class="line">        cmax+&#x3D;arr[i];</span><br><span class="line">        if(rmax&lt;cmax)&#123;</span><br><span class="line">            r &#x3D; i;</span><br><span class="line">            l &#x3D; temp;</span><br><span class="line">            rmax &#x3D; cmax;</span><br><span class="line">        &#125;</span><br><span class="line">        if(cmax&lt;0)&#123;</span><br><span class="line">            cmax &#x3D; 0;</span><br><span class="line">            temp &#x3D; i+1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if(rmax &lt; 0 )</span><br><span class="line">        cout &lt;&lt;0&lt;&lt;&quot; &quot;&lt;&lt;arr[0]&lt;&lt;&quot; &quot;&lt;&lt;arr[k-1];</span><br><span class="line">    else</span><br><span class="line">        cout&lt;&lt; rmax&lt;&lt;&quot; &quot;&lt;&lt;arr[l]&lt;&lt;&quot; &quot;&lt;&lt;arr[r];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>1、设置左边界的时机，需要通过temp临时存储，当cmax&lt;0,可以肯定的是左边界在后面一个，但此时不能直接修改l，例如：3 -4 -5，直接修改会产生错误。所以需要在cmax&gt;rmax时修改。</p>
-<p>2、rmax初值需要设置为负数，如果默认0，例如 0,0,0,0。结果会输出第一个和最后一个，导致错误。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/05/13/2020-5-13/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/05/13/2020-5-13/" class="post-title-link" itemprop="url">2020.5.13</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-05-13 12:47:44 / 修改时间：13:06:37" itemprop="dateCreated datePublished" datetime="2020-05-13T12:47:44+08:00">2020-05-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%94%9F%E6%B4%BB%E6%97%A5%E5%B8%B8/" itemprop="url" rel="index">
-                    <span itemprop="name">生活日常</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/05/13/2020-5-13/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/13/2020-5-13/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <hr>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/05/13/2020-5-13/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1444,7 +1457,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1516,12 +1529,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">80k</span>
+    <span title="站点总字数">81k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:12</span>
+    <span title="站点阅读时长">1:14</span>
 </div>
 
         
