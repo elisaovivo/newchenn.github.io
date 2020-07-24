@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>csapp第三章-程序的机器级表示</title>
+    <url>/2020/07/24/csapp%E7%AC%AC%E4%B8%89%E7%AB%A0-%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/</url>
+    <content><![CDATA[<p>机器代码，用字节序列编码低级的操作。编译器以汇编代码的形式产生输出，汇编代码是机器代码的文本表示，给出程序中的每一条指令。然后GCC调用汇编器和链接器，根据汇编代码生成可执行的机器代码。</p>
+<h1 id="程序编码"><a href="#程序编码" class="headerlink" title="程序编码"></a>程序编码</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;假设一个C程序，有两个文件p1.c和p2.c。</span><br><span class="line">linux&gt; gcc -0g p p1.c p2.c</span><br></pre></td></tr></table></figure>
+
+<p>编译选项-Og告诉编译器使用会生成符合原始C代码整体结构的机器代码的优化等级。</p>
+<p>实际上gcc命令调用了一整套程序，将源代码转化成可执行代码。</p>
+<ol>
+<li>C预处理器扩展源代码，插入所有用#include指令指定的文件，并扩展所有用#define声明指定的宏。</li>
+<li>编译器产生两个源文件的汇编代码，p1.s和p2.s</li>
+<li>汇编器将汇编代码转成二进制目标代码文件p1.o和p2.o。（目标代码是机器代码的而一种形式，包括指令的二进制表示，但还没有填入全局值得地址）</li>
+<li>链接器将两个目标代码文件和实现库函数得代码合并，并产生最终得可执行代码文件p</li>
+</ol>
+<h1 id="机器级代码"><a href="#机器级代码" class="headerlink" title="机器级代码"></a>机器级代码</h1><p>对于机器编程来说，其中两种抽象尤为重要。</p>
+<ol>
+<li>指令集体系结构或指令集架构（Instruction Set Architecture,ISA）定义机器级程序得格式和行为，它定义了处理器状态，指令得格式，以及每条指令对状态得影响。但硬件层面描述复杂，它们并发执行许多指令，但可以采取措施保证整体行为与ISA指定顺序完全一致。</li>
+<li>机器级程序使用内存地址是虚拟地址。存储器系统得实际实现是将多个硬件存储器和操作系统软件给结合起来。</li>
+</ol>
+<p>一些x86-64的机器代码对于C语言程序员隐藏的处理器状态都是可见的：</p>
+<ol>
+<li>程序计数器（PC，x86-64中用%rip表示）给除将要执行恶下一条指令在内存中的地址。</li>
+<li>整数寄存器文件包括16个命名的地址，分别存储64位的值，可以存放地或整数数据。</li>
+<li>条件码寄存器保存最近执行的算术或逻辑命令的状态信息。用来实现控制或条件流中的条件变化。</li>
+<li>一组向量寄存器用来存放一个或多个整数或浮点数值。</li>
+</ol>
+<p>从机器代码角度看内存，内存只是一个很大的、按字节寻址的数组。</p>
+<p>程序在内存中包括：程序的可执行机器代码，操作系统需要的一些信息，用来管理过程调用和返回的运行时栈，以及用户分配的内存块。</p>
+<h1 id="数据格式"><a href="#数据格式" class="headerlink" title="数据格式"></a>数据格式</h1><p>由于是从16位体系结构拓展成32位的，Intel用术语“字（word）”表示16位数据类型。</p>
+<p>图片</p>
+<p>大多数GCC生成的汇编代码指令都有一个字符的后缀，表明操作数的大小。例如数据传送指令有四个变种:movb(传送字节)、movw（传送字）、movl（传送双字）和movq（传送四字。）</p>
+<h1 id="访问信息"><a href="#访问信息" class="headerlink" title="访问信息"></a>访问信息</h1><p>x86-84的中央处理单元（CPU）包含一组16个存储64位值得通用目的寄存器。用来存储整数数据和指针。</p>
+<p>图片</p>
+<p>指令可以对这16个寄存器得低位字节中存放得不同大小数据进行操作。</p>
+<p>在常见得程序里不同得寄存器扮演不同角色。其中最特别得栈指针%rsp。用来指明运行时栈结束位置。</p>
+<h2 id="操作器指令符"><a href="#操作器指令符" class="headerlink" title="操作器指令符"></a>操作器指令符</h2><p>大多数指令有一个或多个操作数（operand）。操作数分为三种类型。</p>
+<ol>
+<li>立即数(immediate)：用来表示常数值。</li>
+<li>寄存器（register）</li>
+<li>内存引用</li>
+</ol>
+<p>寻找方式也有多种。Imm（rb,ri,s）表示最常用的形式:一个立即数偏移Imm，一个基址寄存器rb，一个变址寄存器ri和一个比例因子s,s必须是1，2，4，或者8.</p>
+<p>图片</p>
+<h2 id="数据传送指令"><a href="#数据传送指令" class="headerlink" title="数据传送指令"></a>数据传送指令</h2>]]></content>
+      <categories>
+        <category>《深入理解计算机系统》</category>
+      </categories>
+      <tags>
+        <tag>csapp,视频课程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>排序算法的比较</title>
     <url>/2020/07/21/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83/</url>
     <content><![CDATA[<p><img src="https://pic2.zhimg.com/80/v2-88e47948380615b5adb6e7c313a916e5_1440w.jpg" alt="浙江大学-数据结构-算法排序的比较-10.4.1 - 知乎"></p>
@@ -165,23 +216,23 @@
 
 <p>位级运算一个常见用法就是实现掩码运算，例如：</p>
 <p>x&amp;0xFF生成一个由x的最低有效字节组成的值。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">例题：</span><br><span class="line">除了x的最低有效字节外，其他的位都取补，最低有效字节保持不变</span><br><span class="line">x^0xFF(这样写就可以忽略字长)</span><br><span class="line">x的最低有效字节设置全1，其他字节保持不变</span><br><span class="line">x||0xFF</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">例题：</span><br><span class="line">除了x的最低有效字节外，其他的位都取补，最低有效字节保持不变</span><br><span class="line">x^0xFF(这样写就可以忽略字长)</span><br><span class="line">x的最低有效字节设置全1，其他字节保持不变</span><br><span class="line">x|0xFF</span><br></pre></td></tr></table></figure>
 
 <h2 id="2-1-8-C语言中的逻辑运算"><a href="#2-1-8-C语言中的逻辑运算" class="headerlink" title="2.1.8 C语言中的逻辑运算"></a>2.1.8 C语言中的逻辑运算</h2><p>C语言还提供了一组逻辑运算符||、&amp;&amp;和！。<strong>这与位级运算是不同的</strong></p>
 <h2 id="C语言中的移位运算"><a href="#C语言中的移位运算" class="headerlink" title="C语言中的移位运算"></a>C语言中的移位运算</h2><p>左移只有逻辑左移对应x&lt;&lt;k。</p>
 <p>右移分为逻辑右移和算术右移x&gt;&gt;k。在C语言中没有明确表示，但大多数编译器都是算术右移，在java中，x&gt;&gt;k会将x算术右移k个位置，而x&gt;&gt;&gt;k做逻辑右移。</p>
-<p><strong>若移动k≥w位时，实际移动位数为kmodw</strong></p>
+<p><strong>若移动k≥w位时，实际移动位数为k mod w</strong></p>
 <p><strong>C语言中加减法的优先级比移位运算要高。1&lt;&lt;2+3&lt;&lt;4，其实时（1&lt;&lt;(2+3)）&lt;&lt;4</strong></p>
 <h1 id="整数表示"><a href="#整数表示" class="headerlink" title="整数表示"></a>整数表示</h1><p>编码整数的两种不同的方式：一种只能表示非负数，而另一种能表示负数、零和正数。</p>
-<p>《图片》</p>
+<p><img src="https://i.loli.net/2020/07/22/J9qTAOSXkBMFxPL.png" alt="img"></p>
 <h2 id="整型数据类型"><a href="#整型数据类型" class="headerlink" title="整型数据类型"></a>整型数据类型</h2><p>很明显，对于相同的数据类型根据程序编译为32位还是64位而有所不同。</p>
 <p><strong>C和C++都支持有符号和无符号数。java只支持有符号数</strong></p>
 <h2 id="无符号数的编码"><a href="#无符号数的编码" class="headerlink" title="无符号数的编码"></a>无符号数的编码</h2><p>无符号数编码，定义一个 函数名为B2U(Binary to Unsigned)来表示。</p>
-<p>《图片》</p>
+<p><img src="https://i.loli.net/2020/07/22/kDIMsYiCQdNbFma.png" alt="img"></p>
 <p>B2U是一个双射，是唯一的。</p>
 <h2 id="补码编码"><a href="#补码编码" class="headerlink" title="补码编码"></a>补码编码</h2><p>最常见的有符号数的计算机表示方式就是补码（two’s-complement）形式。</p>
 <p>将字的最高有效位解释为负权（negative weight）。我们用函数B2T来表示</p>
-<p>《图片》</p>
+<p><img src="https://i.loli.net/2020/07/22/982nGHZEBgDN15x.png" alt="img"></p>
 <p>补码编码的唯一性</p>
 <p>B2T是一个双射。</p>
 <p>|TMin| = |TMax| + 1,之所以不对称，因为一半的位模式表示负数，而另一半（符号设置为0）表示非负数，也就意味能表示的整数比负数少一个。第二：UMAX = 2TMAX+1</p>
@@ -189,23 +240,22 @@
 <p>而数据类型的取值范围，java标准是非常明确的。</p>
 <h2 id="有符号数和无符号数之间的转换"><a href="#有符号数和无符号数之间的转换" class="headerlink" title="有符号数和无符号数之间的转换"></a>有符号数和无符号数之间的转换</h2><p>C语言允许不同数字类型之间进行强制类型转换。</p>
 <p>强制类型转换的本质是，位值不变，只是改变了解释这些位的方式。</p>
-<p><strong>原理：补码转化位无符号数</strong></p>
-<p><strong>若满足 Tmin≤x≤Tmax的x有</strong></p>
+<h3 id="原理：补码转化位无符号数"><a href="#原理：补码转化位无符号数" class="headerlink" title="原理：补码转化位无符号数"></a>原理：补码转化位无符号数</h3><p><strong>若满足 Tmin≤x≤Tmax的x有</strong></p>
 <p>​                        </p>
 <p><strong>T2U（x） =   x+2的w次,     x&lt;0</strong></p>
 <p>​                       <strong>x,                    x≥0</strong></p>
-<p>图片</p>
-<p>图片</p>
-<p><strong>若满足 0≤u≤Umax的u有</strong></p>
+<p><img src="https://i.loli.net/2020/07/22/SNJO8wZUC5ugMdG.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/H1SgAlRJ4cM2OVz.png" alt="img"></p>
+<h3 id="无符号数转化为补码"><a href="#无符号数转化为补码" class="headerlink" title="无符号数转化为补码"></a>无符号数转化为补码</h3><p><strong>若满足 0≤u≤Umax的u有</strong></p>
 <p>​                        </p>
 <p><strong>U2T（x） =  u,                            u≤Tmax</strong></p>
 <p>​                       <strong>u-2的w次,                   u&gt;Tmax</strong></p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/22/qSPZxaJyVi3cmCk.png" alt="img"></p>
 <h2 id="C语言中的有符号数与无符号数"><a href="#C语言中的有符号数与无符号数" class="headerlink" title="C语言中的有符号数与无符号数"></a>C语言中的有符号数与无符号数</h2><p>C语言标准没有指定有符号数采用哪种表示，但几乎所有机器都使用补码。</p>
 <p>当申明一个常量默认被当作有符号，要创建一个无符号数常量，必须加上后缀字符U</p>
 <h2 id="拓展一个数字的位表示"><a href="#拓展一个数字的位表示" class="headerlink" title="拓展一个数字的位表示"></a>拓展一个数字的位表示</h2><ul>
 <li>无符号数的零扩展（zero extension）：高位填0就行了</li>
-<li>符号宽展（sign extension)：图片</li>
+<li>符号宽展（sign extension)：<img src="https://i.loli.net/2020/07/22/IK2Tw5Ee1AJrmcO.png" alt="img"></li>
 </ul>
 <p>当short转换成unsigned时，首先要改变大小，再完成从有符号到无符号之间的转换。也就是说(unsigned)sx等价于(unsigned)(int)sx。这个规则是C语言标准要求的。</p>
 <p>对于C语言而言，无符号数移位是逻辑移位，有符号数移位是算术移位。 </p>
@@ -213,33 +263,37 @@
 <li>截断无符号数：x’ = x mod 2的k次（截断为k位的结果）</li>
 <li>截断补码数值：具有相似的属性，只不过要将最高位转换为符号位。</li>
 </ul>
-<h1 id="整数运算"><a href="#整数运算" class="headerlink" title="整数运算"></a>整数运算</h1><h2 id="无符号加法"><a href="#无符号加法" class="headerlink" title="无符号加法"></a>无符号加法</h2><p>图片</p>
+<h1 id="整数运算"><a href="#整数运算" class="headerlink" title="整数运算"></a>整数运算</h1><h2 id="无符号加法"><a href="#无符号加法" class="headerlink" title="无符号加法"></a>无符号加法</h2><p><img src="https://i.loli.net/2020/07/22/yv7sYBCVqb65W1L.png" alt="img"></p>
 <p>对于两个非负整数，满足0≤x,y≤2的w次。每个数都表示为w位无符号数字，然而计算和，可能范围为0≤x+y≤2的（w+1）次-2。</p>
 <p>一般来说，如果x+y＜2的w次，和的w+1位表示中的最高位会等于0，因此不会改变。相反另一种情况会等于1，因此丢弃它相当于从和中减去2的w次。</p>
-<p>图片*3</p>
+<p><img src="https://i.loli.net/2020/07/22/hRTqSjyYUQPf1Ni.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/eonkqLh6mjz8GTD.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/YDNaCt5d6y2on9l.png" alt="img"></p>
 <p>当执行C程序时，不会将溢出作为错误而发信号。所以需要另外检测。</p>
 <p>对在范围0≤x,y≤umax中的x和y，令s = x+y，当s&lt;x或s&lt;y时，发生了溢出。另一方面，如果s确实溢出了，我们就有 s = x+y-2的w次。假设 y&lt;2的w次，我们就有 y-2的w次＜0，因此s&lt;x。</p>
-<p>无符号数取反</p>
-<p>图片</p>
-<h2 id="补码加法"><a href="#补码加法" class="headerlink" title="补码加法"></a>补码加法</h2><p>图片*3</p>
+<h3 id="无符号数取反"><a href="#无符号数取反" class="headerlink" title="无符号数取反"></a>无符号数取反</h3><p><img src="https://i.loli.net/2020/07/22/UvECyAiYpIgMDbJ.png" alt="img"></p>
+<h2 id="补码加法"><a href="#补码加法" class="headerlink" title="补码加法"></a>补码加法</h2><p><img src="https://i.loli.net/2020/07/22/NJMkY8ew3WszdDu.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/TwpNJS372iqrCUV.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/4KkTBxauCGRtdJj.png" alt="img"></p>
 <p>检测补码加法中的溢出：当x&lt;0,y&lt;0,但s≥0,计算s发生了负溢出。负溢出也是同样道理。</p>
-<h2 id="补码的非"><a href="#补码的非" class="headerlink" title="补码的非"></a>补码的非</h2><p>图片</p>
-<p>补码非得位级表示：在C语言中，对于任意整数x,计算-x和~x+1结果一样。</p>
+<h2 id="补码的非"><a href="#补码的非" class="headerlink" title="补码的非"></a>补码的非</h2><p><img src="https://i.loli.net/2020/07/22/IgLaNrQ8MKezFG4.png" alt="img"></p>
+<p><strong>补码非得位级表示：在C语言中，对于任意整数x,计算-x和~x+1结果一样。</strong></p>
 <h2 id="无符号数乘法"><a href="#无符号数乘法" class="headerlink" title="无符号数乘法"></a>无符号数乘法</h2><p>范围在0&lt;=x,y&lt;=2w-1内的整数x和y可以被表示为w位的无符号数，但是它们的乘积的取值范围为0到2的2w次-2的（w+1）次+1。这可能需要2w位来表示。不过，C语言中的无符号乘法被定义为产生w位的值，就是2w位的整数乘积的低w位表示的值。</p>
-<p>图片</p>
-<h2 id="补码乘法"><a href="#补码乘法" class="headerlink" title="补码乘法"></a>补码乘法</h2><p>补码乘法和无符号数乘法具有位级等价性。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/22/kA7ZIKoeCUTSmYp.png" alt="img"></p>
+<h2 id="补码乘法"><a href="#补码乘法" class="headerlink" title="补码乘法"></a>补码乘法</h2><p><strong>补码乘法和无符号数乘法具有位级等价性。</strong></p>
+<p><img src="https://i.loli.net/2020/07/22/lLXw4xIu7HPR2bF.png" alt="img"></p>
 <h2 id="乘以常数"><a href="#乘以常数" class="headerlink" title="乘以常数"></a>乘以常数</h2><p>大多数机器，整数乘法指令相当慢，需要10个或者更多的时钟周期，然后其他整数运算只需要1个时钟周期，所以试着用移位和加法运算的组合来代替乘以常数因子的乘法</p>
-<p>乘以2的幂：k次就是左移k个0（对于无符号和有符号都一样，最后基本等价性）</p>
-<p>需要C语言编译器试图以移位，加法和减法的组合来消除很多整数乘以常数的情况。例如：x*14，编译器将乘法重写为(x&lt;&lt;3)+(x&lt;&lt;2)+(x&lt;&lt;1)</p>
-<p>除以2的幂：整数除法比乘法更慢，需要30个或更多时钟周期。才用右移来实现，无符号数和补码数分别使用逻辑移位和算术移位来达到目的。</p>
-<p>整数除法总是舍入到0.对于负数向上，对于正数向下。</p>
+<h3 id="乘以2的幂"><a href="#乘以2的幂" class="headerlink" title="乘以2的幂"></a>乘以2的幂</h3><p>需要C语言编译器试图以移位，加法和减法的组合来消除很多整数乘以常数的情况。例如：x*14，编译器将乘法重写为(x&lt;&lt;3)+(x&lt;&lt;2)+(x&lt;&lt;1)</p>
+<h3 id="除以2的幂"><a href="#除以2的幂" class="headerlink" title="除以2的幂"></a>除以2的幂</h3><p>整数除法比乘法更慢，需要30个或更多时钟周期。才用右移来实现，无符号数和补码数分别使用逻辑移位和算术移位来达到目的。</p>
+<p>整数除法总是舍入到0。对于负数向上，对于正数向下。</p>
 <p>对于无符号数。采用逻辑移位。设x’为w-k位[x的w-1,…,w的k]的无符号数，而x’’为k位表示[x的k-1,…,x的0]的无符号数,x = 2的k次*x’+x’’,而0≤x’’&lt;2的k次。因此x’自然向下取整。</p>
 <p>对于补码来说。移位执行的是算术移位。对于正数来说，与无符号数一样的。对于负数，普通的算术移位，会导致向下舍入，所以需要配调整。</p>
 <p>对于，负数想要向上舍入，如何调整？</p>
-<p>在移位之前，“偏置（biasing）”这个值，来修正不适合的舍入。C变量x和k分别有补码值x和无符号数值k，且0≤k&lt;w,则当执行算术移位时，C表达式(x+(1&lt;&lt;k)-1)&gt;&gt;K。根本原理：假设x=qy+r，其中0≤r&lt;y,得到(x+y-1)/y=q+(r+y-1)/y，因此。当r=0时，后面一项等于0，而当r&gt;0时，等于1。也就是说，通过给x增加一个偏量y-1，然后再用除法向下舍入，当y整数x时，我们得到q，否则，就得到q+1。回到y=2k的情况，C表达式X+(1&lt;&lt;K)-1得到数值x+2的k次-1。</p>
+<p>在移位之前，“偏置（biasing）”这个值，来修正不适合的舍入。C变量x和k分别有补码值x和无符号数值k，且0≤k&lt;w,则当执行算术移位时，C表达式(x+(1&lt;&lt;k)-1)&gt;&gt;K。</p>
+<p>根本原理：x/y向上取整 = （x+y-1）/y向下取整。</p>
+<p>假设x=qy+r，其中0≤r&lt;y,得到(x+y-1)/y=q+(r+y-1)/y，因此。当r=0时，后面一项等于0，而当r&gt;0时，等于1。也就是说，通过给x增加一个偏量y-1，然后再用除法向下舍入，当y整数x时，我们得到q，否则，就得到q+1。回到y=2k的情况，C表达式X+(1&lt;&lt;K)-1得到数值x+2的k次-1。</p>
 <h1 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h1><h2 id="二进制小数"><a href="#二进制小数" class="headerlink" title="二进制小数"></a>二进制小数</h2><p>二进制小数点往左移动一位相当于这个数被2除。往右移动一位，相当于将该数乘2。假定我们仅考虑有限从长度的编码，有些小数是不能被精确表示(只能表示: x*2的y次)，只能通过长度不断逼近。</p>
-<h2 id="IEEE浮点表示"><a href="#IEEE浮点表示" class="headerlink" title="IEEE浮点表示"></a>IEEE浮点表示</h2><p>IEEE浮点标准用<img src="https://img2018.cnblogs.com/blog/1334023/201907/1334023-20190725104536051-398406811.png" alt="img">的形式来表示一个数：</p>
+<h2 id="IEEE浮点表示"><a href="#IEEE浮点表示" class="headerlink" title="IEEE浮点表示"></a>IEEE浮点表示</h2><p>IEEE浮点标准用<img src="https://i.loli.net/2020/07/22/olTFs5RBNMtiqvy.png" alt="img">的形式来表示一个数：</p>
 <ul>
 <li>符号（sign）s决定是负数（s=1）还是正数（s=0），而对于数值0的符号位解释作为特殊情况处理。</li>
 <li>尾数（significand）M是一个二进制小数，它的范围是1<del>2-ε，或者是0</del>1-ε。</li>
@@ -247,16 +301,17 @@
 </ul>
 <p>在单精度浮点数中，s、exp、frac分别1、8、23。双精度1,11,52。</p>
 <p>根据exp的值，被编码的值可以分成三种不同的情况（最后的情况有两个变种）。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/22/EfHFSGqmxK9oVBN.png" alt="img"></p>
 <ul>
 <li>情况1（规格化数）：阶码的值E = e-bias。e为无符号数。尾数具有隐含的1开头（implied leading 1）表示。</li>
 <li>情况2 （非规格化数）:E = 1-bias。尾数不包含隐含位1开头。（这里设置1-bias是为了平滑过度到规格化值，具体看下图）</li>
 <li>情况3（特殊值）：阶码全为1的时候出现的，当小数域全为0时，根据符号位，得到正负无穷。小数域非0时，结果值称为“NAN”(Not a Number)。例如计算根号-1。</li>
 </ul>
-<h2 id="数字示例"><a href="#数字示例" class="headerlink" title="数字示例"></a>数字示例</h2><p>图片*3</p>
-<p>可以观潮到最大非规格化数和最小规格化数之间的平滑转变。这是一个有趣的属性，当这些表达式解释为无符号整数时，它们就是按升序排列的。</p>
+<h2 id="数字示例"><a href="#数字示例" class="headerlink" title="数字示例"></a>数字示例</h2><p><img src="https://i.loli.net/2020/07/22/JUIsNwlijmrqC68.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/xYSnNpm7fCOu12j.png" alt="img"></p>
+<p>可以观察到最大非规格化数和最小规格化数之间的平滑转变。这是一个有趣的属性，当这些表达式解释为无符号整数时，它们就是按升序排列的。</p>
 <h2 id="舍入（rounding）"><a href="#舍入（rounding）" class="headerlink" title="舍入（rounding）"></a>舍入（rounding）</h2><p>向偶数舍入（round-to-even），也被称为向最接近的值舍入（round-to-nearest），是默认的方式。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/22/hl1zEIGjO5Hn4gt.png" alt="img"></p>
 <h2 id="浮点运算"><a href="#浮点运算" class="headerlink" title="浮点运算"></a>浮点运算</h2><p>浮点运算具有交换律，但不具备结合律。对于表达式（3.14+1e10）-1e10求得0，是因为3.14由于太小，被舍入丢失了。另外两个特例（正无穷加负无穷=NAN，x+NAN=NAN）</p>
 ]]></content>
       <categories>
@@ -431,6 +486,7 @@
 <p>2020.7.20    54-60（没有效率的一天）</p>
 <p>2020.7.21    60-75</p>
 <p>20207.22    75-88</p>
+<p>2020.7.24    109-122</p>
 ]]></content>
       <categories>
         <category>计划</category>
