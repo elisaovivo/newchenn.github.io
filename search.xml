@@ -109,6 +109,63 @@
 <p>图片</p>
 <p>CMP根据两数之差设置条件码。CMP与SUB指令的行为一样。列出操作数的顺序是相反的。</p>
 <p>TEST指令的行为与AND指令一样，除了它们只设置条件码而不改变目的寄存器值，典型用法是，两个操作数一样（检查是 正、负还是0），或其中一个操作数是掩码，用来指示哪些位应该被测试。</p>
+<h2 id="访问条件码"><a href="#访问条件码" class="headerlink" title="访问条件码"></a>访问条件码</h2><p>条件码通常不会被读取，常用使用方法有三种:</p>
+<ol>
+<li>可以根据条件码的某种组合，将一个字节设置为0或1。</li>
+<li>可以条件跳转到程序的某个其他的部分</li>
+<li>可以有条件地传送数据</li>
+</ol>
+<p>对于第一种情况，有一整类指令称为SET指定。这些后缀表示不同德条件而不是操作数大小，例如，指令setl和setb表示“小于时设置（set less）”和“低于时设置（set below）”，而不是“设置长字“set long word”和“set byte”。</p>
+<p>一条set指令的目的操作数是低位单字节寄存器运算之一，或是一个字节的内存位置，指令会将这个字节设置成0或者1。</p>
+<p>图片</p>
+<p>一个计算C语言表达式a&lt;b的经典指令序列如下所示。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; int comp(data_t a,data_t b)</span><br><span class="line">&#x2F;&#x2F; a in %rdi,b in %rsi</span><br><span class="line">comp:</span><br><span class="line">	cmpq	%rsi,%rdi	&#x2F;&#x2F;Compare a:b</span><br><span class="line">	setl	%al			&#x2F;&#x2F;Set low-order byte of %eax to 0 or 1</span><br><span class="line">    movzbl	%al,%eax	&#x2F;&#x2F;Clear rest of %eax(and rest  of %rax)</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure>
+
+<p>cmp指令参数虽然是先b后a，但其实是a:b。</p>
+<p>movzbl指令不仅会把%eax的高3个字节清零，还会把整个寄存器%rax的高4个字节清零。</p>
+<p>某些底层的机器指令可能有多个名字，称之为“同义词（synonym）”</p>
+<p>各个SET命令的描述都适用的情况是：执行比较指令，根据计算t=a-b设置条件码。</p>
+<p>不像C语言，机器代码不会将每个程序值和一个数据类型联系起来。大多数情况下，机器代码对有符号和无符号两种情况都使用一样的指令，这是因为许多算术运算对无符号和补码算术都有一样的位级行为。但也有些情况需要不同指令来处理有符号和无符号操作，例如，使用不同版本的右移、除法和乘法指令，以及不同条件码组合。</p>
+<h2 id="跳转指令"><a href="#跳转指令" class="headerlink" title="跳转指令"></a>跳转指令</h2><p>jump指令会导致执行切换到程序中一个全新的位置。跳转目的由标号（label）指明。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	movq $0,%rax	&#x2F;&#x2F; set %rax to 0</span><br><span class="line">	jmp .L1			&#x2F;&#x2F; Goto .L1</span><br><span class="line">	movq (%rax),%rdx	&#x2F;&#x2F; Null pointer dereference(skipped)</span><br><span class="line">.L1:</span><br><span class="line">	popq %rdx	&#x2F;&#x2F;jump target</span><br></pre></td></tr></table></figure>
+
+<p>在产生目标代码文件时，汇编器会确定所有带标号指令的地址，并将跳转目标（目的指令地址）编码为跳转指令的一部分。</p>
+<p>图片</p>
+<p>jmp指令是无条件跳转。可以是直接跳转(跳转目标作为指令一部分编码)，也可以是间接跳转(从寄存器或内存位置读出的)。直接跳转给出一个标号为目标，间接跳转写法是“*”后跟操作数指示符。</p>
+<p>其他跳转指令都是有条件的，或者跳转或者执行下一条指令。<strong>条件跳转只能是直接跳转</strong></p>
+<h2 id="跳转指令的编码"><a href="#跳转指令的编码" class="headerlink" title="跳转指令的编码"></a>跳转指令的编码</h2><p>跳转指令有几种不同的编码，但最常用的都是PC相对的（PC-relative）/就是将目标指令地址与紧跟在跳转指令后面那条指令的地址之间的差作为编码。这个偏移量可以编码为1，2或4字节。第二种编码方式是给出“绝对”地址，用4个字节直接指定目标。汇编器与链接器会选择适当的跳转目的编码。</p>
+<h2 id="用条件控制来实现条件分支"><a href="#用条件控制来实现条件分支" class="headerlink" title="用条件控制来实现条件分支"></a>用条件控制来实现条件分支</h2><p>C语言中的if-else语句的通用形式模板如下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if(text-expr)</span><br><span class="line">	then-statement</span><br><span class="line">else</span><br><span class="line">	else-statement</span><br></pre></td></tr></table></figure>
+
+<p>这里test-expr是一个整数表达式，取值为0或非0,两个分支语句只会执行一个。</p>
+<p>对于这种通用形式，汇编实现通常使用下面这种形式。用C语言来描述控制流：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	t &#x3D; text-expr</span><br><span class="line">	if(!t)</span><br><span class="line">		goto false;</span><br><span class="line">	then-statement</span><br><span class="line">	goto done;</span><br><span class="line">false:</span><br><span class="line">	else-statement;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+
+<p>汇编器为then-statement和else-statement产生各自的代码块。它会插入条件和无条件分支，以保证执行正确的代码块。</p>
+<h2 id="用条件传送来实现条件分支"><a href="#用条件传送来实现条件分支" class="headerlink" title="用条件传送来实现条件分支"></a>用条件传送来实现条件分支</h2><p>使用<strong>控制的条件转移</strong>这种机制简单而通用，但在现在处理器上，有点低效。一种替代的策略是使用<strong>数据的条件转移。</strong>这种方法计算一个条件操作的两种结果，然后再根据条件是否满足选取一个。只在受限制的情况中，这种策略可行，如果可行就可以用一条简单的条件传送指令来实现它，条件传送指令更符合现代处理器的性能特性。</p>
+<p>为何条件数据传送的方式比较快?</p>
+<p>处理器使用流水线（pipelining）来获得高性能，而这需要提前确定要执行的指令序列，当机器遇到条件跳转（也称为“分支”）时，只有当分支条件求值完成时，才能绝对走哪个分支。处理器采用分支预测逻辑来推测每条跳转指令是否执行。只要预测可靠(现代处理器设计试图达到90%的成功率)，指令流水线就可以充满指令。若预测失败，处理器就要丢掉它为该跳转指令后的所有工作，然后再从正确位置处起始的指令去填充流水线。一次预测失误，会浪费15~30个时钟周期。</p>
+<p>图片</p>
+<p>每条指令有两个操作数:源寄存器或者内存地址S，和目的寄存器R。源和目的值可以是16位、32位或64位长。<strong>不支持单字节的条件传送。</strong></p>
+<p>汇编器可以从目标寄存器的名字推断处条件传送指令的操作数长度，所以对所有的操作数长度，到可以使用同一个的指令名字。</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">v &#x3D; test-expr ? the-expr:else-expr;</span><br></pre></td></tr></table></figure>
+
+<p>条件控制：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	if(!text-pr)</span><br><span class="line">		goto false;</span><br><span class="line">	v &#x3D; then-expr;</span><br><span class="line">	goto done;</span><br><span class="line">false:</span><br><span class="line">	v &#x3D; else-expr;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
+
+<p>条件传送：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">v &#x3D; then-expr;</span><br><span class="line">ve &#x3D; else-expr;</span><br><span class="line">t &#x3D; test-expr;</span><br><span class="line">if(!t) v &#x3D; ve;</span><br></pre></td></tr></table></figure>
+
+<p>不是所有条件表达式都可以用条件出传送来编译，例如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">long cread(long *xp)&#123;</span><br><span class="line">	return (xp?*xp:0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>汇编如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xp in %rdi</span><br><span class="line">cread:</span><br><span class="line">	movq	(%rdi),%rax;	&#x2F;&#x2F;v &#x3D; *xp</span><br><span class="line">	test	%rdi,%rdi		&#x2F;&#x2F;Test &#x3D; x</span><br><span class="line">	movl	$0,%edx			&#x2F;&#x2F;Set ve &#x3D; 0</span><br><span class="line">	cmove	%rdx,%rax		&#x2F;&#x2F;if(x&#x3D;&#x3D;0) v &#x3D; ve</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
+
+<p>不过，这个实现是非法的，因为计时当测试为假，movq指令对xp的间接引用还是发生了，导致了间接引用空指针的错误。</p>
+<p>所以如果两个表达式中的任意一个可能产生错误条件或者副作用，就会导致非法行为。</p>
+<p>如果then-expr或者else-expr部分很麻烦，用条件传送也不适合，所以各有各的优点。</p>
 ]]></content>
       <categories>
         <category>《深入理解计算机系统》</category>
@@ -554,6 +611,7 @@
 <p>20207.22    75-88</p>
 <p>2020.7.24    109-122</p>
 <p>2020.7.25    122-136</p>
+<p>2020.7.26    136-149</p>
 ]]></content>
       <categories>
         <category>计划</category>
