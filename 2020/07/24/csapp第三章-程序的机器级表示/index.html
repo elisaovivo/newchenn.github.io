@@ -60,7 +60,7 @@
 <meta property="og:description" content="机器代码，用字节序列编码低级的操作。编译器以汇编代码的形式产生输出，汇编代码是机器代码的文本表示，给出程序中的每一条指令。然后GCC调用汇编器和链接器，根据汇编代码生成可执行的机器代码。 程序编码12&#x2F;&#x2F;假设一个C程序，有两个文件p1.c和p2.c。linux&gt; gcc -0g p p1.c p2.c  编译选项-Og告诉编译器使用会生成符合原始C代码整体结构的机器代码的">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-24T07:07:02.000Z">
-<meta property="article:modified_time" content="2020-07-27T15:27:19.264Z">
+<meta property="article:modified_time" content="2020-07-28T16:31:57.013Z">
 <meta property="article:author" content="CJ">
 <meta property="article:tag" content="csapp,视频课程">
 <meta name="twitter:card" content="summary">
@@ -258,7 +258,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-27 23:27:19" itemprop="dateModified" datetime="2020-07-27T23:27:19+08:00">2020-07-27</time>
+                <time title="修改时间：2020-07-29 00:31:57" itemprop="dateModified" datetime="2020-07-29T00:31:57+08:00">2020-07-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -299,14 +299,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>10k</span>
+              <span>12k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
+              <span>11 分钟</span>
             </span>
 
         </div>
@@ -521,7 +521,44 @@
 <p>在汇编代码中，跳转表用以下申明表示:</p>
 <p>图片</p>
 <p>这些申明表明，在叫做“.rodata“（只读数据，Read-Only Data）的目标代码文件的段中，应该有一组7个”四“字（8个字节），每个字的的值都是与指定的汇编代码标号（例如.L3）相关联的指令地址。标号.L4标记出这个分配地址的起始。与这个标号相对应的地址会作为间接跳转（第5行）的基地址。</p>
-
+<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><p>过程是软件一种重要抽象。它提供一种封装代码的方式。不同编程语言中，过程的形式多样：函数（function）、方法(method)、子例程（subroutine）、处理函数（handler）等等，但它们具备共性。</p>
+<p>假设过程P调用过程Q，Q执行后返回P。这些动作包括一个或多个机制。</p>
+<ul>
+<li>传递控制。进入进程Q时，PC必须被设置为Q的代码的起始位置，返回时，PC为P调用Q后那条指令的地址。</li>
+<li>传递数据。P必须向Q提供一个或多个参数，Q必须能向P返回一个值。</li>
+<li>分配和释放内存。在开始时，Q可能需要为局部变量分配空间，返回时，又必须释放这些空间。</li>
+</ul>
+<h2 id="运行时栈"><a href="#运行时栈" class="headerlink" title="运行时栈"></a>运行时栈</h2><p>C语言过程调用机制的一个关键特性（大多数其他语言也是如此）在于使用了栈数据结构提供的后进先出的内存管理原则。Q执行中，P以及所有在向上追溯到P的调用链的过程，都暂时被挂起。Q运行时，它只需要为局部变量分配新的存储空间。Q返回时，它局部存储空间都被释放。程序可以用栈来管理它的过程所需要的存储空间。栈和程序寄存器存放着传递控制和数据、分配内存所需要的信息。</p>
+<p>图片</p>
+<p>x86-64的栈向低地址方向增长，而栈指针%rsp指向栈顶元素。可以用pushq和popq指令将数据存入或取出。</p>
+<p>当x86-64过程需要的存储空间超出寄存器能够存放的大小时，就会在栈上分配空间。这个部分称为过程的栈帧（stack fram）。</p>
+<p>过程P调用过程Q时，会把返回地址压入栈中，指明当Q返回时，要从P程序的哪个位置继续执行。Q代码会拓展栈的边界，分配它栈帧所需空间。这个空间中，可以保存寄存器的值，分配局部变量空间，为它调用的过程设置参数。</p>
+<p>大多数过程帧都是定长的，在开始就分配好了。但有些过程需要边长的帧。例如通过寄存器，过程P可以传递最多6个整数值，但如果Q需要更多参数，P可以在调用Q之前在自己的栈帧里存储这些参数。</p>
+<p>例如，所有参数都可以用寄存器传递。图中某些栈帧部分可以省略。而且有些过程都不需要栈帧，当所有局部变量都可以保存在寄存器中，而且该函数都不调用其他函数(称为叶子过程，次数把过程调用看成树结构)，就可以这样处理。</p>
+<h2 id="转移控制"><a href="#转移控制" class="headerlink" title="转移控制"></a>转移控制</h2><p>将控制从函数P转到函数Q只需要简单把PC设置为Q的代码的其实位置。当稍后从Q返回的时候，处理器必须记录好它需要继续P的执行的代码位置。这个信息用指令call Q调用过程Q来记录。call指令把地址A（返回地址：紧跟在call指令后那条指令的地址）压入栈，并将PC设置为Q的起始地址。对应的指令ret会从栈中弹出地址A，并把PC设置为A。</p>
+<p>call指令分为 两种：</p>
+<ul>
+<li>直接调用（标号）</li>
+<li>间接调用（*后面跟一个操作数指示符）</li>
+</ul>
+<p>例子：P166</p>
+<h2 id="数据传送"><a href="#数据传送" class="headerlink" title="数据传送"></a>数据传送</h2><p>过程调用还包括数据作为参数传递，从过程返回还可能包含返回的值。大部分都是通过寄存器实现。</p>
+<p>x86-64中，可以通过寄存器最多传递6个整型参数。寄存器使用有特殊顺序，使用的名字取决于传递的数据类型的大小。</p>
+<p>图片</p>
+<p>如果大于6个参数，多余就用栈传递。1<del>6复制到对应的寄存器，把参数7</del>n放到栈上， 而参数7位于栈顶。通过栈传递参数，数据大小向8的倍数对齐。</p>
+<p>图片*3</p>
+<h3 id="栈上的局部存储"><a href="#栈上的局部存储" class="headerlink" title="栈上的局部存储"></a>栈上的局部存储</h3><p>有时局部数据必须存放在内存中，常见情况：</p>
+<ul>
+<li>寄存器不足够存放所有本地数据</li>
+<li>对一个局部变量使用地址运算符’&amp;’，因此必须为它产生一个地址。</li>
+<li>某些局部变量是数组或结构，因此必须能够通过数组或结构引用被访问到</li>
+</ul>
+<p>图*4</p>
+<h2 id="寄存器中的局部存储空间"><a href="#寄存器中的局部存储空间" class="headerlink" title="寄存器中的局部存储空间"></a>寄存器中的局部存储空间</h2><p>寄存器是共享资源，我们必须保证一个进程(调用者)调用另一个过程（被调用者）时，被调用者不会覆盖调用者稍后会使用的寄存器值。x86-64使用了一组统一的寄存器使用惯例，所有过程都必须遵循。</p>
+<p>惯例，寄存器%rbx、%rbp和%r12~%r15被划分为被调用者保存寄存器。P调用Q，Q必须保存这些寄存器的值，保证到时候返回时一样的。</p>
+<p>过程Q要不保存，要不根本就不去改变。可以选择把原始值压入栈中，然后在返回时弹出改回去。压入的值会在栈中创建标号为“保存的寄存器”一部分。</p>
+<p>所有其他的寄存器，除了栈指针%rsp，都分类为调用者保存寄存器。</p>
+<h2 id="递归过程"><a href="#递归过程" class="headerlink" title="递归过程"></a>递归过程</h2>
     </div>
 
     
@@ -602,7 +639,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#程序编码"><span class="nav-number">1.</span> <span class="nav-text">程序编码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#机器级代码"><span class="nav-number">2.</span> <span class="nav-text">机器级代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据格式"><span class="nav-number">3.</span> <span class="nav-text">数据格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#访问信息"><span class="nav-number">4.</span> <span class="nav-text">访问信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#操作器指令符"><span class="nav-number">4.1.</span> <span class="nav-text">操作器指令符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据传送指令"><span class="nav-number">4.2.</span> <span class="nav-text">数据传送指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据传送实例"><span class="nav-number">4.3.</span> <span class="nav-text">数据传送实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#压入和弹出栈数据"><span class="nav-number">4.4.</span> <span class="nav-text">压入和弹出栈数据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算术和逻辑操作"><span class="nav-number">5.</span> <span class="nav-text">算术和逻辑操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#加载有效地址（load-effective-address）"><span class="nav-number">5.1.</span> <span class="nav-text">加载有效地址（load effective address）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一元和二元操作"><span class="nav-number">5.2.</span> <span class="nav-text">一元和二元操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#移位操作"><span class="nav-number">5.3.</span> <span class="nav-text">移位操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊的算术操作"><span class="nav-number">5.4.</span> <span class="nav-text">特殊的算术操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#控制"><span class="nav-number">6.</span> <span class="nav-text">控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#条件码"><span class="nav-number">6.1.</span> <span class="nav-text">条件码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问条件码"><span class="nav-number">6.2.</span> <span class="nav-text">访问条件码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳转指令"><span class="nav-number">6.3.</span> <span class="nav-text">跳转指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳转指令的编码"><span class="nav-number">6.4.</span> <span class="nav-text">跳转指令的编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用条件控制来实现条件分支"><span class="nav-number">6.5.</span> <span class="nav-text">用条件控制来实现条件分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用条件传送来实现条件分支"><span class="nav-number">6.6.</span> <span class="nav-text">用条件传送来实现条件分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环"><span class="nav-number">6.7.</span> <span class="nav-text">循环</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#do-while循环"><span class="nav-number">6.7.1.</span> <span class="nav-text">do-while循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while循环"><span class="nav-number">6.7.2.</span> <span class="nav-text">while循环</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#跳转到中间（jump-to-middle）"><span class="nav-number">6.7.2.1.</span> <span class="nav-text">跳转到中间（jump to middle）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#guarded-do"><span class="nav-number">6.7.2.2.</span> <span class="nav-text">guarded-do</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for循环"><span class="nav-number">6.7.3.</span> <span class="nav-text">for循环</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#跳转到中间策略"><span class="nav-number">6.7.3.1.</span> <span class="nav-text">跳转到中间策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#guarded-do-1"><span class="nav-number">6.7.3.2.</span> <span class="nav-text">guarded-do</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switch-语句"><span class="nav-number">6.8.</span> <span class="nav-text">switch 语句</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#程序编码"><span class="nav-number">1.</span> <span class="nav-text">程序编码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#机器级代码"><span class="nav-number">2.</span> <span class="nav-text">机器级代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据格式"><span class="nav-number">3.</span> <span class="nav-text">数据格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#访问信息"><span class="nav-number">4.</span> <span class="nav-text">访问信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#操作器指令符"><span class="nav-number">4.1.</span> <span class="nav-text">操作器指令符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据传送指令"><span class="nav-number">4.2.</span> <span class="nav-text">数据传送指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据传送实例"><span class="nav-number">4.3.</span> <span class="nav-text">数据传送实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#压入和弹出栈数据"><span class="nav-number">4.4.</span> <span class="nav-text">压入和弹出栈数据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算术和逻辑操作"><span class="nav-number">5.</span> <span class="nav-text">算术和逻辑操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#加载有效地址（load-effective-address）"><span class="nav-number">5.1.</span> <span class="nav-text">加载有效地址（load effective address）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一元和二元操作"><span class="nav-number">5.2.</span> <span class="nav-text">一元和二元操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#移位操作"><span class="nav-number">5.3.</span> <span class="nav-text">移位操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊的算术操作"><span class="nav-number">5.4.</span> <span class="nav-text">特殊的算术操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#控制"><span class="nav-number">6.</span> <span class="nav-text">控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#条件码"><span class="nav-number">6.1.</span> <span class="nav-text">条件码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问条件码"><span class="nav-number">6.2.</span> <span class="nav-text">访问条件码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳转指令"><span class="nav-number">6.3.</span> <span class="nav-text">跳转指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳转指令的编码"><span class="nav-number">6.4.</span> <span class="nav-text">跳转指令的编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用条件控制来实现条件分支"><span class="nav-number">6.5.</span> <span class="nav-text">用条件控制来实现条件分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用条件传送来实现条件分支"><span class="nav-number">6.6.</span> <span class="nav-text">用条件传送来实现条件分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环"><span class="nav-number">6.7.</span> <span class="nav-text">循环</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#do-while循环"><span class="nav-number">6.7.1.</span> <span class="nav-text">do-while循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while循环"><span class="nav-number">6.7.2.</span> <span class="nav-text">while循环</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#跳转到中间（jump-to-middle）"><span class="nav-number">6.7.2.1.</span> <span class="nav-text">跳转到中间（jump to middle）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#guarded-do"><span class="nav-number">6.7.2.2.</span> <span class="nav-text">guarded-do</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for循环"><span class="nav-number">6.7.3.</span> <span class="nav-text">for循环</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#跳转到中间策略"><span class="nav-number">6.7.3.1.</span> <span class="nav-text">跳转到中间策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#guarded-do-1"><span class="nav-number">6.7.3.2.</span> <span class="nav-text">guarded-do</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switch-语句"><span class="nav-number">6.8.</span> <span class="nav-text">switch 语句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过程"><span class="nav-number">7.</span> <span class="nav-text">过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时栈"><span class="nav-number">7.1.</span> <span class="nav-text">运行时栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转移控制"><span class="nav-number">7.2.</span> <span class="nav-text">转移控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据传送"><span class="nav-number">7.3.</span> <span class="nav-text">数据传送</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#栈上的局部存储"><span class="nav-number">7.3.1.</span> <span class="nav-text">栈上的局部存储</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寄存器中的局部存储空间"><span class="nav-number">7.4.</span> <span class="nav-text">寄存器中的局部存储空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#递归过程"><span class="nav-number">7.5.</span> <span class="nav-text">递归过程</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -690,12 +727,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">93k</span>
+    <span title="站点总字数">94k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:24</span>
+    <span title="站点阅读时长">1:26</span>
 </div>
 
         
