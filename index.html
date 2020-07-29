@@ -279,7 +279,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-29 00:31:57" itemprop="dateModified" datetime="2020-07-29T00:31:57+08:00">2020-07-29</time>
+                <time title="修改时间：2020-07-29 23:03:25" itemprop="dateModified" datetime="2020-07-29T23:03:25+08:00">2020-07-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -313,14 +313,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>12k</span>
+              <span>16k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
+              <span>14 分钟</span>
             </span>
 
         </div>
@@ -333,246 +333,14 @@
 
       
           <p>机器代码，用字节序列编码低级的操作。编译器以汇编代码的形式产生输出，汇编代码是机器代码的文本表示，给出程序中的每一条指令。然后GCC调用汇编器和链接器，根据汇编代码生成可执行的机器代码。</p>
-<h1 id="程序编码"><a href="#程序编码" class="headerlink" title="程序编码"></a>程序编码</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;假设一个C程序，有两个文件p1.c和p2.c。</span><br><span class="line">linux&gt; gcc -0g p p1.c p2.c</span><br></pre></td></tr></table></figure>
-
-<p>编译选项-Og告诉编译器使用会生成符合原始C代码整体结构的机器代码的优化等级。</p>
-<p>实际上gcc命令调用了一整套程序，将源代码转化成可执行代码。</p>
-<ol>
-<li>C预处理器扩展源代码，插入所有用#include指令指定的文件，并扩展所有用#define声明指定的宏。</li>
-<li>编译器产生两个源文件的汇编代码，p1.s和p2.s</li>
-<li>汇编器将汇编代码转成二进制目标代码文件p1.o和p2.o。（目标代码是机器代码的而一种形式，包括指令的二进制表示，但还没有填入全局值得地址）</li>
-<li>链接器将两个目标代码文件和实现库函数得代码合并，并产生最终得可执行代码文件p</li>
-</ol>
-<h1 id="机器级代码"><a href="#机器级代码" class="headerlink" title="机器级代码"></a>机器级代码</h1><p>对于机器编程来说，其中两种抽象尤为重要。</p>
-<ol>
-<li>指令集体系结构或指令集架构（Instruction Set Architecture,ISA）定义机器级程序得格式和行为，它定义了处理器状态，指令得格式，以及每条指令对状态得影响。但硬件层面描述复杂，它们并发执行许多指令，但可以采取措施保证整体行为与ISA指定顺序完全一致。</li>
-<li>机器级程序使用内存地址是虚拟地址。存储器系统得实际实现是将多个硬件存储器和操作系统软件给结合起来。</li>
-</ol>
-<p>一些x86-64的机器代码对于C语言程序员隐藏的处理器状态都是可见的：</p>
-<ol>
-<li>程序计数器（PC，x86-64中用%rip表示）给除将要执行恶下一条指令在内存中的地址。</li>
-<li>整数寄存器文件包括16个命名的地址，分别存储64位的值，可以存放地或整数数据。</li>
-<li>条件码寄存器保存最近执行的算术或逻辑命令的状态信息。用来实现控制或条件流中的条件变化。</li>
-<li>一组向量寄存器用来存放一个或多个整数或浮点数值。</li>
-</ol>
-<p>从机器代码角度看内存，内存只是一个很大的、按字节寻址的数组。</p>
-<p>程序在内存中包括：程序的可执行机器代码，操作系统需要的一些信息，用来管理过程调用和返回的运行时栈，以及用户分配的内存块。</p>
-<h1 id="数据格式"><a href="#数据格式" class="headerlink" title="数据格式"></a>数据格式</h1><p>由于是从16位体系结构拓展成32位的，Intel用术语“字（word）”表示16位数据类型。32位“双子（double words）”。64位数为“四字（quad words）”。</p>
-<p>图片</p>
-<p>大多数GCC生成的汇编代码指令都有一个字符的后缀，表明操作数的大小。例如数据传送指令有四个变种:movb(传送字节)、movw（传送字）、movl（传送双字）和movq（传送四字。）</p>
-<h1 id="访问信息"><a href="#访问信息" class="headerlink" title="访问信息"></a>访问信息</h1><p>x86-84的中央处理单元（CPU）包含一组16个存储64位值得通用目的寄存器。用来存储整数数据和指针。</p>
-<p>图片</p>
-<p>指令可以对这16个寄存器得低位字节中存放得不同大小数据进行操作。</p>
-<p>在常见得程序里不同得寄存器扮演不同角色。其中最特别得栈指针%rsp。用来指明运行时栈结束位置。</p>
-<h2 id="操作器指令符"><a href="#操作器指令符" class="headerlink" title="操作器指令符"></a>操作器指令符</h2><p>大多数指令有一个或多个操作数（operand）。操作数分为三种类型。</p>
-<ol>
-<li>立即数(immediate)：用来表示常数值。</li>
-<li>寄存器（register）</li>
-<li>内存引用</li>
-</ol>
-<p>寻找方式也有多种。Imm（rb,ri,s）表示最常用的形式:一个立即数偏移Imm，一个基址寄存器rb，一个变址寄存器ri和一个比例因子s,s必须是1，2，4，或者8.</p>
-<p>图片</p>
-<h2 id="数据传送指令"><a href="#数据传送指令" class="headerlink" title="数据传送指令"></a>数据传送指令</h2><p>图片</p>
-<p>原操作数是一个立即数，存储在寄存器或内存中。目的操作数只当一个位置。</p>
-<p>x86-64加了一条限制，传送指令的两个操作数不能都指向内存位置。需要第一条指令将源值加载到寄存器中，第二条将该寄存器值写入目的位置。</p>
-<p><strong>大部分mov指令仅仅更新目的范围内的操作数，movl指令以寄存器为目的时，它会把该寄存器的高位4字节设置为0</strong></p>
-<p>图片</p>
-<p>常规的movq指令只能以表示为32位补码数字的立即数作为原操作数，然后把这个值符号扩展得到64位，放到目的位置。<strong>movabsq指令能以任意64位，并且只能放到寄存器作为目的。</strong></p>
-<p>图片2</p>
-<p>第一类零扩展数据传送，第二类符号扩展数据传送。每条指令名字的最后两个字符都是大小指示符：第一个指定源的大小，第二个指明目的大小。</p>
-<h2 id="数据传送实例"><a href="#数据传送实例" class="headerlink" title="数据传送实例"></a>数据传送实例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">long exchange(long *xp,long y)</span><br><span class="line">&#123;</span><br><span class="line">	long x &#x3D; *xp;</span><br><span class="line">	*xp &#x3D; y;</span><br><span class="line">	return x;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;汇编</span><br><span class="line">&#x2F;&#x2F;xp in %rdi,y in %rsi,x in %rax</span><br><span class="line">exchange:</span><br><span class="line">	movq	(%rdi),%rax</span><br><span class="line">	movq	%rsi,(%rdi)</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
-
-<p>间接引用指针就是将该指针放在一个寄存器中，然后在内存引用中使用这个寄存器。像x这样的局部变量通常保存在寄存器中，而不是内存。访问寄存器比访问内存快许多。</p>
-<h2 id="压入和弹出栈数据"><a href="#压入和弹出栈数据" class="headerlink" title="压入和弹出栈数据"></a>压入和弹出栈数据</h2><p>最后两个数据传送操作可以将数据压入程序栈中，以及从程序栈中弹出数据。</p>
-<p>图片</p>
-<p>在x86-64中，程序栈存放在内存中某个区域。栈向下增长，栈顶元素的地址是栈中元素地址中最低的。栈指针%rsp保存着栈顶元素的地址。</p>
-<p>将一个四字值压入栈中，首先要将栈指针减8，然后将值写到新的栈顶地址。因此，pushq %rbp 的行为等价于:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sub $8,%rsp	&#x2F;&#x2F;Decrement stack pointer</span><br><span class="line">movq %rbp,(%rsp)	&#x2F;&#x2F;store %rbp on stack</span><br></pre></td></tr></table></figure>
-
-<p>区别在于pushq指令编码为1字节，上面两条一共8字节。</p>
-<p>图片</p>
-<p>popq    %rax等价于下面两条指令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">movq (%rsp),%rax	&#x2F;&#x2F;Read %rax from stack</span><br><span class="line">addq $8,%rsp	&#x2F;&#x2F;Incremetn stack pointer</span><br></pre></td></tr></table></figure>
-
-<p>因为栈其实就是内存中的一片空间，其实可以用程序访问栈内的任意位置。假设栈顶元素是四字，指令movq 8(%rsp),%rdx会将第二个四字从栈中复制到寄存器%rdx。</p>
-<h1 id="算术和逻辑操作"><a href="#算术和逻辑操作" class="headerlink" title="算术和逻辑操作"></a>算术和逻辑操作</h1><p>图片</p>
-<p>大部分操作都分成了指令类，指令类都带不同大小操作数变种<strong>只有leaq没有</strong>。例如，ADD由四条加法指令组成：addb、addw、addl和addq。</p>
-<p>这些操作被分为四组：加载有效地址、一元操作、二元操作和移位。</p>
-<h2 id="加载有效地址（load-effective-address）"><a href="#加载有效地址（load-effective-address）" class="headerlink" title="加载有效地址（load effective address）"></a>加载有效地址（load effective address）</h2><p>lea指令实际上是movq指令的变型。它的指令形式是从内存读数据到寄存器，但实际上它根本就没有引用内存。它的第一个操作数看上去是一个内存引用，但该指令将有效地址写入到目的操作数。</p>
-<p>这条指令可以为后面的内容引用产生指针。它还可以简洁得描述普通得算术操作。<strong>目的操作数必须是一个寄存器</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">long scale(long x,long y,long z)&#123;</span><br><span class="line">	long t &#x3D; x + 4*y + 12*z;</span><br><span class="line">	return t;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;汇编</span><br><span class="line">&#x2F;&#x2F;x in %rdi,y in %rsi,z in %rdx</span><br><span class="line">scale:</span><br><span class="line">	leaq	(%rdi,%rsi,4), %rax	&#x2F;&#x2F;x + 4*y</span><br><span class="line">	leaq	(%rdx,%rdx,2), %rdx	&#x2F;&#x2F;z+2*z &#x3D; 3*z</span><br><span class="line">	leaq	(%rax,%rdx,4), %rax &#x2F;&#x2F;(x+4*y)+4*(3*z) &#x3D; x + 4*y + 12*z</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
-
-<p>leaq指令能执行加法和有限形式得乘法，在编译如上简单算术表达式时，是很有用处的。</p>
-<h2 id="一元和二元操作"><a href="#一元和二元操作" class="headerlink" title="一元和二元操作"></a>一元和二元操作</h2><p>第二组操作是一元操作，操作数可以是寄存器，也可以是内存位置。</p>
-<p>第三组是二元操作，第一个操作数可以是立即数、寄存器或是内存地址。第二个操作数可以是寄存器或者是内存位置。当第二个操作数为内存地址时，处理器必须从内存中读出值，执行操作，再把结果写回内存。</p>
-<h2 id="移位操作"><a href="#移位操作" class="headerlink" title="移位操作"></a>移位操作</h2><p>最后一组为移位操作，先给出位移量，第二项给出要位移的数。可以逻辑移动，也可以算术。位移量可以是一个立即数，或者放在单字节寄存器%cl中。（这些指令只允许特定的寄存器作为操作数）。位移操作对w位长的数据值进行操作，位移量是由%cl寄存器的低m位决定，2的m次 = w。</p>
-<p>例如当寄存器%cl的十六进制值为0xFF时，指令salb会移7位，salw会移15位，sall移31位，salq移63位。移位操作的目的操作数可以是一个寄存器值或是一个内存位置。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">long arith(long x,long y,long z)</span><br><span class="line">&#123;</span><br><span class="line">	long t1 &#x3D; x^y;</span><br><span class="line">	long t2 &#x3D; z*48;</span><br><span class="line">	long t3 &#x3D; t1&amp;0x0F0F0F0F;</span><br><span class="line">	long t4 &#x3D; t2-t3;</span><br><span class="line">	return t4;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;汇编</span><br><span class="line">&#x2F;&#x2F;x in %rdi,y in %rsi,z in %rdx</span><br><span class="line">arith:</span><br><span class="line">	xorq	%rsi,%rdi &#x2F;&#x2F;t1 &#x3D; x^y</span><br><span class="line">	leaq	(%rdx,%rdx,2),%rax	&#x2F;&#x2F;3*z</span><br><span class="line">	salq	$4,%rax		&#x2F;&#x2F;t2 &#x3D; 16*(3*z) &#x3D; 48*z</span><br><span class="line">	andl	$252645135,%edi		&#x2F;&#x2F;t3 &#x3D; t1&amp;0x0F0F0F0F</span><br><span class="line">	subq	%rdi,%rax		&#x2F;&#x2F;Return t2-t3</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
-
-<h2 id="特殊的算术操作"><a href="#特殊的算术操作" class="headerlink" title="特殊的算术操作"></a>特殊的算术操作</h2><p>对于两个64位有符号或无符号整数相乘得到乘积需要128位来表示。Intel把16字节的数称为八字(oct word)。</p>
-<p>图片</p>
-<p>两种乘法都要求一个参数必须在寄存器%rax中，而另一个作为指令的源操作数给出。然后乘积存放在寄存器%rdx（高64位）和%rax（低64位）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;inttypes.h&gt;</span><br><span class="line">typedef unsigned __int128 unit128_t</span><br><span class="line">void store_uprod(uint128_t *dest,unit64_t x,unit64_t y)&#123;</span><br><span class="line">	*dest &#x3D; x*(unit128_t)y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>inttypes.h对标准C拓展的一部分，但这个标准并没有实现128位的值。只好依赖GCC提供的128位整数支持，用名字__int128声明。这段代码指明得到的乘积应该存放在指针dest指向的16字节处。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dest in %rdi,x in %rsi,y in %rdx</span><br><span class="line">store_uprod:</span><br><span class="line">	movq	%rsi,%rax	&#x2F;&#x2F;Copy x to mutiplicand</span><br><span class="line">	mulq	%rdx	&#x2F;&#x2F;Multiply by y</span><br><span class="line">	movq	%rax,(%rdi)	&#x2F;&#x2F;store lower 8 bytes at dest</span><br><span class="line">	movq	%rdx,8(%rdi)	&#x2F;&#x2F;store upper 8 bytes at dest+8</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
-
-<p>这段代码针对小端机器，所以高位字节存储在大地址。</p>
-<p>单操作数除法指令。有符号除法指令idivl将寄存器%rdx（高64位）和%rax（低64位）中的128位数作为被除数，而除数作为指令的操作数给出。指令将商存在%rax中，余数存储在%rdx中。</p>
-<p>对于64位除法来说，这个值在%rax中，%rdx的位设置为全0（无符号）或%rax的符号位（有符号）。后面这个操作由指令cqto来完成。这条指令隐含读出%rax符号位，并将它复制到%rdx所在的位。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">void remdiv(long x,long y,long *qp,long *rp)&#123;</span><br><span class="line">	long q &#x3D; x&#x2F;y;</span><br><span class="line">	long r &#x3D; x%y;</span><br><span class="line">	*qp &#x3D; q;</span><br><span class="line">	*rp &#x3D; r;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; x in %rdi,y in %rsi,qp in %rdx,rp in %rcx</span><br><span class="line">rediv:</span><br><span class="line">	movq	%rdx，%r8	&#x2F;&#x2F;Copy qp</span><br><span class="line">	movq	%rdi,%rax	&#x2F;&#x2F;Move x to lower 8 bytes of dividend</span><br><span class="line">	cqto	&#x2F;&#x2F;Sign-extend to upper 8 bytes of dividend</span><br><span class="line">	idiq	%rsi	&#x2F;&#x2F;Divide by y</span><br><span class="line">	movq	%rax,(%r8)	&#x2F;&#x2F;Store quotient at qp</span><br><span class="line">	movq	%rdx,(%rcx)	&#x2F;&#x2F;Store remainder at rp</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
-
-<p>首先把qp保存到另一个寄存器中（第2行），因为除法操作要使用参数寄存器%rdx。3~4准备被除数，复制并符号扩展x。</p>
-<p>无符号除法使用divq指令。通常，寄存器%rdx会事先设置为0。</p>
-<h1 id="控制"><a href="#控制" class="headerlink" title="控制"></a>控制</h1><p>C语言中的某些机构，比如条件语句、循环语句和分支语句，要求有条件的执行，根据数据测试的结果来决定操作执行的顺序。机器代码提供两种基本的低级机制来实现有条件的行为：<strong>测试数据值，然后根据测试的结果来改变控制流或者数据流。</strong></p>
-<p>用jump指令可以改变一组机器代码指令的执行顺序，通过某个测试结果调转到程序的其他部分。</p>
-<h2 id="条件码"><a href="#条件码" class="headerlink" title="条件码"></a>条件码</h2><p>除整数寄存器，CPU还维护一组单个位的条件码(condition code)寄存器。它们描述最近的算术或逻辑操作的属性。可以检测这些寄存器来执行条件分支指令。常用有:</p>
-<ul>
-<li>CF:进位标志。最近的操作最高位产生了进位。可用来无符号操作的溢出。</li>
-<li>ZF:零标志。最近操作结果为0.</li>
-<li>SF:符号标志。最近的操作得到结果为负。</li>
-<li>OF：溢出标志。最近操作导致一个补码溢出–正溢出或负溢出。</li>
-</ul>
-<p>leaq指令不改变任何条件码，因为它用来进行地址计算。除此之外3-10中所有指令都会设置条件码。</p>
-<p>除了3-10中的指令会设置条件码，还有两类指令(有8，16，32和64位形式)，它们只设置条件码不改变任何其他寄存器。</p>
-<p>图片</p>
-<p>CMP根据两数之差设置条件码。CMP与SUB指令的行为一样。列出操作数的顺序是相反的。</p>
-<p>TEST指令的行为与AND指令一样，除了它们只设置条件码而不改变目的寄存器值，典型用法是，两个操作数一样（检查是 正、负还是0），或其中一个操作数是掩码，用来指示哪些位应该被测试。</p>
-<h2 id="访问条件码"><a href="#访问条件码" class="headerlink" title="访问条件码"></a>访问条件码</h2><p>条件码通常不会被读取，常用使用方法有三种:</p>
-<ol>
-<li>可以根据条件码的某种组合，将一个字节设置为0或1。</li>
-<li>可以条件跳转到程序的某个其他的部分</li>
-<li>可以有条件地传送数据</li>
-</ol>
-<p>对于第一种情况，有一整类指令称为SET指定。这些后缀表示不同德条件而不是操作数大小，例如，指令setl和setb表示“小于时设置（set less）”和“低于时设置（set below）”，而不是“设置长字“set long word”和“set byte”。</p>
-<p>一条set指令的目的操作数是低位单字节寄存器运算之一，或是一个字节的内存位置，指令会将这个字节设置成0或者1。</p>
-<p>图片</p>
-<p>一个计算C语言表达式a&lt;b的经典指令序列如下所示。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; int comp(data_t a,data_t b)</span><br><span class="line">&#x2F;&#x2F; a in %rdi,b in %rsi</span><br><span class="line">comp:</span><br><span class="line">	cmpq	%rsi,%rdi	&#x2F;&#x2F;Compare a:b</span><br><span class="line">	setl	%al			&#x2F;&#x2F;Set low-order byte of %eax to 0 or 1</span><br><span class="line">    movzbl	%al,%eax	&#x2F;&#x2F;Clear rest of %eax(and rest  of %rax)</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure>
-
-<p>cmp指令参数虽然是先b后a，但其实是a:b。</p>
-<p>movzbl指令不仅会把%eax的高3个字节清零，还会把整个寄存器%rax的高4个字节清零。</p>
-<p>某些底层的机器指令可能有多个名字，称之为“同义词（synonym）”</p>
-<p>各个SET命令的描述都适用的情况是：执行比较指令，根据计算t=a-b设置条件码。</p>
-<p>不像C语言，机器代码不会将每个程序值和一个数据类型联系起来。大多数情况下，机器代码对有符号和无符号两种情况都使用一样的指令，这是因为许多算术运算对无符号和补码算术都有一样的位级行为。但也有些情况需要不同指令来处理有符号和无符号操作，例如，使用不同版本的右移、除法和乘法指令，以及不同条件码组合。</p>
-<h2 id="跳转指令"><a href="#跳转指令" class="headerlink" title="跳转指令"></a>跳转指令</h2><p>jump指令会导致执行切换到程序中一个全新的位置。跳转目的由标号（label）指明。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">	movq $0,%rax	&#x2F;&#x2F; set %rax to 0</span><br><span class="line">	jmp .L1			&#x2F;&#x2F; Goto .L1</span><br><span class="line">	movq (%rax),%rdx	&#x2F;&#x2F; Null pointer dereference(skipped)</span><br><span class="line">.L1:</span><br><span class="line">	popq %rdx	&#x2F;&#x2F;jump target</span><br></pre></td></tr></table></figure>
-
-<p>在产生目标代码文件时，汇编器会确定所有带标号指令的地址，并将跳转目标（目的指令地址）编码为跳转指令的一部分。</p>
-<p>图片</p>
-<p>jmp指令是无条件跳转。可以是直接跳转(跳转目标作为指令一部分编码)，也可以是间接跳转(从寄存器或内存位置读出的)。直接跳转给出一个标号为目标，间接跳转写法是“*”后跟操作数指示符。</p>
-<p>其他跳转指令都是有条件的，或者跳转或者执行下一条指令。<strong>条件跳转只能是直接跳转</strong></p>
-<h2 id="跳转指令的编码"><a href="#跳转指令的编码" class="headerlink" title="跳转指令的编码"></a>跳转指令的编码</h2><p>跳转指令有几种不同的编码，但最常用的都是PC相对的（PC-relative）/就是将目标指令地址与紧跟在跳转指令后面那条指令的地址之间的差作为编码。这个偏移量可以编码为1，2或4字节。第二种编码方式是给出“绝对”地址，用4个字节直接指定目标。汇编器与链接器会选择适当的跳转目的编码。</p>
-<h2 id="用条件控制来实现条件分支"><a href="#用条件控制来实现条件分支" class="headerlink" title="用条件控制来实现条件分支"></a>用条件控制来实现条件分支</h2><p>C语言中的if-else语句的通用形式模板如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if(text-expr)</span><br><span class="line">	then-statement</span><br><span class="line">else</span><br><span class="line">	else-statement</span><br></pre></td></tr></table></figure>
-
-<p>这里test-expr是一个整数表达式，取值为0或非0,两个分支语句只会执行一个。</p>
-<p>对于这种通用形式，汇编实现通常使用下面这种形式。用C语言来描述控制流：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">	t &#x3D; text-expr</span><br><span class="line">	if(!t)</span><br><span class="line">		goto false;</span><br><span class="line">	then-statement</span><br><span class="line">	goto done;</span><br><span class="line">false:</span><br><span class="line">	else-statement;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
-
-<p>汇编器为then-statement和else-statement产生各自的代码块。它会插入条件和无条件分支，以保证执行正确的代码块。</p>
-<h2 id="用条件传送来实现条件分支"><a href="#用条件传送来实现条件分支" class="headerlink" title="用条件传送来实现条件分支"></a>用条件传送来实现条件分支</h2><p>使用<strong>控制的条件转移</strong>这种机制简单而通用，但在现在处理器上，有点低效。一种替代的策略是使用<strong>数据的条件转移。</strong>这种方法计算一个条件操作的两种结果，然后再根据条件是否满足选取一个。只在受限制的情况中，这种策略可行，如果可行就可以用一条简单的条件传送指令来实现它，条件传送指令更符合现代处理器的性能特性。</p>
-<p>为何条件数据传送的方式比较快?</p>
-<p>处理器使用流水线（pipelining）来获得高性能，而这需要提前确定要执行的指令序列，当机器遇到条件跳转（也称为“分支”）时，只有当分支条件求值完成时，才能绝对走哪个分支。处理器采用分支预测逻辑来推测每条跳转指令是否执行。只要预测可靠(现代处理器设计试图达到90%的成功率)，指令流水线就可以充满指令。若预测失败，处理器就要丢掉它为该跳转指令后的所有工作，然后再从正确位置处起始的指令去填充流水线。一次预测失误，会浪费15~30个时钟周期。</p>
-<p>图片</p>
-<p>每条指令有两个操作数:源寄存器或者内存地址S，和目的寄存器R。源和目的值可以是16位、32位或64位长。<strong>不支持单字节的条件传送。</strong></p>
-<p>汇编器可以从目标寄存器的名字推断处条件传送指令的操作数长度，所以对所有的操作数长度，到可以使用同一个的指令名字。</p>
-<p>例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v &#x3D; test-expr ? the-expr:else-expr;</span><br></pre></td></tr></table></figure>
-
-<p>条件控制：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">	if(!text-pr)</span><br><span class="line">		goto false;</span><br><span class="line">	v &#x3D; then-expr;</span><br><span class="line">	goto done;</span><br><span class="line">false:</span><br><span class="line">	v &#x3D; else-expr;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
-
-<p>条件传送：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">v &#x3D; then-expr;</span><br><span class="line">ve &#x3D; else-expr;</span><br><span class="line">t &#x3D; test-expr;</span><br><span class="line">if(!t) v &#x3D; ve;</span><br></pre></td></tr></table></figure>
-
-<p>不是所有条件表达式都可以用条件出传送来编译，例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">long cread(long *xp)&#123;</span><br><span class="line">	return (xp?*xp:0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>汇编如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">xp in %rdi</span><br><span class="line">cread:</span><br><span class="line">	movq	(%rdi),%rax;	&#x2F;&#x2F;v &#x3D; *xp</span><br><span class="line">	test	%rdi,%rdi		&#x2F;&#x2F;Test &#x3D; x</span><br><span class="line">	movl	$0,%edx			&#x2F;&#x2F;Set ve &#x3D; 0</span><br><span class="line">	cmove	%rdx,%rax		&#x2F;&#x2F;if(x&#x3D;&#x3D;0) v &#x3D; ve</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
-
-<p>不过，这个实现是非法的，因为计时当测试为假，movq指令对xp的间接引用还是发生了，导致了间接引用空指针的错误。</p>
-<p>所以如果两个表达式中的任意一个可能产生错误条件或者副作用，就会导致非法行为。</p>
-<p>如果then-expr或者else-expr部分很麻烦，用条件传送也不适合，所以各有各的优点。</p>
-<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><p>C语言提供多种循环结构，即do-while、while和for。汇编中没有相应的指令存在，可以用条件测试和跳转组合起来实现循环的效果。</p>
-<h3 id="do-while循环"><a href="#do-while循环" class="headerlink" title="do-while循环"></a>do-while循环</h3><p>通用形式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">do</span><br><span class="line">	body-statement</span><br><span class="line">	while(test-expr)</span><br></pre></td></tr></table></figure>
-
-<p>可以看见，body-statement至少执行一次</p>
-<p>翻译如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop:</span><br><span class="line">	body-statement</span><br><span class="line">	t &#x3D; test-expr</span><br><span class="line">	if(t)</span><br><span class="line">		goto loop</span><br></pre></td></tr></table></figure>
-
-<h3 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h3><p>通用形式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">while(text-expr)</span><br><span class="line">	body-statement</span><br></pre></td></tr></table></figure>
-
-<p>这个有两种翻译方法</p>
-<h4 id="跳转到中间（jump-to-middle）"><a href="#跳转到中间（jump-to-middle）" class="headerlink" title="跳转到中间（jump to middle）"></a>跳转到中间（jump to middle）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">	goto test;</span><br><span class="line">loop:</span><br><span class="line">	body-statement</span><br><span class="line">test:</span><br><span class="line">	t &#x3D; test-expr;</span><br><span class="line">	if(t)</span><br><span class="line">		goto loop;</span><br></pre></td></tr></table></figure>
-
-<h4 id="guarded-do"><a href="#guarded-do" class="headerlink" title="guarded-do"></a>guarded-do</h4><p>当采用较高优化等级编译时，会采用这种策略</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">t &#x3D; test-expr;</span><br><span class="line">if(!t)</span><br><span class="line">	goto done;</span><br><span class="line">do</span><br><span class="line">	body-statement</span><br><span class="line">	while(test-expr)</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
-
-<p>把它翻译成goto代码如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">t &#x3D; text-expr;</span><br><span class="line">if(!t)</span><br><span class="line">	goto done;</span><br><span class="line">loop:</span><br><span class="line">	body-statement</span><br><span class="line">	t &#x3D; text-expr;</span><br><span class="line">	if(t)</span><br><span class="line">		goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
-
-<h3 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h3><p>通用形式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for(init-expr; test-expr;update-expr)</span><br><span class="line">	body-statement</span><br></pre></td></tr></table></figure>
-
-<p>这个行为与while代码行为一样:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">init-expr;</span><br><span class="line">while(text-expr)&#123;</span><br><span class="line">	body-statement;</span><br><span class="line">	update-expr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>GCC也对应两种翻译</p>
-<h4 id="跳转到中间策略"><a href="#跳转到中间策略" class="headerlink" title="跳转到中间策略"></a>跳转到中间策略</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">init-expr;</span><br><span class="line">goto test;</span><br><span class="line">loop:</span><br><span class="line">	body-statement</span><br><span class="line">	update-expr;</span><br><span class="line">test:</span><br><span class="line">	t&#x3D; text-expr;</span><br><span class="line">	if(t)</span><br><span class="line">		goto loop;</span><br></pre></td></tr></table></figure>
-
-<h4 id="guarded-do-1"><a href="#guarded-do-1" class="headerlink" title="guarded-do"></a>guarded-do</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">init-expr;</span><br><span class="line">	t &#x3D; test-expr;</span><br><span class="line">	if(!t)</span><br><span class="line">		goto done;</span><br><span class="line">loop:</span><br><span class="line">	body-statement</span><br><span class="line">	update-expr;</span><br><span class="line">	t &#x3D; text-expr;</span><br><span class="line">	if(t)</span><br><span class="line">		goto loop;</span><br><span class="line">done:</span><br></pre></td></tr></table></figure>
-
-<h2 id="switch-语句"><a href="#switch-语句" class="headerlink" title="switch 语句"></a>switch 语句</h2><p>switch(开关)语句可以根据一个整数索引值进行多重分支（mutiway branching）。这种语句通过使用跳转表（jump table）这种数据结构使得实现更加高效。跳转表是一个数组，表项i是一个代码段的地址，这个地址段实现当开关索引值等于i时程序应该采取的动作。</p>
-<p>与很长的if-else语句相比，使用跳转表的优先是执行开关语句的时间与开关情况的数量无关。GCC根据开关情况的数量和开关情况值得稀疏程度来翻译开关语句。当开关情况比较多（例如4个以上），并且值得范围跨度很小时，就会使用跳转表。</p>
-<p>图片2</p>
-<p>b代码采用了GCC提供的对跳转表的支持，这是对C语言的拓展，GCC的作者创造了新的运算符&amp;&amp;,这个运算符创建了一个指向代码位置的指针。</p>
-<p>汇编器首先将n减去100，把取值范围移到0和6之间，创建新变量index，<strong>补码表示的负数会被映射成符号位表示的大正数，利用这事实，将index看作无符号数，从而进一步简化分支的可能性。通过测试index是否大于6来判定index是否在0~6范围之外。</strong></p>
-<p>执行switch语句的关键步骤是通过跳转表来访问代码位置。C代码16行，一条goto语句引用跳转表jt。在汇编代码中，类似操作在第5行，jmp指令操作数有前缀”*”,表明是间接跳转，操作数指定一个内存位置，索引由%rsi给出，这个寄存器保存index的值。</p>
-<p>在汇编代码中，跳转表用以下申明表示:</p>
-<p>图片</p>
-<p>这些申明表明，在叫做“.rodata“（只读数据，Read-Only Data）的目标代码文件的段中，应该有一组7个”四“字（8个字节），每个字的的值都是与指定的汇编代码标号（例如.L3）相关联的指令地址。标号.L4标记出这个分配地址的起始。与这个标号相对应的地址会作为间接跳转（第5行）的基地址。</p>
-<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><p>过程是软件一种重要抽象。它提供一种封装代码的方式。不同编程语言中，过程的形式多样：函数（function）、方法(method)、子例程（subroutine）、处理函数（handler）等等，但它们具备共性。</p>
-<p>假设过程P调用过程Q，Q执行后返回P。这些动作包括一个或多个机制。</p>
-<ul>
-<li>传递控制。进入进程Q时，PC必须被设置为Q的代码的起始位置，返回时，PC为P调用Q后那条指令的地址。</li>
-<li>传递数据。P必须向Q提供一个或多个参数，Q必须能向P返回一个值。</li>
-<li>分配和释放内存。在开始时，Q可能需要为局部变量分配空间，返回时，又必须释放这些空间。</li>
-</ul>
-<h2 id="运行时栈"><a href="#运行时栈" class="headerlink" title="运行时栈"></a>运行时栈</h2><p>C语言过程调用机制的一个关键特性（大多数其他语言也是如此）在于使用了栈数据结构提供的后进先出的内存管理原则。Q执行中，P以及所有在向上追溯到P的调用链的过程，都暂时被挂起。Q运行时，它只需要为局部变量分配新的存储空间。Q返回时，它局部存储空间都被释放。程序可以用栈来管理它的过程所需要的存储空间。栈和程序寄存器存放着传递控制和数据、分配内存所需要的信息。</p>
-<p>图片</p>
-<p>x86-64的栈向低地址方向增长，而栈指针%rsp指向栈顶元素。可以用pushq和popq指令将数据存入或取出。</p>
-<p>当x86-64过程需要的存储空间超出寄存器能够存放的大小时，就会在栈上分配空间。这个部分称为过程的栈帧（stack fram）。</p>
-<p>过程P调用过程Q时，会把返回地址压入栈中，指明当Q返回时，要从P程序的哪个位置继续执行。Q代码会拓展栈的边界，分配它栈帧所需空间。这个空间中，可以保存寄存器的值，分配局部变量空间，为它调用的过程设置参数。</p>
-<p>大多数过程帧都是定长的，在开始就分配好了。但有些过程需要边长的帧。例如通过寄存器，过程P可以传递最多6个整数值，但如果Q需要更多参数，P可以在调用Q之前在自己的栈帧里存储这些参数。</p>
-<p>例如，所有参数都可以用寄存器传递。图中某些栈帧部分可以省略。而且有些过程都不需要栈帧，当所有局部变量都可以保存在寄存器中，而且该函数都不调用其他函数(称为叶子过程，次数把过程调用看成树结构)，就可以这样处理。</p>
-<h2 id="转移控制"><a href="#转移控制" class="headerlink" title="转移控制"></a>转移控制</h2><p>将控制从函数P转到函数Q只需要简单把PC设置为Q的代码的其实位置。当稍后从Q返回的时候，处理器必须记录好它需要继续P的执行的代码位置。这个信息用指令call Q调用过程Q来记录。call指令把地址A（返回地址：紧跟在call指令后那条指令的地址）压入栈，并将PC设置为Q的起始地址。对应的指令ret会从栈中弹出地址A，并把PC设置为A。</p>
-<p>call指令分为 两种：</p>
-<ul>
-<li>直接调用（标号）</li>
-<li>间接调用（*后面跟一个操作数指示符）</li>
-</ul>
-<p>例子：P166</p>
-<h2 id="数据传送"><a href="#数据传送" class="headerlink" title="数据传送"></a>数据传送</h2><p>过程调用还包括数据作为参数传递，从过程返回还可能包含返回的值。大部分都是通过寄存器实现。</p>
-<p>x86-64中，可以通过寄存器最多传递6个整型参数。寄存器使用有特殊顺序，使用的名字取决于传递的数据类型的大小。</p>
-<p>图片</p>
-<p>如果大于6个参数，多余就用栈传递。1<del>6复制到对应的寄存器，把参数7</del>n放到栈上， 而参数7位于栈顶。通过栈传递参数，数据大小向8的倍数对齐。</p>
-<p>图片*3</p>
-<h3 id="栈上的局部存储"><a href="#栈上的局部存储" class="headerlink" title="栈上的局部存储"></a>栈上的局部存储</h3><p>有时局部数据必须存放在内存中，常见情况：</p>
-<ul>
-<li>寄存器不足够存放所有本地数据</li>
-<li>对一个局部变量使用地址运算符’&amp;’，因此必须为它产生一个地址。</li>
-<li>某些局部变量是数组或结构，因此必须能够通过数组或结构引用被访问到</li>
-</ul>
-<p>图*4</p>
-<h2 id="寄存器中的局部存储空间"><a href="#寄存器中的局部存储空间" class="headerlink" title="寄存器中的局部存储空间"></a>寄存器中的局部存储空间</h2><p>寄存器是共享资源，我们必须保证一个进程(调用者)调用另一个过程（被调用者）时，被调用者不会覆盖调用者稍后会使用的寄存器值。x86-64使用了一组统一的寄存器使用惯例，所有过程都必须遵循。</p>
-<p>惯例，寄存器%rbx、%rbp和%r12~%r15被划分为被调用者保存寄存器。P调用Q，Q必须保存这些寄存器的值，保证到时候返回时一样的。</p>
-<p>过程Q要不保存，要不根本就不去改变。可以选择把原始值压入栈中，然后在返回时弹出改回去。压入的值会在栈中创建标号为“保存的寄存器”一部分。</p>
-<p>所有其他的寄存器，除了栈指针%rsp，都分类为调用者保存寄存器。</p>
-<h2 id="递归过程"><a href="#递归过程" class="headerlink" title="递归过程"></a>递归过程</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/07/24/csapp%E7%AC%AC%E4%B8%89%E7%AB%A0-%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -712,10 +480,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-21 16:02:39 / 修改时间：17:05:23" itemprop="dateCreated datePublished" datetime="2020-07-21T16:02:39+08:00">2020-07-21</time>
+              <time title="创建时间：2020-07-21 16:02:39" itemprop="dateCreated datePublished" datetime="2020-07-21T16:02:39+08:00">2020-07-21</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-29 23:04:26" itemprop="dateModified" datetime="2020-07-29T23:04:26+08:00">2020-07-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -767,7 +541,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h1><p>假设我们有N个学生，他们的成绩是0到100之间的整数（于是有M=101个不同的成绩值）。如何在线性时间内将学生按成绩排序?</p>
+          <a id="more"></a>
+
+<h1 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h1><p>假设我们有N个学生，他们的成绩是0到100之间的整数（于是有M=101个不同的成绩值）。如何在线性时间内将学生按成绩排序?</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void Bucket_Sort(ElementType A[], int N)</span><br><span class="line">&#123;</span><br><span class="line">	count[]初始化;</span><br><span class="line">	while(读入1个学生成绩grade)</span><br><span class="line">		将该生插入count[grade]链表;</span><br><span class="line">	for(i&#x3D;0;i&lt;M;i++)&#123;</span><br><span class="line">		if(count[i])</span><br><span class="line">			输出整个count[i]链表;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;T(N,M) &#x3D; O(M+N)</span><br></pre></td></tr></table></figure>
 
 <p>若M&gt;&gt;N该怎么办?</p>
@@ -819,10 +595,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-19 17:51:11 / 修改时间：17:57:40" itemprop="dateCreated datePublished" datetime="2020-07-19T17:51:11+08:00">2020-07-19</time>
+              <time title="创建时间：2020-07-19 17:51:11" itemprop="dateCreated datePublished" datetime="2020-07-19T17:51:11+08:00">2020-07-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-29 23:04:37" itemprop="dateModified" datetime="2020-07-29T23:04:37+08:00">2020-07-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -874,7 +656,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="算法概述"><a href="#算法概述" class="headerlink" title="算法概述"></a>算法概述</h1><ul>
+          <a id="more"></a>
+
+<h1 id="算法概述"><a href="#算法概述" class="headerlink" title="算法概述"></a>算法概述</h1><ul>
 <li>简介排序</li>
 </ul>
 <p>定义一个指针数组作为”表”（table)</p>
@@ -933,10 +717,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-19 17:33:13 / 修改时间：17:50:22" itemprop="dateCreated datePublished" datetime="2020-07-19T17:33:13+08:00">2020-07-19</time>
+              <time title="创建时间：2020-07-19 17:33:13" itemprop="dateCreated datePublished" datetime="2020-07-19T17:33:13+08:00">2020-07-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-29 23:04:43" itemprop="dateModified" datetime="2020-07-29T23:04:43+08:00">2020-07-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -988,7 +778,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="算法概述"><a href="#算法概述" class="headerlink" title="算法概述"></a>算法概述</h1><p>什么是快速排序算法的最好情况？</p>
+          <a id="more"></a>
+
+<h1 id="算法概述"><a href="#算法概述" class="headerlink" title="算法概述"></a>算法概述</h1><p>什么是快速排序算法的最好情况？</p>
 <p>每次正好中分    T(N) = O(NlogN)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void Quicksort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	pivot &#x3D; 从A[]中选一个主元;</span><br><span class="line">	将S &#x3D; &#123;A[]\pivot&#125; 分成2个独立子集:</span><br><span class="line">	A1 &#x3D; &#123;a∈S | a ≤ pivot&#125; 和 A2 &#x3D; &#123;a∈S | a ≥ pivot&#125;;</span><br><span class="line">	A[] &#x3D; Quicksort(A1,N1) ∪ &#123;pivot&#125; ∪ Quicksort(A2,N2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -1057,10 +849,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-19 16:01:33 / 修改时间：17:32:45" itemprop="dateCreated datePublished" datetime="2020-07-19T16:01:33+08:00">2020-07-19</time>
+              <time title="创建时间：2020-07-19 16:01:33" itemprop="dateCreated datePublished" datetime="2020-07-19T16:01:33+08:00">2020-07-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-29 23:04:50" itemprop="dateModified" datetime="2020-07-29T23:04:50+08:00">2020-07-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -1112,7 +910,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="核心-有序子列的归并"><a href="#核心-有序子列的归并" class="headerlink" title="核心: 有序子列的归并"></a>核心: 有序子列的归并</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;L &#x3D; 左边起始位置，R &#x3D; 右边起始位置，RightEnd &#x3D; 右边终点位置</span><br><span class="line">void Merge(ElementType A[],ElementType TmpA[],int L,int R,int RightEnd)</span><br><span class="line">&#123;</span><br><span class="line">	LeftEnd &#x3D; R-1;	&#x2F;&#x2F;左边终点位置</span><br><span class="line">	Tmp &#x3D; L;	&#x2F;&#x2F;存放数组的起始位置</span><br><span class="line">	NumElements &#x3D; RightEnd - L + 1;</span><br><span class="line">	while(L&lt;&#x3D;LeftEnd &amp;&amp; R&lt;&#x3D;RightEnd)&#123;</span><br><span class="line">		if(A[L]&lt;&#x3D;A[R]) TmpA[Tmp++] &#x3D; A[L++];</span><br><span class="line">		else	TmpA[Tmp++] &#x3D; A[R++];</span><br><span class="line">	&#125;</span><br><span class="line">	while(L&lt;&#x3D;LeftEnd)	TmpA[Tmp++] &#x3D; A[L++];</span><br><span class="line">	while(R&lt;&#x3D;RightEnd)	TmpA[Tmp++] &#x3D; A[R++];</span><br><span class="line">	for(i &#x3D; 0;i&lt;NumElements;i++,RightEnd--)</span><br><span class="line">		A[RightEnd]	&#x3D; TmpA[RightEnd];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <a id="more"></a>
+
+<h1 id="核心-有序子列的归并"><a href="#核心-有序子列的归并" class="headerlink" title="核心: 有序子列的归并"></a>核心: 有序子列的归并</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;L &#x3D; 左边起始位置，R &#x3D; 右边起始位置，RightEnd &#x3D; 右边终点位置</span><br><span class="line">void Merge(ElementType A[],ElementType TmpA[],int L,int R,int RightEnd)</span><br><span class="line">&#123;</span><br><span class="line">	LeftEnd &#x3D; R-1;	&#x2F;&#x2F;左边终点位置</span><br><span class="line">	Tmp &#x3D; L;	&#x2F;&#x2F;存放数组的起始位置</span><br><span class="line">	NumElements &#x3D; RightEnd - L + 1;</span><br><span class="line">	while(L&lt;&#x3D;LeftEnd &amp;&amp; R&lt;&#x3D;RightEnd)&#123;</span><br><span class="line">		if(A[L]&lt;&#x3D;A[R]) TmpA[Tmp++] &#x3D; A[L++];</span><br><span class="line">		else	TmpA[Tmp++] &#x3D; A[R++];</span><br><span class="line">	&#125;</span><br><span class="line">	while(L&lt;&#x3D;LeftEnd)	TmpA[Tmp++] &#x3D; A[L++];</span><br><span class="line">	while(R&lt;&#x3D;RightEnd)	TmpA[Tmp++] &#x3D; A[R++];</span><br><span class="line">	for(i &#x3D; 0;i&lt;NumElements;i++,RightEnd--)</span><br><span class="line">		A[RightEnd]	&#x3D; TmpA[RightEnd];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="递归算法"><a href="#递归算法" class="headerlink" title="递归算法"></a>递归算法</h1><ul>
 <li>分而治之</li>
@@ -1177,7 +977,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-24 15:07:19" itemprop="dateModified" datetime="2020-07-24T15:07:19+08:00">2020-07-24</time>
+                <time title="修改时间：2020-07-29 23:04:08" itemprop="dateModified" datetime="2020-07-29T23:04:08+08:00">2020-07-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1230,7 +1030,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="信息存储"><a href="#信息存储" class="headerlink" title="信息存储"></a>信息存储</h1><p>机器级程序将内存视为字节数组，每一个字节都有一个数字来标识，称它为地址（address）。在机器级程序的视角里，内存被抽象成了一个概念，名为虚拟内存(virtual address space)。而所有地址的集合被称为虚拟地址空间（virtual address space）。</p>
+          <a id="more"></a>
+
+<h1 id="信息存储"><a href="#信息存储" class="headerlink" title="信息存储"></a>信息存储</h1><p>机器级程序将内存视为字节数组，每一个字节都有一个数字来标识，称它为地址（address）。在机器级程序的视角里，内存被抽象成了一个概念，名为虚拟内存(virtual address space)。而所有地址的集合被称为虚拟地址空间（virtual address space）。</p>
 <h2 id="十六进制表示法"><a href="#十六进制表示法" class="headerlink" title="十六进制表示法"></a>十六进制表示法</h2><p>以16为基数，叫做十六进制（hexadecimal）数。在C语言中，以0x或0X开头的数字常量被认为是十六进制的值。</p>
 <p><strong>十六进制转二进制的一个窍门是记住A,C和F对应的十进制的值。（10，12，15）</strong></p>
 <h2 id="字数据大小"><a href="#字数据大小" class="headerlink" title="字数据大小"></a>字数据大小</h2><p>每台计算机都有字长（word size），虚拟地址都是用一个字来编码,因此对于字长为w位的机器，虚拟地址范围为0~2的w次-1；程序最多访问2的w次 的字节。</p>
@@ -1406,10 +1208,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-18 18:29:54 / 修改时间：22:45:07" itemprop="dateCreated datePublished" datetime="2020-07-18T18:29:54+08:00">2020-07-18</time>
+              <time title="创建时间：2020-07-18 18:29:54" itemprop="dateCreated datePublished" datetime="2020-07-18T18:29:54+08:00">2020-07-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-29 23:04:57" itemprop="dateModified" datetime="2020-07-29T23:04:57+08:00">2020-07-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -1461,7 +1269,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void Selection_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">		MinPostion &#x3D; ScanForMin(A,i,N-1);&#x2F;&#x2F;找最小元O（N）</span><br><span class="line">		Swap(A[i],A[MinPostion]);&#x2F;&#x2F;将未排序部分的最小元换到有序部分的最后位置</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <a id="more"></a>
+
+<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void Selection_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">		MinPostion &#x3D; ScanForMin(A,i,N-1);&#x2F;&#x2F;找最小元O（N）</span><br><span class="line">		Swap(A[i],A[MinPostion]);&#x2F;&#x2F;将未排序部分的最小元换到有序部分的最后位置</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这里看出，虽然元素交换次数变为N-1次，但是寻找最小元的次数固定为N2。</p>
 <p>无论如何： T = O（N2）；</p>
@@ -1518,10 +1328,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-18 17:31:15 / 修改时间：17:59:06" itemprop="dateCreated datePublished" datetime="2020-07-18T17:31:15+08:00">2020-07-18</time>
+              <time title="创建时间：2020-07-18 17:31:15" itemprop="dateCreated datePublished" datetime="2020-07-18T17:31:15+08:00">2020-07-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-29 23:05:17" itemprop="dateModified" datetime="2020-07-29T23:05:17+08:00">2020-07-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -1573,7 +1389,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>定义增量序列 Dm&gt;Dm-1&gt;…&gt;D1 = 1</p>
+          <a id="more"></a>
+
+<p>定义增量序列 Dm&gt;Dm-1&gt;…&gt;D1 = 1</p>
 <p>对每个Dk进行Dk间隔排序（k = m,m-1,…1）</p>
 <p>注意: Dk间隔有序的序列，在执行Dk-1间隔排序后，仍然是Dk间隔有序的</p>
 <h1 id="希尔增量序列"><a href="#希尔增量序列" class="headerlink" title="希尔增量序列"></a>希尔增量序列</h1><p>原始希尔排序    Dm =    N/2向下取整,    Dk = Dk+1/2向下取整</p>
@@ -1835,12 +1653,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">94k</span>
+    <span title="站点总字数">98k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:26</span>
+    <span title="站点阅读时长">1:29</span>
 </div>
 
         

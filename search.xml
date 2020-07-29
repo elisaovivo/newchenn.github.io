@@ -4,6 +4,8 @@
     <title>csapp第三章-程序的机器级表示</title>
     <url>/2020/07/24/csapp%E7%AC%AC%E4%B8%89%E7%AB%A0-%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/</url>
     <content><![CDATA[<p>机器代码，用字节序列编码低级的操作。编译器以汇编代码的形式产生输出，汇编代码是机器代码的文本表示，给出程序中的每一条指令。然后GCC调用汇编器和链接器，根据汇编代码生成可执行的机器代码。</p>
+<a id="more"></a>
+
 <h1 id="程序编码"><a href="#程序编码" class="headerlink" title="程序编码"></a>程序编码</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;假设一个C程序，有两个文件p1.c和p2.c。</span><br><span class="line">linux&gt; gcc -0g p p1.c p2.c</span><br></pre></td></tr></table></figure>
 
 <p>编译选项-Og告诉编译器使用会生成符合原始C代码整体结构的机器代码的优化等级。</p>
@@ -243,7 +245,116 @@
 <p>惯例，寄存器%rbx、%rbp和%r12~%r15被划分为被调用者保存寄存器。P调用Q，Q必须保存这些寄存器的值，保证到时候返回时一样的。</p>
 <p>过程Q要不保存，要不根本就不去改变。可以选择把原始值压入栈中，然后在返回时弹出改回去。压入的值会在栈中创建标号为“保存的寄存器”一部分。</p>
 <p>所有其他的寄存器，除了栈指针%rsp，都分类为调用者保存寄存器。</p>
-<h2 id="递归过程"><a href="#递归过程" class="headerlink" title="递归过程"></a>递归过程</h2>]]></content>
+<h2 id="递归过程"><a href="#递归过程" class="headerlink" title="递归过程"></a>递归过程</h2><p>图片</p>
+<p>该汇编代码用寄存器%rbx保存n，先把已有值保存到栈上（第2行）,随后在返回时恢复该值（第11行）。每次调用rfact(n-1)结果在%rax中。</p>
+<h1 id="数组分配和访问"><a href="#数组分配和访问" class="headerlink" title="数组分配和访问"></a>数组分配和访问</h1><h2 id="基本原则"><a href="#基本原则" class="headerlink" title="基本原则"></a>基本原则</h2><p>C语言可以产生指向数组中元素的指针，并对指针运算。在机器代码中，这些指针会被翻译成地址运算。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">T A[N]</span><br></pre></td></tr></table></figure>
+
+<p>这个申明有两个效果。</p>
+<ul>
+<li>内存中分配一个L*N字节的连续区域。</li>
+<li>引入标识符A，用A来表示指向数组开头的指针。</li>
+</ul>
+<p>元素i会被存放在地址xA+L*i的地方。</p>
+<p>x86-64可以用内存引用指令来简化数组访问。例如，E是一个int型的数组，而我们想计算E[i]，E的地址存放在寄存器%rdx中，i存放在%rcx中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">movl (%rdx,%rcs,4),%eax</span><br></pre></td></tr></table></figure>
+
+<h2 id="指针运算"><a href="#指针运算" class="headerlink" title="指针运算"></a>指针运算</h2><p>P是一个指向类型为T的数据的指针，p的值为xp，那么表达式p+i的值为xp+L*i,这里L是数据类型T的小。</p>
+<h2 id="嵌套的数组"><a href="#嵌套的数组" class="headerlink" title="嵌套的数组"></a>嵌套的数组</h2><p>声明:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int A[5][3];</span><br></pre></td></tr></table></figure>
+
+<p>等价于:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">typedef int row3_t[3];</span><br><span class="line">row3_t A[5];</span><br></pre></td></tr></table></figure>
+
+<p>数组元素在内存中按照“行优先”的顺序排序。</p>
+<p>对于数组：T D[R][C];</p>
+<p>数组元素D[i][j]的内存地址为：&amp;D[i][j] = xd + L（C*i+j）；</p>
+<p>将A[i][j]复制到寄存器%eax中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">A in %rdi,i in %rsi,and j in %rdx</span><br><span class="line">leaq (%rsi,%rsi,2),%rax	 &#x2F;&#x2F;compute 3i</span><br><span class="line">leaq (%rdi,%rax,3),%rax	&#x2F;&#x2F;compute 12i</span><br><span class="line">movl (%rax,%rdx,4),%eax &#x2F;&#x2F;Read from M[xa+12i+4j]</span><br></pre></td></tr></table></figure>
+
+<h2 id="定长数组"><a href="#定长数组" class="headerlink" title="定长数组"></a>定长数组</h2><p>C语言编译器能优化定长多维数组上的操作代码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#define N 16</span><br><span class="line">typedef int fix_matrix[N][N];</span><br></pre></td></tr></table></figure>
+
+<p>它去掉了整数索引j，并把所有的数组引用都换成了指针间接引用。</p>
+<h2 id="变长数组"><a href="#变长数组" class="headerlink" title="变长数组"></a>变长数组</h2><p>C语言只支持大小在编译时就能确定的多维数组（对第一维可能有些例外）。程序员需要变长数组时不得不用malloc或calloc这样的函数为这些数组分配存储空间。</p>
+<p>ISOC99引入一种功能，运行数组的维度是表达式，在数组被分配的时候再计算出来。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int A[expr1][expr2]</span><br></pre></td></tr></table></figure>
+
+<p>访问n*n数组的元素i,j,我们可以写一个如下函数：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int var_ele(long n,int A[N][N],long i,long j)&#123;</span><br><span class="line">	return A[i][j]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>参数n必须再参数A[n][n]之前，这样函数就可以遇到这个数组的时候计算出数组的维度。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">n in %rdi,A in %rsi,i in %rdx,j in %rcx</span><br><span class="line">var_ele:</span><br><span class="line">	imlq	%rdx,%rdi &#x2F;&#x2F;compute n*i</span><br><span class="line">	leaq	(%rsi,%rdi,4),	%rax	&#x2F;&#x2F;compute xa+4(n*i))</span><br><span class="line">	movl	(%rax,%rcx,4),	%eax	&#x2F;&#x2F;read from M[xa+4*(n*i)+4j]</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
+
+<p>跟定长数组的地址计算不同在于:</p>
+<ul>
+<li>增加了参数n,寄存器的使用变化了</li>
+<li>用了乘法指令计算n<em>i，而不是用leaq指令计算3\</em>i</li>
+</ul>
+<p>动态版本必须用乘法指令伸缩n倍，而不能用一系列移位和加法。这会导致严重性能处罚。</p>
+<p>图片</p>
+<p>生成代码会避免直接引用等式&amp;D[i][j] = xd + L(C*i+j)会导致的乘法。</p>
+<h1 id="异质的数据结构"><a href="#异质的数据结构" class="headerlink" title="异质的数据结构"></a>异质的数据结构</h1><p>C语言提供两种将不同类型的对象组合到一起创建数据类型的机制：结构(structure),将多个对象集合到一个单位中；联合(union),用关键字union来声明，允许用不同的类型来引用一个对象。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>指向结构的指针就是结构第一个字节的地址。</p>
+<p>看下面的结构声明：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">struct rec&#123;</span><br><span class="line">	int i;</span><br><span class="line">	int j;</span><br><span class="line">	omt a[2];</span><br><span class="line">	int *p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>假设struct rec*类型的变量r放在寄存器%rdi中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">r in %rdi</span><br><span class="line">movl (%rdi),%eax	&#x2F;&#x2F;Get r-&gt;i</span><br><span class="line">movl %eax,4(%rdi)	&#x2F;&#x2F;store in r-&gt;j</span><br></pre></td></tr></table></figure>
+
+<p>结构的各个字段的选取完全是在编译时处理的，机器代码不包含关于字段声明或字段名字的信息。</p>
+<h2 id="联合"><a href="#联合" class="headerlink" title="联合"></a>联合</h2><p>可以用不同字段来引用相同的内存块。这种方式规避C语言的类型系统。</p>
+<p>联合的一种引用情况是，对一个数据结构中的两个不同字段的使用是互斥的，那可以声明为联合，这样可以减少分配空间的总量。</p>
+<p>还有一种情况用来不同数据类型的位模式。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">unsigned long u &#x3D; (unsigned long) d;</span><br></pre></td></tr></table></figure>
+
+<p>这种情况下u的位模式与d的位模式是不一样的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">unsigned long double2bits(double d)&#123;</span><br><span class="line">	union&#123;</span><br><span class="line">		double d;</span><br><span class="line">		unsigned long u;</span><br><span class="line">	&#125;temp;</span><br><span class="line">	temp.d &#x3D; d;</span><br><span class="line">	return temp.u;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样u和d会有一样的位表示。</p>
+<h2 id="数据对齐"><a href="#数据对齐" class="headerlink" title="数据对齐"></a>数据对齐</h2><p>许多计算机对基本数据类型的合法地址都做了一些限制，要求地址必须是k的倍数。对齐限制简化硬件设计。例如处理器一次往内存取8字节，则地址必须要是8的倍数，否则就要取两次。</p>
+<p>无论是否对齐，x86-64都能工作。不过对齐提高性能。</p>
+<h1 id="在机器级程序中将控制与数据结合起来"><a href="#在机器级程序中将控制与数据结合起来" class="headerlink" title="在机器级程序中将控制与数据结合起来"></a>在机器级程序中将控制与数据结合起来</h1><h2 id="理解指针"><a href="#理解指针" class="headerlink" title="理解指针"></a>理解指针</h2><p>指针从一种类型强制转换成另一种类型，只改变它的类型，而不改变它的值。例如p是一个char<em>类型的指针，它的值为p，那么表达式(int</em>)p+7计算为p+28，而（int*)(p+7)计算为p+7。</p>
+<h2 id="内存越界引用和缓冲区溢出"><a href="#内存越界引用和缓冲区溢出" class="headerlink" title="内存越界引用和缓冲区溢出"></a>内存越界引用和缓冲区溢出</h2><p>C对数组引用不进行边界调查，而且局部变量和状态信息都在栈中。这就有可能导致写操作直接写到栈中，破坏原有数据。</p>
+<p>一种特别常见的状态破坏被称为缓冲区溢出（buffer overflow）</p>
+<p>gets函数的问题是它没有颁发确定是否为保存整个字符串分配了足够的康健。若将缓冲区设置得很小，若读入这个长度就会越界。</p>
+<p>缓冲区溢出的一个更加致命的使用就是让程序执行它本来不愿意执行的函数。这是一种通过计算机网络攻击系统安全的方法。输入给程序一个字符串，这个字符串包括一些可执行代码的文件编码，称为攻击代码（exploit code）,另外还有一些字节会用一个指向攻击代码的指针覆盖返回地址。</p>
+<h2 id="对抗缓冲区溢出攻击"><a href="#对抗缓冲区溢出攻击" class="headerlink" title="对抗缓冲区溢出攻击"></a>对抗缓冲区溢出攻击</h2><h3 id="栈随机化"><a href="#栈随机化" class="headerlink" title="栈随机化"></a>栈随机化</h3><p>使得栈的位置在程序每次运行时都有变化。实现方式：程序开始时，在栈上分配一段0~n字节之间的随机大小的空间。程序不适用这段抗击那，但会使后续栈位置发生改变。</p>
+<h3 id="栈破坏检测"><a href="#栈破坏检测" class="headerlink" title="栈破坏检测"></a>栈破坏检测</h3><p>图片</p>
+<p>最新GCC版本在产生的代码中加入一种栈保护者（stack protector）机制，来检测缓冲区越界。其思想是在栈帧任何局部缓冲区与栈状态之间存储一个特殊的金丝雀(canary)值，也称为哨兵值（guard value）。在恢复寄存器状态和从函数返回之前，程序检查这个金丝雀值是否被改变了，如果是，程序异常终止。</p>
+<h3 id="限制可执行代码区域"><a href="#限制可执行代码区域" class="headerlink" title="限制可执行代码区域"></a>限制可执行代码区域</h3><h2 id="支持变长栈帧"><a href="#支持变长栈帧" class="headerlink" title="支持变长栈帧"></a>支持变长栈帧</h2><p>图片</p>
+<p>函数声明n个指针的局部数组，这里n可变，要求在栈上分配8n个字节。此外还有一个对局部变量i的地址引用，因此i必须在栈中。</p>
+<p>为了管理边长栈帧，x86-64代码使用寄存器%rbp作为栈指针（frame pointer，也称为 base pointer,也是bp由来）。</p>
+<p>图片</p>
+<p>保存%rbp之前的值到栈中，因为%rbp是一个被调用者保存寄存器。</p>
+<h1 id="浮点代码"><a href="#浮点代码" class="headerlink" title="浮点代码"></a>浮点代码</h1><p>处理器的浮点体系结构有多个方面：</p>
+<ul>
+<li>如何存储和访问浮点数值。通常是通过某种寄存器方式完成</li>
+<li>对浮点数操作的指令</li>
+<li>向函数传递浮点数参数和从函数返回浮点数结果的规则</li>
+<li>函数调用过程中保存寄存器的规则</li>
+</ul>
+<p>SIMD：对多个不同的数据采用并行执行同一个操作。</p>
+<h2 id="浮点传送和转换操作"><a href="#浮点传送和转换操作" class="headerlink" title="浮点传送和转换操作"></a>浮点传送和转换操作</h2><p>图片</p>
+<p>指令名字中的字母’a’表示“aligned（对齐的）”</p>
+<p>下两张图里的格式转换指令都是对单个数据值进行操作的标量指令。</p>
+<p>图2</p>
+<p>3-48中的指令有两个源和一个目的，第二个操作数的值只会影响结果的高位字节。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vcvtsi2sdq %rax,%xmm1,%xmm1</span><br></pre></td></tr></table></figure>
+
+<p>从%rax中读出长整数，转换成double，放进xmm1低字节中</p>
+<h2 id="过程中的浮点代码"><a href="#过程中的浮点代码" class="headerlink" title="过程中的浮点代码"></a>过程中的浮点代码</h2><p>x86-64中，XMM寄存器用来向函数传递浮点参数，以及从函数返回浮点值。</p>
+<ul>
+<li>XMM寄存器%xmm0~%xmm7最多可以传递8个浮点参数。按照参数列出的顺序使用这些寄存器。通过栈传递额外的浮点参数。</li>
+<li>函数使用寄存器%mm0来返回浮点值。</li>
+<li>所有xmm寄存器都是调用者保存的。被调用者可以不用保存就覆盖这些寄存器中的任意一个。</li>
+</ul>
+<h2 id="浮点运算操作"><a href="#浮点运算操作" class="headerlink" title="浮点运算操作"></a>浮点运算操作</h2><p>图</p>
+<p>第一个源操作数s1可以是xmm寄存器或内存位置。第二个源操作数和目的操作数都必须是XMM寄存器。每个操作都有针对单精度的指令和针对双精度的指令。</p>
+<h2 id="定义和使用浮点常数"><a href="#定义和使用浮点常数" class="headerlink" title="定义和使用浮点常数"></a>定义和使用浮点常数</h2><p>浮点操作不饿能以立即数值作为操作数。编译器必须为所有常量值分配和初始化存储空间。然后代码在把这些值从内存读入。</p>
+<h2 id="在浮点代码中使用位级操作"><a href="#在浮点代码中使用位级操作" class="headerlink" title="在浮点代码中使用位级操作"></a>在浮点代码中使用位级操作</h2><h2 id="浮点数比较"><a href="#浮点数比较" class="headerlink" title="浮点数比较"></a>浮点数比较</h2><p>类似于CMP指令，与cmpq一样，都是反序列出操作数的ATT格式管理。S2必须在XMM寄存器中，S1可以在XMM寄存器中，也可以在内存中。</p>
+<p>浮点比较指令会设置三个条件码：零标志位ZF、进位标志位CF和奇偶标志位PF。当两个操作数任一个是NAN时，会设置PF位。</p>
+]]></content>
       <categories>
         <category>《深入理解计算机系统》</category>
       </categories>
@@ -266,7 +377,9 @@
   <entry>
     <title>基数排序</title>
     <url>/2020/07/21/%E5%9F%BA%E6%95%B0%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<h1 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h1><p>假设我们有N个学生，他们的成绩是0到100之间的整数（于是有M=101个不同的成绩值）。如何在线性时间内将学生按成绩排序?</p>
+    <content><![CDATA[<a id="more"></a>
+
+<h1 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h1><p>假设我们有N个学生，他们的成绩是0到100之间的整数（于是有M=101个不同的成绩值）。如何在线性时间内将学生按成绩排序?</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void Bucket_Sort(ElementType A[], int N)</span><br><span class="line">&#123;</span><br><span class="line">	count[]初始化;</span><br><span class="line">	while(读入1个学生成绩grade)</span><br><span class="line">		将该生插入count[grade]链表;</span><br><span class="line">	for(i&#x3D;0;i&lt;M;i++)&#123;</span><br><span class="line">		if(count[i])</span><br><span class="line">			输出整个count[i]链表;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;T(N,M) &#x3D; O(M+N)</span><br></pre></td></tr></table></figure>
 
 <p>若M&gt;&gt;N该怎么办?</p>
@@ -287,7 +400,9 @@
   <entry>
     <title>表排序</title>
     <url>/2020/07/19/%E8%A1%A8%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<h1 id="算法概述"><a href="#算法概述" class="headerlink" title="算法概述"></a>算法概述</h1><ul>
+    <content><![CDATA[<a id="more"></a>
+
+<h1 id="算法概述"><a href="#算法概述" class="headerlink" title="算法概述"></a>算法概述</h1><ul>
 <li>简介排序</li>
 </ul>
 <p>定义一个指针数组作为”表”（table)</p>
@@ -315,7 +430,9 @@
   <entry>
     <title>快速排序</title>
     <url>/2020/07/19/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<h1 id="算法概述"><a href="#算法概述" class="headerlink" title="算法概述"></a>算法概述</h1><p>什么是快速排序算法的最好情况？</p>
+    <content><![CDATA[<a id="more"></a>
+
+<h1 id="算法概述"><a href="#算法概述" class="headerlink" title="算法概述"></a>算法概述</h1><p>什么是快速排序算法的最好情况？</p>
 <p>每次正好中分    T(N) = O(NlogN)</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void Quicksort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	pivot &#x3D; 从A[]中选一个主元;</span><br><span class="line">	将S &#x3D; &#123;A[]\pivot&#125; 分成2个独立子集:</span><br><span class="line">	A1 &#x3D; &#123;a∈S | a ≤ pivot&#125; 和 A2 &#x3D; &#123;a∈S | a ≥ pivot&#125;;</span><br><span class="line">	A[] &#x3D; Quicksort(A1,N1) ∪ &#123;pivot&#125; ∪ Quicksort(A2,N2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -353,7 +470,9 @@
   <entry>
     <title>归并排序</title>
     <url>/2020/07/19/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<h1 id="核心-有序子列的归并"><a href="#核心-有序子列的归并" class="headerlink" title="核心: 有序子列的归并"></a>核心: 有序子列的归并</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;L &#x3D; 左边起始位置，R &#x3D; 右边起始位置，RightEnd &#x3D; 右边终点位置</span><br><span class="line">void Merge(ElementType A[],ElementType TmpA[],int L,int R,int RightEnd)</span><br><span class="line">&#123;</span><br><span class="line">	LeftEnd &#x3D; R-1;	&#x2F;&#x2F;左边终点位置</span><br><span class="line">	Tmp &#x3D; L;	&#x2F;&#x2F;存放数组的起始位置</span><br><span class="line">	NumElements &#x3D; RightEnd - L + 1;</span><br><span class="line">	while(L&lt;&#x3D;LeftEnd &amp;&amp; R&lt;&#x3D;RightEnd)&#123;</span><br><span class="line">		if(A[L]&lt;&#x3D;A[R]) TmpA[Tmp++] &#x3D; A[L++];</span><br><span class="line">		else	TmpA[Tmp++] &#x3D; A[R++];</span><br><span class="line">	&#125;</span><br><span class="line">	while(L&lt;&#x3D;LeftEnd)	TmpA[Tmp++] &#x3D; A[L++];</span><br><span class="line">	while(R&lt;&#x3D;RightEnd)	TmpA[Tmp++] &#x3D; A[R++];</span><br><span class="line">	for(i &#x3D; 0;i&lt;NumElements;i++,RightEnd--)</span><br><span class="line">		A[RightEnd]	&#x3D; TmpA[RightEnd];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<a id="more"></a>
+
+<h1 id="核心-有序子列的归并"><a href="#核心-有序子列的归并" class="headerlink" title="核心: 有序子列的归并"></a>核心: 有序子列的归并</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;L &#x3D; 左边起始位置，R &#x3D; 右边起始位置，RightEnd &#x3D; 右边终点位置</span><br><span class="line">void Merge(ElementType A[],ElementType TmpA[],int L,int R,int RightEnd)</span><br><span class="line">&#123;</span><br><span class="line">	LeftEnd &#x3D; R-1;	&#x2F;&#x2F;左边终点位置</span><br><span class="line">	Tmp &#x3D; L;	&#x2F;&#x2F;存放数组的起始位置</span><br><span class="line">	NumElements &#x3D; RightEnd - L + 1;</span><br><span class="line">	while(L&lt;&#x3D;LeftEnd &amp;&amp; R&lt;&#x3D;RightEnd)&#123;</span><br><span class="line">		if(A[L]&lt;&#x3D;A[R]) TmpA[Tmp++] &#x3D; A[L++];</span><br><span class="line">		else	TmpA[Tmp++] &#x3D; A[R++];</span><br><span class="line">	&#125;</span><br><span class="line">	while(L&lt;&#x3D;LeftEnd)	TmpA[Tmp++] &#x3D; A[L++];</span><br><span class="line">	while(R&lt;&#x3D;RightEnd)	TmpA[Tmp++] &#x3D; A[R++];</span><br><span class="line">	for(i &#x3D; 0;i&lt;NumElements;i++,RightEnd--)</span><br><span class="line">		A[RightEnd]	&#x3D; TmpA[RightEnd];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="递归算法"><a href="#递归算法" class="headerlink" title="递归算法"></a>递归算法</h1><ul>
 <li>分而治之</li>
@@ -379,7 +498,9 @@
   <entry>
     <title>csapp第二章:信息的表示和处理</title>
     <url>/2020/07/18/csapp%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<h1 id="信息存储"><a href="#信息存储" class="headerlink" title="信息存储"></a>信息存储</h1><p>机器级程序将内存视为字节数组，每一个字节都有一个数字来标识，称它为地址（address）。在机器级程序的视角里，内存被抽象成了一个概念，名为虚拟内存(virtual address space)。而所有地址的集合被称为虚拟地址空间（virtual address space）。</p>
+    <content><![CDATA[<a id="more"></a>
+
+<h1 id="信息存储"><a href="#信息存储" class="headerlink" title="信息存储"></a>信息存储</h1><p>机器级程序将内存视为字节数组，每一个字节都有一个数字来标识，称它为地址（address）。在机器级程序的视角里，内存被抽象成了一个概念，名为虚拟内存(virtual address space)。而所有地址的集合被称为虚拟地址空间（virtual address space）。</p>
 <h2 id="十六进制表示法"><a href="#十六进制表示法" class="headerlink" title="十六进制表示法"></a>十六进制表示法</h2><p>以16为基数，叫做十六进制（hexadecimal）数。在C语言中，以0x或0X开头的数字常量被认为是十六进制的值。</p>
 <p><strong>十六进制转二进制的一个窍门是记住A,C和F对应的十进制的值。（10，12，15）</strong></p>
 <h2 id="字数据大小"><a href="#字数据大小" class="headerlink" title="字数据大小"></a>字数据大小</h2><p>每台计算机都有字长（word size），虚拟地址都是用一个字来编码,因此对于字长为w位的机器，虚拟地址范围为0~2的w次-1；程序最多访问2的w次 的字节。</p>
@@ -524,7 +645,9 @@
   <entry>
     <title>堆排序</title>
     <url>/2020/07/18/%E5%A0%86%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void Selection_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">		MinPostion &#x3D; ScanForMin(A,i,N-1);&#x2F;&#x2F;找最小元O（N）</span><br><span class="line">		Swap(A[i],A[MinPostion]);&#x2F;&#x2F;将未排序部分的最小元换到有序部分的最后位置</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<a id="more"></a>
+
+<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void Selection_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">		MinPostion &#x3D; ScanForMin(A,i,N-1);&#x2F;&#x2F;找最小元O（N）</span><br><span class="line">		Swap(A[i],A[MinPostion]);&#x2F;&#x2F;将未排序部分的最小元换到有序部分的最后位置</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这里看出，虽然元素交换次数变为N-1次，但是寻找最小元的次数固定为N2。</p>
 <p>无论如何： T = O（N2）；</p>
@@ -550,7 +673,9 @@
   <entry>
     <title>希尔排序</title>
     <url>/2020/07/18/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>定义增量序列 Dm&gt;Dm-1&gt;…&gt;D1 = 1</p>
+    <content><![CDATA[<a id="more"></a>
+
+<p>定义增量序列 Dm&gt;Dm-1&gt;…&gt;D1 = 1</p>
 <p>对每个Dk进行Dk间隔排序（k = m,m-1,…1）</p>
 <p>注意: Dk间隔有序的序列，在执行Dk-1间隔排序后，仍然是Dk间隔有序的</p>
 <h1 id="希尔增量序列"><a href="#希尔增量序列" class="headerlink" title="希尔增量序列"></a>希尔增量序列</h1><p>原始希尔排序    Dm =    N/2向下取整,    Dk = Dk+1/2向下取整</p>
@@ -678,6 +803,8 @@
     <title>csapp</title>
     <url>/2020/07/17/csapp/</url>
     <content><![CDATA[<p>计划:阅读CSAPP和看对应CMU课程，看完后，总结笔记。</p>
+<a id="more"></a>
+
 <hr>
 <p>该篇blog用于记录实施进度。</p>
 <p>2020.7.17    1-20</p>
@@ -691,6 +818,7 @@
 <p>2020.7.26    136-149</p>
 <p>2020.7.27    149-164</p>
 <p>2020.7.28    164-176</p>
+<p>2020.7.28    176-216（第3章结束）</p>
 ]]></content>
       <categories>
         <category>计划</category>
@@ -702,7 +830,9 @@
   <entry>
     <title>简单排序</title>
     <url>/2020/07/16/%E7%AE%80%E5%8D%95%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void Bubble_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(p &#x3D; N-1;p&gt;&#x3D;0;p--)&#123;</span><br><span class="line">		flag &#x3D; 0;</span><br><span class="line">		for(i &#x3D; 0;i&lt;p;i++)&#123;	&#x2F;&#x2F;一趟冒泡</span><br><span class="line">			if(A[i]&gt;A[i+1])&#123;</span><br><span class="line">				Swap(A[i],A[i+1]);</span><br><span class="line">				flag &#x3D; 1;&#x2F;&#x2F;标识发生了交换</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if(flag &#x3D;&#x3D; 0) break;&#x2F;&#x2F;全程无交换</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<a id="more"></a>
+
+<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void Bubble_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(p &#x3D; N-1;p&gt;&#x3D;0;p--)&#123;</span><br><span class="line">		flag &#x3D; 0;</span><br><span class="line">		for(i &#x3D; 0;i&lt;p;i++)&#123;	&#x2F;&#x2F;一趟冒泡</span><br><span class="line">			if(A[i]&gt;A[i+1])&#123;</span><br><span class="line">				Swap(A[i],A[i+1]);</span><br><span class="line">				flag &#x3D; 1;&#x2F;&#x2F;标识发生了交换</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if(flag &#x3D;&#x3D; 0) break;&#x2F;&#x2F;全程无交换</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>最好情况：顺序T=O（N）</p>
 <p>最欢情况：逆序T=O（N2）</p>
