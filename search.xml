@@ -1,6 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>csapp第四章-处理器体系结构</title>
+    <url>/2020/07/30/csapp%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%84%E7%90%86%E5%99%A8%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</url>
+    <content><![CDATA[<p>ISA在编译器编写者和处理器设计人员之间提供了一个概念抽象层，编译器编写者只需要知道允许哪些指令，以及它们是如何编码的；而处理器设计者必须建造出执行这些指令的处理器。</p>
+<a id="more"></a>
+
+<h1 id="Y86-64指令集体系结构"><a href="#Y86-64指令集体系结构" class="headerlink" title="Y86-64指令集体系结构"></a>Y86-64指令集体系结构</h1><p>定义一个指令体系结构包括定义各种你状态单元、指令集和它们的编码、一组编程规范和异常事件处理。</p>
+<h2 id="程序员可见的状态"><a href="#程序员可见的状态" class="headerlink" title="程序员可见的状态"></a>程序员可见的状态</h2><p>Y86-64程序中的每条指令都会读取或修改处理器状态的某些部分。这称为程序员可见状态。这里的程序员指用汇编代码写程序的人，也可以是产生机器级代码的编译器。</p>
+<p>图2</p>
+<p>15个程序寄存器，rsp作为栈指针，3个一位条件码。</p>
+<p>目前只认为虚拟内存系统向Y86-64提供了一个单一的字节数组映像。</p>
+<p>Stat来表明程序执行的总体状态。它会指示是正常运行，还是出现了某种异常。</p>
+<h2 id="Y86-64指令"><a href="#Y86-64指令" class="headerlink" title="Y86-64指令"></a>Y86-64指令</h2><p>图片</p>
+<p>这个指令集就是处理器实现的目标。它只包括8字节整数操作，寻址方式较少，操作也较少。因为只有8字节数据，所以称之为“字（word）”不会有歧义。</p>
+<ul>
+<li>四种movq，第一第二个字母代表源和目的格式</li>
+<li>内存引用方式采用基址和偏移量形式</li>
+<li>四个整数操作指令，如图4-2中的OPq。只对寄存器数据进行操作</li>
+<li>7个跳转指令jxx</li>
+<li>6个条件传送指令</li>
+<li>call指令将返回地址入栈，然后跳到目的地址。ret指令从这样的调用中返回。</li>
+<li>pushq和popq指令实现入栈和出栈</li>
+<li>halt指令停止指令的执行。执行该指令会导致处理器停止，并将状态设置为HLT</li>
+</ul>
+<h2 id="指令编码"><a href="#指令编码" class="headerlink" title="指令编码"></a>指令编码</h2><p>每个指令第一个字节表明指令的类型。该字节分为两部分：高4位代码（code）部分，第4位是功能（function）部分。</p>
+<p>图片</p>
+<p>有些指令只有一个字节长，但有些更长，往往带有寄存器指示符字节（regisiter specifier byte），用于指定一或两个寄存器。对于只需要一个寄存器操作数的指令只要将另一个寄存器指示符设为0xF。</p>
+<p>有些指令需要一个附加的4字节常数字(constant word)。这个字能作为立即数数据，偏移量，以及目的地址。</p>
+<p>指令集的一个重要性质就是字节编码必须有唯一的解释。任意一个字节序列要么是一个唯一的指令序列的编码，要么就不是一个合法的字节序列。只要从序列的一个字节开始处理，我们仍然可以容易确定指令序列。若不知道起始位置，就不能准确确定怎样将序列分成单独的指令。</p>
+<h2 id="Y86-64异常"><a href="#Y86-64异常" class="headerlink" title="Y86-64异常"></a>Y86-64异常</h2><p>图片</p>
+<p>在完整设计中，处理器通常会调用一个异常处理程序（exception handler），这个过程被指定用来处理遇到的某种类型的异常。</p>
+<h2 id="Y86-64程序"><a href="#Y86-64程序" class="headerlink" title="Y86-64程序"></a>Y86-64程序</h2><p>图</p>
+<p>“.”开头的词是汇编器伪指令（assmebler directives），告诉汇编器调整地址，以便在那儿产生代码或插入一些数据。</p>
+<p>.pos告诉汇编器从地址0开始产生代码。</p>
+<p>第3行初始化指针，程序结尾处声明了标号stack，并且指明地址0x200。</p>
+<p>8~13声明4个字的数组，标号arry标签数组的起始，并且在8字节边界处对齐（.align伪指令指定）</p>
+<p>16~19给出main过程</p>
+<p>图</p>
+<p>这里实现了一个指令集模拟器YIS，可以模拟Y86-64机器代码程序的执行</p>
+<p>图</p>
+<p>模拟输出的第一行总结了执行以及PC和程序状态的结果值。模拟器只打印出在模拟过程中被改变了的寄存器或内存的字。左边是原始值，右边是最终值。</p>
+<h2 id="一些Y86-64指令的详情"><a href="#一些Y86-64指令的详情" class="headerlink" title="一些Y86-64指令的详情"></a>一些Y86-64指令的详情</h2><p>当执行pushq %rsp指令时，通常有2种约定：1）压入原始值，2）压入减去8的%rsp值</p>
+<p>popq也一样</p>
+<h1 id="逻辑设计和硬件控制语言HCL"><a href="#逻辑设计和硬件控制语言HCL" class="headerlink" title="逻辑设计和硬件控制语言HCL"></a>逻辑设计和硬件控制语言HCL</h1><p>硬件设计种，用电子电路来计算对位进行运算的函数，以及在各种存储器单元中存储位。大多数现代电路技术都是用信号线上的高压电或低压电表示不同位置。当前技术中，逻辑1用1伏特左右的高压电表示，而逻辑0用0伏特左右的低电压表示。</p>
+<p>实现一个数字系统要三个主要的组成部分：</p>
+<ol>
+<li>计算对位机型操作的函数的组合逻辑</li>
+<li>存储位的存储器单元</li>
+<li>控制存储器单元更新的时钟信号</li>
+</ol>
+<p>HCL（Hardware Control Language，硬件控制语言）来描述不同处理器设计的控制逻辑。</p>
+<h2 id="逻辑门"><a href="#逻辑门" class="headerlink" title="逻辑门"></a>逻辑门</h2><p>数字电路的基本计算单元。它们产生输出，等于它们输入位值得某个布尔函数。</p>
+<p>图</p>
+<p>逻辑门总是活动的。一旦一个门输入变化了，很短时间内，输出就会相应地变化。</p>
+<h2 id="组合电路和HCL布尔表达式"><a href="#组合电路和HCL布尔表达式" class="headerlink" title="组合电路和HCL布尔表达式"></a>组合电路和HCL布尔表达式</h2><p>多个逻辑门组合成网，构建计算块(computational block)，称为组合电路（combinational circuits）。构建有如下限制：</p>
+<ul>
+<li>输入必须是:1)一个系统输入，2）某个存储器单元的输出，3）某个逻辑门的输出</li>
+<li>两个或多个逻辑门的输出不能连在一起</li>
+<li>网必须无环</li>
+</ul>
+<p>图</p>
+<p>HCL来写4-10函数就是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bool eq &#x3D; (a &amp;&amp; b) || (!a &amp;&amp; !b)</span><br></pre></td></tr></table></figure>
+
+<p>eq仅仅只是给表达式一个名字</p>
+<p>图4-11的组合电路，称为多路复用器（multiplexor,称为“MUX”）。多路复用器根据输入控制信号的值，从一组不同的数据信号中选出一个。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;s为1输出a，s为0，输出b</span><br><span class="line">bool out &#x3D; (s &amp;&amp; a) || (!s &amp;&amp; b);</span><br></pre></td></tr></table></figure>
+
+<h2 id="字级的组合电路和HCL整数表达式"><a href="#字级的组合电路和HCL整数表达式" class="headerlink" title="字级的组合电路和HCL整数表达式"></a>字级的组合电路和HCL整数表达式</h2><p>通常我们设计对数据字(word)进行操作的电路。有一些位级信号，代表一个整数或一些控制模式。</p>
+<p>执行字级计算的组合电路根据输入字的各个位，用逻辑门来计算输出字的各个位。</p>
+<p>图</p>
+<p>这个电路用64个图4-10所示的单个位相等电路实现。</p>
+<p>在HCL中，将所有字级信号都声明位int,不指定字的大小。HCL允许比较字是否相等</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bool Eq &#x3D; (A&#x3D;&#x3D;B)</span><br></pre></td></tr></table></figure>
+
+<p>这里参数A和B是int型的。</p>
+<p>4-12所示，画字级电路用中等粗度的线表示携带字的每个位的线路，而用虚线来表示布尔信号结果。</p>
+]]></content>
+      <categories>
+        <category>《深入理解计算机系统》</category>
+      </categories>
+      <tags>
+        <tag>csapp,视频课程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>csapp第三章-程序的机器级表示</title>
     <url>/2020/07/24/csapp%E7%AC%AC%E4%B8%89%E7%AB%A0-%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/</url>
     <content><![CDATA[<p>机器代码，用字节序列编码低级的操作。编译器以汇编代码的形式产生输出，汇编代码是机器代码的文本表示，给出程序中的每一条指令。然后GCC调用汇编器和链接器，根据汇编代码生成可执行的机器代码。</p>
@@ -13,13 +98,13 @@
 <ol>
 <li>C预处理器扩展源代码，插入所有用#include指令指定的文件，并扩展所有用#define声明指定的宏。</li>
 <li>编译器产生两个源文件的汇编代码，p1.s和p2.s</li>
-<li>汇编器将汇编代码转成二进制目标代码文件p1.o和p2.o。（目标代码是机器代码的而一种形式，包括指令的二进制表示，但还没有填入全局值得地址）</li>
+<li>汇编器将汇编代码转成二进制目标代码文件p1.o和p2.o。（目标代码是机器代码的而一种形式，包括指令的二进制表示，但还没有填入全局值的地址）</li>
 <li>链接器将两个目标代码文件和实现库函数得代码合并，并产生最终得可执行代码文件p</li>
 </ol>
 <h1 id="机器级代码"><a href="#机器级代码" class="headerlink" title="机器级代码"></a>机器级代码</h1><p>对于机器编程来说，其中两种抽象尤为重要。</p>
 <ol>
-<li>指令集体系结构或指令集架构（Instruction Set Architecture,ISA）定义机器级程序得格式和行为，它定义了处理器状态，指令得格式，以及每条指令对状态得影响。但硬件层面描述复杂，它们并发执行许多指令，但可以采取措施保证整体行为与ISA指定顺序完全一致。</li>
-<li>机器级程序使用内存地址是虚拟地址。存储器系统得实际实现是将多个硬件存储器和操作系统软件给结合起来。</li>
+<li>指令集体系结构或指令集架构（Instruction Set Architecture,ISA）定义机器级程序得格式和行为，它定义了处理器状态，指令的格式，以及每条指令对状态的影响。但硬件层面描述复杂，它们并发执行许多指令，但可以采取措施保证整体行为与ISA指定顺序完全一致。</li>
+<li>机器级程序使用内存地址是虚拟地址。存储器系统的实际实现是将 多个硬件存储器 和 操作系统软件 给结合起来。</li>
 </ol>
 <p>一些x86-64的机器代码对于C语言程序员隐藏的处理器状态都是可见的：</p>
 <ol>
@@ -31,10 +116,10 @@
 <p>从机器代码角度看内存，内存只是一个很大的、按字节寻址的数组。</p>
 <p>程序在内存中包括：程序的可执行机器代码，操作系统需要的一些信息，用来管理过程调用和返回的运行时栈，以及用户分配的内存块。</p>
 <h1 id="数据格式"><a href="#数据格式" class="headerlink" title="数据格式"></a>数据格式</h1><p>由于是从16位体系结构拓展成32位的，Intel用术语“字（word）”表示16位数据类型。32位“双子（double words）”。64位数为“四字（quad words）”。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/Lsay2w8dNQqUlbI.png" alt="1334023-20190807170430649-1604938390.png"></p>
 <p>大多数GCC生成的汇编代码指令都有一个字符的后缀，表明操作数的大小。例如数据传送指令有四个变种:movb(传送字节)、movw（传送字）、movl（传送双字）和movq（传送四字。）</p>
-<h1 id="访问信息"><a href="#访问信息" class="headerlink" title="访问信息"></a>访问信息</h1><p>x86-84的中央处理单元（CPU）包含一组16个存储64位值得通用目的寄存器。用来存储整数数据和指针。</p>
-<p>图片</p>
+<h1 id="访问信息"><a href="#访问信息" class="headerlink" title="访问信息"></a>访问信息</h1><p>x86-84的中央处理单元（CPU）包含一组16个存储64位值的通用目的寄存器。用来存储整数数据和指针。</p>
+<p><img src="https://i.loli.net/2020/07/30/zX4ckLaEUbd9eVf.png" alt="1334023-20190809115302856-2146181911.png"></p>
 <p>指令可以对这16个寄存器得低位字节中存放得不同大小数据进行操作。</p>
 <p>在常见得程序里不同得寄存器扮演不同角色。其中最特别得栈指针%rsp。用来指明运行时栈结束位置。</p>
 <h2 id="操作器指令符"><a href="#操作器指令符" class="headerlink" title="操作器指令符"></a>操作器指令符</h2><p>大多数指令有一个或多个操作数（operand）。操作数分为三种类型。</p>
@@ -43,32 +128,33 @@
 <li>寄存器（register）</li>
 <li>内存引用</li>
 </ol>
-<p>寻找方式也有多种。Imm（rb,ri,s）表示最常用的形式:一个立即数偏移Imm，一个基址寄存器rb，一个变址寄存器ri和一个比例因子s,s必须是1，2，4，或者8.</p>
-<p>图片</p>
-<h2 id="数据传送指令"><a href="#数据传送指令" class="headerlink" title="数据传送指令"></a>数据传送指令</h2><p>图片</p>
+<p>寻找方式也有多种。Imm（rb,ri,s）表示最常用的形式:<strong>一个立即数偏移Imm，一个基址寄存器rb，一个变址寄存器ri和一个比例因子s,s必须是1，2，4，或者8.</strong></p>
+<p><img src="https://i.loli.net/2020/07/30/Wo5YMb7fDKLBywm.png" alt="1334023-20190809144635365-1131133860.png"></p>
+<h2 id="数据传送指令"><a href="#数据传送指令" class="headerlink" title="数据传送指令"></a>数据传送指令</h2><p><img src="https://i.loli.net/2020/07/30/1KO2aN9n3roqFt6.png" alt="1334023-20190809153000104-990216913.png"></p>
 <p>原操作数是一个立即数，存储在寄存器或内存中。目的操作数只当一个位置。</p>
-<p>x86-64加了一条限制，传送指令的两个操作数不能都指向内存位置。需要第一条指令将源值加载到寄存器中，第二条将该寄存器值写入目的位置。</p>
+<p><strong>x86-64加了一条限制，传送指令的两个操作数不能都指向内存位置。需要第一条指令将源值加载到寄存器中，第二条将该寄存器值写入目的位置。</strong></p>
 <p><strong>大部分mov指令仅仅更新目的范围内的操作数，movl指令以寄存器为目的时，它会把该寄存器的高位4字节设置为0</strong></p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/a3PGm4geExc8kbo.png" alt="1334023-20190809154255266-1023894161.png"></p>
 <p>常规的movq指令只能以表示为32位补码数字的立即数作为原操作数，然后把这个值符号扩展得到64位，放到目的位置。<strong>movabsq指令能以任意64位，并且只能放到寄存器作为目的。</strong></p>
-<p>图片2</p>
+<p><img src="https://i.loli.net/2020/07/30/UnziyT9DhxmE4oH.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/30/x8MdiERTnCe72XZ.png" alt="img"></p>
 <p>第一类零扩展数据传送，第二类符号扩展数据传送。每条指令名字的最后两个字符都是大小指示符：第一个指定源的大小，第二个指明目的大小。</p>
 <h2 id="数据传送实例"><a href="#数据传送实例" class="headerlink" title="数据传送实例"></a>数据传送实例</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">long exchange(long *xp,long y)</span><br><span class="line">&#123;</span><br><span class="line">	long x &#x3D; *xp;</span><br><span class="line">	*xp &#x3D; y;</span><br><span class="line">	return x;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;汇编</span><br><span class="line">&#x2F;&#x2F;xp in %rdi,y in %rsi,x in %rax</span><br><span class="line">exchange:</span><br><span class="line">	movq	(%rdi),%rax</span><br><span class="line">	movq	%rsi,(%rdi)</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
 
 <p>间接引用指针就是将该指针放在一个寄存器中，然后在内存引用中使用这个寄存器。像x这样的局部变量通常保存在寄存器中，而不是内存。访问寄存器比访问内存快许多。</p>
 <h2 id="压入和弹出栈数据"><a href="#压入和弹出栈数据" class="headerlink" title="压入和弹出栈数据"></a>压入和弹出栈数据</h2><p>最后两个数据传送操作可以将数据压入程序栈中，以及从程序栈中弹出数据。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/NDsZzGUVE1hTap4.png" alt="img"></p>
 <p>在x86-64中，程序栈存放在内存中某个区域。栈向下增长，栈顶元素的地址是栈中元素地址中最低的。栈指针%rsp保存着栈顶元素的地址。</p>
 <p>将一个四字值压入栈中，首先要将栈指针减8，然后将值写到新的栈顶地址。因此，pushq %rbp 的行为等价于:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sub $8,%rsp	&#x2F;&#x2F;Decrement stack pointer</span><br><span class="line">movq %rbp,(%rsp)	&#x2F;&#x2F;store %rbp on stack</span><br></pre></td></tr></table></figure>
 
 <p>区别在于pushq指令编码为1字节，上面两条一共8字节。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/D2Zx5RJn1ITtAB3.png" alt="img"></p>
 <p>popq    %rax等价于下面两条指令：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">movq (%rsp),%rax	&#x2F;&#x2F;Read %rax from stack</span><br><span class="line">addq $8,%rsp	&#x2F;&#x2F;Incremetn stack pointer</span><br></pre></td></tr></table></figure>
 
 <p>因为栈其实就是内存中的一片空间，其实可以用程序访问栈内的任意位置。假设栈顶元素是四字，指令movq 8(%rsp),%rdx会将第二个四字从栈中复制到寄存器%rdx。</p>
-<h1 id="算术和逻辑操作"><a href="#算术和逻辑操作" class="headerlink" title="算术和逻辑操作"></a>算术和逻辑操作</h1><p>图片</p>
+<h1 id="算术和逻辑操作"><a href="#算术和逻辑操作" class="headerlink" title="算术和逻辑操作"></a>算术和逻辑操作</h1><p><img src="https://i.loli.net/2020/07/30/t7lTmPAco8S4YEg.jpg" alt="img"></p>
 <p>大部分操作都分成了指令类，指令类都带不同大小操作数变种<strong>只有leaq没有</strong>。例如，ADD由四条加法指令组成：addb、addw、addl和addq。</p>
 <p>这些操作被分为四组：加载有效地址、一元操作、二元操作和移位。</p>
 <h2 id="加载有效地址（load-effective-address）"><a href="#加载有效地址（load-effective-address）" class="headerlink" title="加载有效地址（load effective address）"></a>加载有效地址（load effective address）</h2><p>lea指令实际上是movq指令的变型。它的指令形式是从内存读数据到寄存器，但实际上它根本就没有引用内存。它的第一个操作数看上去是一个内存引用，但该指令将有效地址写入到目的操作数。</p>
@@ -77,13 +163,13 @@
 
 <p>leaq指令能执行加法和有限形式得乘法，在编译如上简单算术表达式时，是很有用处的。</p>
 <h2 id="一元和二元操作"><a href="#一元和二元操作" class="headerlink" title="一元和二元操作"></a>一元和二元操作</h2><p>第二组操作是一元操作，操作数可以是寄存器，也可以是内存位置。</p>
-<p>第三组是二元操作，第一个操作数可以是立即数、寄存器或是内存地址。第二个操作数可以是寄存器或者是内存位置。当第二个操作数为内存地址时，处理器必须从内存中读出值，执行操作，再把结果写回内存。</p>
+<p>第三组是二元操作，第一个操作数可以是立即数、寄存器或是内存地址。第二个操作数可以是寄存器或者是内存位置。<strong>当第二个操作数为内存地址时，处理器必须从内存中读出值，执行操作，再把结果写回内存。</strong></p>
 <h2 id="移位操作"><a href="#移位操作" class="headerlink" title="移位操作"></a>移位操作</h2><p>最后一组为移位操作，先给出位移量，第二项给出要位移的数。可以逻辑移动，也可以算术。位移量可以是一个立即数，或者放在单字节寄存器%cl中。（这些指令只允许特定的寄存器作为操作数）。位移操作对w位长的数据值进行操作，位移量是由%cl寄存器的低m位决定，2的m次 = w。</p>
 <p>例如当寄存器%cl的十六进制值为0xFF时，指令salb会移7位，salw会移15位，sall移31位，salq移63位。移位操作的目的操作数可以是一个寄存器值或是一个内存位置。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">long arith(long x,long y,long z)</span><br><span class="line">&#123;</span><br><span class="line">	long t1 &#x3D; x^y;</span><br><span class="line">	long t2 &#x3D; z*48;</span><br><span class="line">	long t3 &#x3D; t1&amp;0x0F0F0F0F;</span><br><span class="line">	long t4 &#x3D; t2-t3;</span><br><span class="line">	return t4;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;汇编</span><br><span class="line">&#x2F;&#x2F;x in %rdi,y in %rsi,z in %rdx</span><br><span class="line">arith:</span><br><span class="line">	xorq	%rsi,%rdi &#x2F;&#x2F;t1 &#x3D; x^y</span><br><span class="line">	leaq	(%rdx,%rdx,2),%rax	&#x2F;&#x2F;3*z</span><br><span class="line">	salq	$4,%rax		&#x2F;&#x2F;t2 &#x3D; 16*(3*z) &#x3D; 48*z</span><br><span class="line">	andl	$252645135,%edi		&#x2F;&#x2F;t3 &#x3D; t1&amp;0x0F0F0F0F</span><br><span class="line">	subq	%rdi,%rax		&#x2F;&#x2F;Return t2-t3</span><br><span class="line">	ret</span><br></pre></td></tr></table></figure>
 
 <h2 id="特殊的算术操作"><a href="#特殊的算术操作" class="headerlink" title="特殊的算术操作"></a>特殊的算术操作</h2><p>对于两个64位有符号或无符号整数相乘得到乘积需要128位来表示。Intel把16字节的数称为八字(oct word)。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/rphUSTxIvDWtNJ4.jpg" alt="img"></p>
 <p>两种乘法都要求一个参数必须在寄存器%rax中，而另一个作为指令的源操作数给出。然后乘积存放在寄存器%rdx（高64位）和%rax（低64位）。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;inttypes.h&gt;</span><br><span class="line">typedef unsigned __int128 unit128_t</span><br><span class="line">void store_uprod(uint128_t *dest,unit64_t x,unit64_t y)&#123;</span><br><span class="line">	*dest &#x3D; x*(unit128_t)y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -108,18 +194,18 @@
 </ul>
 <p>leaq指令不改变任何条件码，因为它用来进行地址计算。除此之外3-10中所有指令都会设置条件码。</p>
 <p>除了3-10中的指令会设置条件码，还有两类指令(有8，16，32和64位形式)，它们只设置条件码不改变任何其他寄存器。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/Oe6sWRwL82alYtp.jpg" alt="img"></p>
 <p>CMP根据两数之差设置条件码。CMP与SUB指令的行为一样。列出操作数的顺序是相反的。</p>
 <p>TEST指令的行为与AND指令一样，除了它们只设置条件码而不改变目的寄存器值，典型用法是，两个操作数一样（检查是 正、负还是0），或其中一个操作数是掩码，用来指示哪些位应该被测试。</p>
-<h2 id="访问条件码"><a href="#访问条件码" class="headerlink" title="访问条件码"></a>访问条件码</h2><p>条件码通常不会被读取，常用使用方法有三种:</p>
+<h2 id="访问条件码"><a href="#访问条件码" class="headerlink" title="访问条件码"></a>访问条件码</h2><p>条件码通常不会直接读取，常用使用方法有三种:</p>
 <ol>
 <li>可以根据条件码的某种组合，将一个字节设置为0或1。</li>
 <li>可以条件跳转到程序的某个其他的部分</li>
 <li>可以有条件地传送数据</li>
 </ol>
-<p>对于第一种情况，有一整类指令称为SET指定。这些后缀表示不同德条件而不是操作数大小，例如，指令setl和setb表示“小于时设置（set less）”和“低于时设置（set below）”，而不是“设置长字“set long word”和“set byte”。</p>
+<p>对于第一种情况，有一整类指令称为SET指令。这些后缀表示不同条件而不是操作数大小，例如，指令setl和setb表示“小于时设置（set less）”和“低于时设置（set below）”，而不是“设置长字“set long word”和“set byte”。</p>
 <p>一条set指令的目的操作数是低位单字节寄存器运算之一，或是一个字节的内存位置，指令会将这个字节设置成0或者1。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/WZJgbXfSmYEjxsT.png" alt="img"></p>
 <p>一个计算C语言表达式a&lt;b的经典指令序列如下所示。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; int comp(data_t a,data_t b)</span><br><span class="line">&#x2F;&#x2F; a in %rdi,b in %rsi</span><br><span class="line">comp:</span><br><span class="line">	cmpq	%rsi,%rdi	&#x2F;&#x2F;Compare a:b</span><br><span class="line">	setl	%al			&#x2F;&#x2F;Set low-order byte of %eax to 0 or 1</span><br><span class="line">    movzbl	%al,%eax	&#x2F;&#x2F;Clear rest of %eax(and rest  of %rax)</span><br><span class="line">    ret</span><br></pre></td></tr></table></figure>
 
@@ -127,15 +213,15 @@
 <p>movzbl指令不仅会把%eax的高3个字节清零，还会把整个寄存器%rax的高4个字节清零。</p>
 <p>某些底层的机器指令可能有多个名字，称之为“同义词（synonym）”</p>
 <p>各个SET命令的描述都适用的情况是：执行比较指令，根据计算t=a-b设置条件码。</p>
-<p>不像C语言，机器代码不会将每个程序值和一个数据类型联系起来。大多数情况下，机器代码对有符号和无符号两种情况都使用一样的指令，这是因为许多算术运算对无符号和补码算术都有一样的位级行为。但也有些情况需要不同指令来处理有符号和无符号操作，例如，使用不同版本的右移、除法和乘法指令，以及不同条件码组合。</p>
+<p>不像C语言，机器代码不会将每个程序值和一个数据类型联系起来。<strong>大多数情况下，机器代码对有符号和无符号两种情况都使用一样的指令，这是因为许多算术运算对无符号和补码算术都有一样的位级行为。但也有些情况需要不同指令来处理有符号和无符号操作，例如，使用不同版本的右移、除法和乘法指令，以及不同条件码组合。</strong></p>
 <h2 id="跳转指令"><a href="#跳转指令" class="headerlink" title="跳转指令"></a>跳转指令</h2><p>jump指令会导致执行切换到程序中一个全新的位置。跳转目的由标号（label）指明。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	movq $0,%rax	&#x2F;&#x2F; set %rax to 0</span><br><span class="line">	jmp .L1			&#x2F;&#x2F; Goto .L1</span><br><span class="line">	movq (%rax),%rdx	&#x2F;&#x2F; Null pointer dereference(skipped)</span><br><span class="line">.L1:</span><br><span class="line">	popq %rdx	&#x2F;&#x2F;jump target</span><br></pre></td></tr></table></figure>
 
 <p>在产生目标代码文件时，汇编器会确定所有带标号指令的地址，并将跳转目标（目的指令地址）编码为跳转指令的一部分。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/uIERk64tpmAQ7cB.jpg" alt="img"></p>
 <p>jmp指令是无条件跳转。可以是直接跳转(跳转目标作为指令一部分编码)，也可以是间接跳转(从寄存器或内存位置读出的)。直接跳转给出一个标号为目标，间接跳转写法是“*”后跟操作数指示符。</p>
 <p>其他跳转指令都是有条件的，或者跳转或者执行下一条指令。<strong>条件跳转只能是直接跳转</strong></p>
-<h2 id="跳转指令的编码"><a href="#跳转指令的编码" class="headerlink" title="跳转指令的编码"></a>跳转指令的编码</h2><p>跳转指令有几种不同的编码，但最常用的都是PC相对的（PC-relative）/就是将目标指令地址与紧跟在跳转指令后面那条指令的地址之间的差作为编码。这个偏移量可以编码为1，2或4字节。第二种编码方式是给出“绝对”地址，用4个字节直接指定目标。汇编器与链接器会选择适当的跳转目的编码。</p>
+<h2 id="跳转指令的编码"><a href="#跳转指令的编码" class="headerlink" title="跳转指令的编码"></a>跳转指令的编码</h2><p>跳转指令有几种不同的编码，但最常用的都是PC相对的（PC-relative）就是将目标指令地址与紧跟在跳转指令后面那条指令的地址之间的差作为编码。这个偏移量可以编码为1，2或4字节。第二种编码方式是给出“绝对”地址，用4个字节直接指定目标。汇编器与链接器会选择适当的跳转目的编码。</p>
 <h2 id="用条件控制来实现条件分支"><a href="#用条件控制来实现条件分支" class="headerlink" title="用条件控制来实现条件分支"></a>用条件控制来实现条件分支</h2><p>C语言中的if-else语句的通用形式模板如下:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if(text-expr)</span><br><span class="line">	then-statement</span><br><span class="line">else</span><br><span class="line">	else-statement</span><br></pre></td></tr></table></figure>
 
@@ -146,10 +232,10 @@
 <p>汇编器为then-statement和else-statement产生各自的代码块。它会插入条件和无条件分支，以保证执行正确的代码块。</p>
 <h2 id="用条件传送来实现条件分支"><a href="#用条件传送来实现条件分支" class="headerlink" title="用条件传送来实现条件分支"></a>用条件传送来实现条件分支</h2><p>使用<strong>控制的条件转移</strong>这种机制简单而通用，但在现在处理器上，有点低效。一种替代的策略是使用<strong>数据的条件转移。</strong>这种方法计算一个条件操作的两种结果，然后再根据条件是否满足选取一个。只在受限制的情况中，这种策略可行，如果可行就可以用一条简单的条件传送指令来实现它，条件传送指令更符合现代处理器的性能特性。</p>
 <p>为何条件数据传送的方式比较快?</p>
-<p>处理器使用流水线（pipelining）来获得高性能，而这需要提前确定要执行的指令序列，当机器遇到条件跳转（也称为“分支”）时，只有当分支条件求值完成时，才能绝对走哪个分支。处理器采用分支预测逻辑来推测每条跳转指令是否执行。只要预测可靠(现代处理器设计试图达到90%的成功率)，指令流水线就可以充满指令。若预测失败，处理器就要丢掉它为该跳转指令后的所有工作，然后再从正确位置处起始的指令去填充流水线。一次预测失误，会浪费15~30个时钟周期。</p>
-<p>图片</p>
+<p>处理器使用流水线（pipelining）来获得高性能，而这需要提前确定要执行的指令序列，当机器遇到条件跳转（也称为“分支”）时，只有当分支条件求值完成时，才能决定走哪个分支。处理器采用分支预测逻辑来推测每条跳转指令是否执行。只要预测可靠(现代处理器设计试图达到90%的成功率)，指令流水线就可以充满指令。若预测失败，处理器就要丢掉它为该跳转指令后的所有工作，然后再从正确位置处起始的指令去填充流水线。一次预测失误，会浪费15~30个时钟周期。</p>
+<p><img src="https://i.loli.net/2020/07/30/f8Zmr3eqWSko7Xx.png" alt="img"></p>
 <p>每条指令有两个操作数:源寄存器或者内存地址S，和目的寄存器R。源和目的值可以是16位、32位或64位长。<strong>不支持单字节的条件传送。</strong></p>
-<p>汇编器可以从目标寄存器的名字推断处条件传送指令的操作数长度，所以对所有的操作数长度，到可以使用同一个的指令名字。</p>
+<p>汇编器可以从目标寄存器的名字推断出条件传送指令的操作数长度，所以对所有的操作数长度，到可以使用同一个的指令名字。</p>
 <p>例子：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">v &#x3D; test-expr ? the-expr:else-expr;</span><br></pre></td></tr></table></figure>
 
@@ -167,7 +253,7 @@
 
 <p>不过，这个实现是非法的，因为计时当测试为假，movq指令对xp的间接引用还是发生了，导致了间接引用空指针的错误。</p>
 <p>所以如果两个表达式中的任意一个可能产生错误条件或者副作用，就会导致非法行为。</p>
-<p>如果then-expr或者else-expr部分很麻烦，用条件传送也不适合，所以各有各的优点。</p>
+<p>如果then-expr或者else-expr部分很麻烦，用条件传送传送也不适合，所以各有各的优点。</p>
 <h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><p>C语言提供多种循环结构，即do-while、while和for。汇编中没有相应的指令存在，可以用条件测试和跳转组合起来实现循环的效果。</p>
 <h3 id="do-while循环"><a href="#do-while循环" class="headerlink" title="do-while循环"></a>do-while循环</h3><p>通用形式如下：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">do</span><br><span class="line">	body-statement</span><br><span class="line">	while(test-expr)</span><br></pre></td></tr></table></figure>
@@ -201,13 +287,14 @@
 
 <h2 id="switch-语句"><a href="#switch-语句" class="headerlink" title="switch 语句"></a>switch 语句</h2><p>switch(开关)语句可以根据一个整数索引值进行多重分支（mutiway branching）。这种语句通过使用跳转表（jump table）这种数据结构使得实现更加高效。跳转表是一个数组，表项i是一个代码段的地址，这个地址段实现当开关索引值等于i时程序应该采取的动作。</p>
 <p>与很长的if-else语句相比，使用跳转表的优先是执行开关语句的时间与开关情况的数量无关。GCC根据开关情况的数量和开关情况值得稀疏程度来翻译开关语句。当开关情况比较多（例如4个以上），并且值得范围跨度很小时，就会使用跳转表。</p>
-<p>图片2</p>
+<p><img src="https://i.loli.net/2020/07/30/XgYcP7zrpLN2mo6.png" alt="img"></p>
 <p>b代码采用了GCC提供的对跳转表的支持，这是对C语言的拓展，GCC的作者创造了新的运算符&amp;&amp;,这个运算符创建了一个指向代码位置的指针。</p>
+<p><img src="https://i.loli.net/2020/07/30/7i3tH1SCWIM9R52.png" alt="img"></p>
 <p>汇编器首先将n减去100，把取值范围移到0和6之间，创建新变量index，<strong>补码表示的负数会被映射成符号位表示的大正数，利用这事实，将index看作无符号数，从而进一步简化分支的可能性。通过测试index是否大于6来判定index是否在0~6范围之外。</strong></p>
 <p>执行switch语句的关键步骤是通过跳转表来访问代码位置。C代码16行，一条goto语句引用跳转表jt。在汇编代码中，类似操作在第5行，jmp指令操作数有前缀”*”,表明是间接跳转，操作数指定一个内存位置，索引由%rsi给出，这个寄存器保存index的值。</p>
 <p>在汇编代码中，跳转表用以下申明表示:</p>
-<p>图片</p>
-<p>这些申明表明，在叫做“.rodata“（只读数据，Read-Only Data）的目标代码文件的段中，应该有一组7个”四“字（8个字节），每个字的的值都是与指定的汇编代码标号（例如.L3）相关联的指令地址。标号.L4标记出这个分配地址的起始。与这个标号相对应的地址会作为间接跳转（第5行）的基地址。</p>
+<p><img src="https://i.loli.net/2020/07/30/h8IOwiZR3DeplNy.jpg" alt="img"></p>
+<p>这些申明表明，在叫做“.rodata“（只读数据，Read-Only Data）的目标代码文件的段中，应该有一组7个”四“字（8个字节），每个字的的值都是与指定的汇编代码标号（例如.L3）相关联的指令地址。标号.L4标记出这个分配地址的起始，与这个标号相对应的地址会作为间接跳转（第5行）的基地址。</p>
 <h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><p>过程是软件一种重要抽象。它提供一种封装代码的方式。不同编程语言中，过程的形式多样：函数（function）、方法(method)、子例程（subroutine）、处理函数（handler）等等，但它们具备共性。</p>
 <p>假设过程P调用过程Q，Q执行后返回P。这些动作包括一个或多个机制。</p>
 <ul>
@@ -216,13 +303,13 @@
 <li>分配和释放内存。在开始时，Q可能需要为局部变量分配空间，返回时，又必须释放这些空间。</li>
 </ul>
 <h2 id="运行时栈"><a href="#运行时栈" class="headerlink" title="运行时栈"></a>运行时栈</h2><p>C语言过程调用机制的一个关键特性（大多数其他语言也是如此）在于使用了栈数据结构提供的后进先出的内存管理原则。Q执行中，P以及所有在向上追溯到P的调用链的过程，都暂时被挂起。Q运行时，它只需要为局部变量分配新的存储空间。Q返回时，它局部存储空间都被释放。程序可以用栈来管理它的过程所需要的存储空间。栈和程序寄存器存放着传递控制和数据、分配内存所需要的信息。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/6aB2VvWqzl7oKL9.png" alt="img"></p>
 <p>x86-64的栈向低地址方向增长，而栈指针%rsp指向栈顶元素。可以用pushq和popq指令将数据存入或取出。</p>
 <p>当x86-64过程需要的存储空间超出寄存器能够存放的大小时，就会在栈上分配空间。这个部分称为过程的栈帧（stack fram）。</p>
 <p>过程P调用过程Q时，会把返回地址压入栈中，指明当Q返回时，要从P程序的哪个位置继续执行。Q代码会拓展栈的边界，分配它栈帧所需空间。这个空间中，可以保存寄存器的值，分配局部变量空间，为它调用的过程设置参数。</p>
-<p>大多数过程帧都是定长的，在开始就分配好了。但有些过程需要边长的帧。例如通过寄存器，过程P可以传递最多6个整数值，但如果Q需要更多参数，P可以在调用Q之前在自己的栈帧里存储这些参数。</p>
+<p>大多数过程帧都是定长的，在开始就分配好了。但有些过程需要变长的帧。例如通过寄存器，过程P可以传递最多6个整数值，但如果Q需要更多参数，P可以在调用Q之前在自己的栈帧里存储这些参数。</p>
 <p>例如，所有参数都可以用寄存器传递。图中某些栈帧部分可以省略。而且有些过程都不需要栈帧，当所有局部变量都可以保存在寄存器中，而且该函数都不调用其他函数(称为叶子过程，次数把过程调用看成树结构)，就可以这样处理。</p>
-<h2 id="转移控制"><a href="#转移控制" class="headerlink" title="转移控制"></a>转移控制</h2><p>将控制从函数P转到函数Q只需要简单把PC设置为Q的代码的其实位置。当稍后从Q返回的时候，处理器必须记录好它需要继续P的执行的代码位置。这个信息用指令call Q调用过程Q来记录。call指令把地址A（返回地址：紧跟在call指令后那条指令的地址）压入栈，并将PC设置为Q的起始地址。对应的指令ret会从栈中弹出地址A，并把PC设置为A。</p>
+<h2 id="转移控制"><a href="#转移控制" class="headerlink" title="转移控制"></a>转移控制</h2><p>将控制从函数P转到函数Q只需要简单把PC设置为Q的代码的其实位置。当稍后从Q返回的时候，处理器必须记录好它需要继续P的执行的代码位置。这个信息用指令call Q调用过程Q来记录。<strong>call指令把地址A（返回地址：紧跟在call指令后那条指令的地址）压入栈，并将PC设置为Q的起始地址。对应的指令ret会从栈中弹出地址A，并把PC设置为A。</strong></p>
 <p>call指令分为 两种：</p>
 <ul>
 <li>直接调用（标号）</li>
@@ -231,21 +318,28 @@
 <p>例子：P166</p>
 <h2 id="数据传送"><a href="#数据传送" class="headerlink" title="数据传送"></a>数据传送</h2><p>过程调用还包括数据作为参数传递，从过程返回还可能包含返回的值。大部分都是通过寄存器实现。</p>
 <p>x86-64中，可以通过寄存器最多传递6个整型参数。寄存器使用有特殊顺序，使用的名字取决于传递的数据类型的大小。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/NduBQ9oxr6wIWhH.png" alt="img"></p>
 <p>如果大于6个参数，多余就用栈传递。1<del>6复制到对应的寄存器，把参数7</del>n放到栈上， 而参数7位于栈顶。通过栈传递参数，数据大小向8的倍数对齐。</p>
-<p>图片*3</p>
+<p><img src="https://i.loli.net/2020/07/30/EvMRS1moP8OcY5Z.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/30/X3mpRwj9qUCl1eQ.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/30/9YDsEiZuGVxIy62.png" alt="img"></p>
 <h3 id="栈上的局部存储"><a href="#栈上的局部存储" class="headerlink" title="栈上的局部存储"></a>栈上的局部存储</h3><p>有时局部数据必须存放在内存中，常见情况：</p>
 <ul>
 <li>寄存器不足够存放所有本地数据</li>
 <li>对一个局部变量使用地址运算符’&amp;’，因此必须为它产生一个地址。</li>
 <li>某些局部变量是数组或结构，因此必须能够通过数组或结构引用被访问到</li>
 </ul>
-<p>图*4</p>
+<p><img src="https://i.loli.net/2020/07/30/tBwzKNpqYaIXDMk.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/30/AGQOeztxXEbWqaK.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/30/AGQOeztxXEbWqaK.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/30/jUFANuIDrfM8Et9.png" alt="img"></p>
 <h2 id="寄存器中的局部存储空间"><a href="#寄存器中的局部存储空间" class="headerlink" title="寄存器中的局部存储空间"></a>寄存器中的局部存储空间</h2><p>寄存器是共享资源，我们必须保证一个进程(调用者)调用另一个过程（被调用者）时，被调用者不会覆盖调用者稍后会使用的寄存器值。x86-64使用了一组统一的寄存器使用惯例，所有过程都必须遵循。</p>
-<p>惯例，寄存器%rbx、%rbp和%r12~%r15被划分为被调用者保存寄存器。P调用Q，Q必须保存这些寄存器的值，保证到时候返回时一样的。</p>
+<p><strong>惯例，寄存器%rbx、%rbp和%r12~%r15被划分为被调用者保存寄存器</strong>。P调用Q，Q必须保存这些寄存器的值，保证到时候返回时一样的。</p>
 <p>过程Q要不保存，要不根本就不去改变。可以选择把原始值压入栈中，然后在返回时弹出改回去。压入的值会在栈中创建标号为“保存的寄存器”一部分。</p>
-<p>所有其他的寄存器，除了栈指针%rsp，都分类为调用者保存寄存器。</p>
-<h2 id="递归过程"><a href="#递归过程" class="headerlink" title="递归过程"></a>递归过程</h2><p>图片</p>
+<p><strong>所有其他的寄存器，除了栈指针%rsp，都分类为调用者保存寄存器。</strong></p>
+<p><img src="https://i.loli.net/2020/07/30/cdyisBH6SRTjrgo.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/30/B7WsmntIjbyVFer.png" alt="img"></p>
+<h2 id="递归过程"><a href="#递归过程" class="headerlink" title="递归过程"></a>递归过程</h2><p><img src="https://i.loli.net/2020/07/30/iXpUYsxnOMvH6zP.png" alt="img"></p>
 <p>该汇编代码用寄存器%rbx保存n，先把已有值保存到栈上（第2行）,随后在返回时恢复该值（第11行）。每次调用rfact(n-1)结果在%rax中。</p>
 <h1 id="数组分配和访问"><a href="#数组分配和访问" class="headerlink" title="数组分配和访问"></a>数组分配和访问</h1><h2 id="基本原则"><a href="#基本原则" class="headerlink" title="基本原则"></a>基本原则</h2><p>C语言可以产生指向数组中元素的指针，并对指针运算。在机器代码中，这些指针会被翻译成地址运算。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">T A[N]</span><br></pre></td></tr></table></figure>
@@ -257,9 +351,9 @@
 </ul>
 <p>元素i会被存放在地址xA+L*i的地方。</p>
 <p>x86-64可以用内存引用指令来简化数组访问。例如，E是一个int型的数组，而我们想计算E[i]，E的地址存放在寄存器%rdx中，i存放在%rcx中</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">movl (%rdx,%rcs,4),%eax</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">movl (%rdx,%rcx,4),%eax</span><br></pre></td></tr></table></figure>
 
-<h2 id="指针运算"><a href="#指针运算" class="headerlink" title="指针运算"></a>指针运算</h2><p>P是一个指向类型为T的数据的指针，p的值为xp，那么表达式p+i的值为xp+L*i,这里L是数据类型T的小。</p>
+<h2 id="指针运算"><a href="#指针运算" class="headerlink" title="指针运算"></a>指针运算</h2><p>P是一个指向类型为T的数据的指针，p的值为xp，那么表达式p+i的值为xp+L*i,这里L是数据类型T的大小。</p>
 <h2 id="嵌套的数组"><a href="#嵌套的数组" class="headerlink" title="嵌套的数组"></a>嵌套的数组</h2><p>声明:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int A[5][3];</span><br></pre></td></tr></table></figure>
 
@@ -274,6 +368,8 @@
 
 <h2 id="定长数组"><a href="#定长数组" class="headerlink" title="定长数组"></a>定长数组</h2><p>C语言编译器能优化定长多维数组上的操作代码。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#define N 16</span><br><span class="line">typedef int fix_matrix[N][N];</span><br></pre></td></tr></table></figure>
+
+
 
 <p>它去掉了整数索引j，并把所有的数组引用都换成了指针间接引用。</p>
 <h2 id="变长数组"><a href="#变长数组" class="headerlink" title="变长数组"></a>变长数组</h2><p>C语言只支持大小在编译时就能确定的多维数组（对第一维可能有些例外）。程序员需要变长数组时不得不用malloc或calloc这样的函数为这些数组分配存储空间。</p>
@@ -292,7 +388,7 @@
 <li>用了乘法指令计算n<em>i，而不是用leaq指令计算3\</em>i</li>
 </ul>
 <p>动态版本必须用乘法指令伸缩n倍，而不能用一系列移位和加法。这会导致严重性能处罚。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/HacQhKNFtJxV5uy.png" alt="img"></p>
 <p>生成代码会避免直接引用等式&amp;D[i][j] = xd + L(C*i+j)会导致的乘法。</p>
 <h1 id="异质的数据结构"><a href="#异质的数据结构" class="headerlink" title="异质的数据结构"></a>异质的数据结构</h1><p>C语言提供两种将不同类型的对象组合到一起创建数据类型的机制：结构(structure),将多个对象集合到一个单位中；联合(union),用关键字union来声明，允许用不同的类型来引用一个对象。</p>
 <h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>指向结构的指针就是结构第一个字节的地址。</p>
@@ -320,12 +416,12 @@
 <p>gets函数的问题是它没有颁发确定是否为保存整个字符串分配了足够的康健。若将缓冲区设置得很小，若读入这个长度就会越界。</p>
 <p>缓冲区溢出的一个更加致命的使用就是让程序执行它本来不愿意执行的函数。这是一种通过计算机网络攻击系统安全的方法。输入给程序一个字符串，这个字符串包括一些可执行代码的文件编码，称为攻击代码（exploit code）,另外还有一些字节会用一个指向攻击代码的指针覆盖返回地址。</p>
 <h2 id="对抗缓冲区溢出攻击"><a href="#对抗缓冲区溢出攻击" class="headerlink" title="对抗缓冲区溢出攻击"></a>对抗缓冲区溢出攻击</h2><h3 id="栈随机化"><a href="#栈随机化" class="headerlink" title="栈随机化"></a>栈随机化</h3><p>使得栈的位置在程序每次运行时都有变化。实现方式：程序开始时，在栈上分配一段0~n字节之间的随机大小的空间。程序不适用这段抗击那，但会使后续栈位置发生改变。</p>
-<h3 id="栈破坏检测"><a href="#栈破坏检测" class="headerlink" title="栈破坏检测"></a>栈破坏检测</h3><p>图片</p>
+<h3 id="栈破坏检测"><a href="#栈破坏检测" class="headerlink" title="栈破坏检测"></a>栈破坏检测</h3><p><img src="https://i.loli.net/2020/07/30/Dlmoi3k1SIgwutM.jpg" alt="img"></p>
 <p>最新GCC版本在产生的代码中加入一种栈保护者（stack protector）机制，来检测缓冲区越界。其思想是在栈帧任何局部缓冲区与栈状态之间存储一个特殊的金丝雀(canary)值，也称为哨兵值（guard value）。在恢复寄存器状态和从函数返回之前，程序检查这个金丝雀值是否被改变了，如果是，程序异常终止。</p>
-<h3 id="限制可执行代码区域"><a href="#限制可执行代码区域" class="headerlink" title="限制可执行代码区域"></a>限制可执行代码区域</h3><h2 id="支持变长栈帧"><a href="#支持变长栈帧" class="headerlink" title="支持变长栈帧"></a>支持变长栈帧</h2><p>图片</p>
+<h3 id="限制可执行代码区域"><a href="#限制可执行代码区域" class="headerlink" title="限制可执行代码区域"></a>限制可执行代码区域</h3><h2 id="支持变长栈帧"><a href="#支持变长栈帧" class="headerlink" title="支持变长栈帧"></a>支持变长栈帧</h2><p><img src="https://i.loli.net/2020/07/30/J4jLmGx3TRCsuzM.png" alt="img"></p>
 <p>函数声明n个指针的局部数组，这里n可变，要求在栈上分配8n个字节。此外还有一个对局部变量i的地址引用，因此i必须在栈中。</p>
 <p>为了管理边长栈帧，x86-64代码使用寄存器%rbp作为栈指针（frame pointer，也称为 base pointer,也是bp由来）。</p>
-<p>图片</p>
+<p><img src="https://i.loli.net/2020/07/30/EwFA8UtTQlZ12J9.png" alt="img"></p>
 <p>保存%rbp之前的值到栈中，因为%rbp是一个被调用者保存寄存器。</p>
 <h1 id="浮点代码"><a href="#浮点代码" class="headerlink" title="浮点代码"></a>浮点代码</h1><p>处理器的浮点体系结构有多个方面：</p>
 <ul>
@@ -335,10 +431,11 @@
 <li>函数调用过程中保存寄存器的规则</li>
 </ul>
 <p>SIMD：对多个不同的数据采用并行执行同一个操作。</p>
-<h2 id="浮点传送和转换操作"><a href="#浮点传送和转换操作" class="headerlink" title="浮点传送和转换操作"></a>浮点传送和转换操作</h2><p>图片</p>
+<h2 id="浮点传送和转换操作"><a href="#浮点传送和转换操作" class="headerlink" title="浮点传送和转换操作"></a>浮点传送和转换操作</h2><p><img src="https://i.loli.net/2020/07/30/cT8jGLvfow7HaZb.jpg" alt="img"></p>
 <p>指令名字中的字母’a’表示“aligned（对齐的）”</p>
 <p>下两张图里的格式转换指令都是对单个数据值进行操作的标量指令。</p>
-<p>图2</p>
+<p><img src="https://i.loli.net/2020/07/30/oncrPBICAm9fiSj.jpg" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/30/QpM2WPD8v3c4uxY.jpg" alt="img"></p>
 <p>3-48中的指令有两个源和一个目的，第二个操作数的值只会影响结果的高位字节。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vcvtsi2sdq %rax,%xmm1,%xmm1</span><br></pre></td></tr></table></figure>
 
@@ -349,9 +446,9 @@
 <li>函数使用寄存器%mm0来返回浮点值。</li>
 <li>所有xmm寄存器都是调用者保存的。被调用者可以不用保存就覆盖这些寄存器中的任意一个。</li>
 </ul>
-<h2 id="浮点运算操作"><a href="#浮点运算操作" class="headerlink" title="浮点运算操作"></a>浮点运算操作</h2><p>图</p>
+<h2 id="浮点运算操作"><a href="#浮点运算操作" class="headerlink" title="浮点运算操作"></a>浮点运算操作</h2><p><img src="https://i.loli.net/2020/07/30/i2LmNbPfqRu3a61.png" alt="img"></p>
 <p>第一个源操作数s1可以是xmm寄存器或内存位置。第二个源操作数和目的操作数都必须是XMM寄存器。每个操作都有针对单精度的指令和针对双精度的指令。</p>
-<h2 id="定义和使用浮点常数"><a href="#定义和使用浮点常数" class="headerlink" title="定义和使用浮点常数"></a>定义和使用浮点常数</h2><p>浮点操作不饿能以立即数值作为操作数。编译器必须为所有常量值分配和初始化存储空间。然后代码在把这些值从内存读入。</p>
+<h2 id="定义和使用浮点常数"><a href="#定义和使用浮点常数" class="headerlink" title="定义和使用浮点常数"></a>定义和使用浮点常数</h2><p>浮点操作不能以立即数值作为操作数。对于立即数，编译器必须为所有常量值分配和初始化存储空间。然后代码在把这些值从内存读入。</p>
 <h2 id="在浮点代码中使用位级操作"><a href="#在浮点代码中使用位级操作" class="headerlink" title="在浮点代码中使用位级操作"></a>在浮点代码中使用位级操作</h2><h2 id="浮点数比较"><a href="#浮点数比较" class="headerlink" title="浮点数比较"></a>浮点数比较</h2><p>类似于CMP指令，与cmpq一样，都是反序列出操作数的ATT格式管理。S2必须在XMM寄存器中，S1可以在XMM寄存器中，也可以在内存中。</p>
 <p>浮点比较指令会设置三个条件码：零标志位ZF、进位标志位CF和奇偶标志位PF。当两个操作数任一个是NAN时，会设置PF位。</p>
 ]]></content>
@@ -818,7 +915,8 @@
 <p>2020.7.26    136-149</p>
 <p>2020.7.27    149-164</p>
 <p>2020.7.28    164-176</p>
-<p>2020.7.28    176-216（第3章结束）</p>
+<p>2020.7.29    176-216（第3章结束）</p>
+<p>2020.7.30    243-259</p>
 ]]></content>
       <categories>
         <category>计划</category>

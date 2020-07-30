@@ -248,6 +248,116 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/06/19/%E9%9B%86%E5%90%88%E5%8F%8A%E8%BF%90%E7%AE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/19/%E9%9B%86%E5%90%88%E5%8F%8A%E8%BF%90%E7%AE%97/" class="post-title-link" itemprop="url">集合及运算</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-19 15:33:27 / 修改时间：17:03:14" itemprop="dateCreated datePublished" datetime="2020-06-19T15:33:27+08:00">2020-06-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/06/19/%E9%9B%86%E5%90%88%E5%8F%8A%E8%BF%90%E7%AE%97/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/19/%E9%9B%86%E5%90%88%E5%8F%8A%E8%BF%90%E7%AE%97/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>668</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h1><p>定义：集合<strong><em>并，查</em></strong>某元素属于什么集合</p>
+<p><em>双亲表示法：孩子指向双亲(与普通树的指针刚好相反)</em></p>
+<h1 id="并查集存储"><a href="#并查集存储" class="headerlink" title="并查集存储"></a>并查集存储</h1><p>typedef struct{</p>
+<p>​    ElementType Data;</p>
+<p>​    int parent;</p>
+<p>} SetType;</p>
+<h1 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h1><h2 id="查找某个元素所在集合"><a href="#查找某个元素所在集合" class="headerlink" title="查找某个元素所在集合"></a>查找某个元素所在集合</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int Find(SetType S[],ElementType X)&#123;</span><br><span class="line">	int i;</span><br><span class="line">	for(i &#x3D; 0;i&lt;MaxSize &amp;&amp; S[i].data !&#x3D; X; i++);</span><br><span class="line">	if(i &gt;&#x3D; MaxSize) return -1; 	&#x2F;&#x2F;未找到X，返回-1</span><br><span class="line">	for(;S[i].parent &gt;&#x3D; 0; i &#x3D; S[i].Parent);</span><br><span class="line">	return i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="集合的并运算"><a href="#集合的并运算" class="headerlink" title="集合的并运算"></a>集合的并运算</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void Union(SetType S[], ElementType X1, ElementType X2)&#123;</span><br><span class="line">	int root1, root2;</span><br><span class="line">	root1 &#x3D; Find(S,X1);</span><br><span class="line">	root2 &#x3D; Find(S,X2);</span><br><span class="line">	if(root1!&#x3D;root2) S[root2].parent &#x3D; Root1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="路径压缩"><a href="#路径压缩" class="headerlink" title="路径压缩"></a>路径压缩</h2><p>改写Find方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int Find(SetType S[], ElementType X)&#123;</span><br><span class="line">	if(S[X]&lt;0)</span><br><span class="line">		return x;</span><br><span class="line">	else return S[X] &#x3D; Find(S,S[X]);	&#x2F;&#x2F;尾递归不用担心爆内存，编译器编译时会优化成循环</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/06/18/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E4%B8%8E%E5%93%88%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1273,123 +1383,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/05/28/Reversing-Linked-List/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/05/28/Reversing-Linked-List/" class="post-title-link" itemprop="url">Reversing Linked List</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-05-28 18:57:58 / 修改时间：21:58:06" itemprop="dateCreated datePublished" datetime="2020-05-28T18:57:58+08:00">2020-05-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/05/28/Reversing-Linked-List/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/28/Reversing-Linked-List/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Given a constant <em>K</em> and a singly linked list <em>L</em>, you are supposed to reverse the links of every <em>K</em> elements on <em>L</em>. For example, given <em>L</em> being 1→2→3→4→5→6, if <em>K</em>=3, then you must output 3→2→1→6→5→4; if <em>K</em>=4, you must output 4→3→2→1→5→6.</p>
-<h3 id="Input-Specification"><a href="#Input-Specification" class="headerlink" title="Input Specification:"></a>Input Specification:</h3><p>Each input file contains one test case. For each case, the first line contains the address of the first node, a positive <em>N</em> (≤105) which is the total number of nodes, and a positive <em>K</em> (≤<em>N</em>) which is the length of the sublist to be reversed. The address of a node is a 5-digit nonnegative integer, and NULL is represented by -1.</p>
-<p>Then <em>N</em> lines follow, each describes a node in the format:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Address Data Next</span><br></pre></td></tr></table></figure>
-
-<p>where <code>Address</code> is the position of the node, <code>Data</code> is an integer, and <code>Next</code> is the position of the next node.</p>
-<h3 id="Output-Specification"><a href="#Output-Specification" class="headerlink" title="Output Specification:"></a>Output Specification:</h3><p>For each case, output the resulting ordered linked list. Each node occupies a line, and is printed in the same format as in the input.</p>
-<h3 id="Sample-Input"><a href="#Sample-Input" class="headerlink" title="Sample Input:"></a>Sample Input:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">00100 6 4</span><br><span class="line">00000 4 99999</span><br><span class="line">00100 1 12309</span><br><span class="line">68237 6 -1</span><br><span class="line">33218 3 00000</span><br><span class="line">99999 5 68237</span><br><span class="line">12309 2 33218</span><br></pre></td></tr></table></figure>
-
-<h3 id="Sample-Output"><a href="#Sample-Output" class="headerlink" title="Sample Output:"></a>Sample Output:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">00000 4 33218</span><br><span class="line">33218 3 12309</span><br><span class="line">12309 2 00100</span><br><span class="line">00100 1 99999</span><br><span class="line">99999 5 68237</span><br><span class="line">68237 6 -1</span><br></pre></td></tr></table></figure>
-
-<p><a href="https://pintia.cn/problem-sets/1211841066264109056/problems/1231458941036285954" target="_blank" rel="noopener">链接</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int temp,data[100005],nex[100005],lis[100005],ans[100005];</span><br><span class="line">int main()&#123;</span><br><span class="line">	int first,k,n,sum &#x3D; 0;</span><br><span class="line">	</span><br><span class="line">	cin&gt;&gt;first&gt;&gt;n&gt;&gt;k;</span><br><span class="line">	for(int i &#x3D; 0;i&lt;n;i++)&#123;</span><br><span class="line">		cin&gt;&gt;temp;</span><br><span class="line">		cin&gt;&gt;data[temp]&gt;&gt;nex[temp];</span><br><span class="line">	&#125;</span><br><span class="line">	while(first!&#x3D;-1)&#123;</span><br><span class="line">		lis[sum++] &#x3D; first;</span><br><span class="line">		first &#x3D; nex[first];</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	for(int i &#x3D; 0;i&lt;sum;i++) ans[i] &#x3D; lis[i];</span><br><span class="line">	for(int i &#x3D; 0;i&lt;(sum-sum%k);i++)&#123;&#x2F;&#x2F;反转范围为前k的整数倍,后面剩余部分不动</span><br><span class="line">		ans[i] &#x3D; lis[i&#x2F;k*k+k-1-i%k];&#x2F;&#x2F;i&#x2F;k*k确定第几组反转的起步位置，k-1-i%k控制组内的顺序移动</span><br><span class="line">	&#125;</span><br><span class="line">	for(int i &#x3D; 0;i&lt;sum-1;i++)</span><br><span class="line">		printf(&quot;%05d %d %05d\n&quot;,ans[i],data[ans[i]],ans[i+1]);</span><br><span class="line">	printf(&quot;%05d %d -1\n&quot;,ans[sum-1],data[ans[sum-1]]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里采用数组模拟链表</p>
-<p>对于节点元素：value,next；</p>
-<p>分别用两个数组模拟,数组下标为节点地址，只要有节点地址，就能通过访问两个数组获取相应的值；</p>
-<p>对于翻转，只要关注节点排列的顺序就行了。</p>
-<p>lis数组存储链表上节点的顺序依次地址。</p>
-<p>ans来存储lis按照一定k值重写排列的地址。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1440,7 +1433,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1512,12 +1505,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">98k</span>
+    <span title="站点总字数">100k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:29</span>
+    <span title="站点阅读时长">1:31</span>
 </div>
 
         

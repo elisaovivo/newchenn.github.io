@@ -248,6 +248,160 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">最短路径问题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-10 20:25:18" itemprop="dateCreated datePublished" datetime="2020-07-10T20:25:18+08:00">2020-07-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-13 17:09:50" itemprop="dateModified" datetime="2020-07-13T17:09:50+08:00">2020-07-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="最短路径问题的抽象"><a href="#最短路径问题的抽象" class="headerlink" title="最短路径问题的抽象"></a>最短路径问题的抽象</h1><p>最短路径就是源点（Source）和终点（Destination）之间权值之和最小的一条路径</p>
+<h1 id="问题分类"><a href="#问题分类" class="headerlink" title="问题分类"></a>问题分类</h1><ol>
+<li>单元最短路径问题：一点到其他顶点的最短路径<ol>
+<li>（有向）无权图</li>
+<li>（有向）有权图</li>
+</ol>
+</li>
+<li>多源最短路径问题：任意两点之间的最短路径</li>
+</ol>
+<h1 id="无权图的单源最短路算法"><a href="#无权图的单源最短路算法" class="headerlink" title="无权图的单源最短路算法"></a>无权图的单源最短路算法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;本质就是BFS的变型</span><br><span class="line">&#x2F;&#x2F;dist[w] &#x3D; S到W的最短距离</span><br><span class="line">&#x2F;&#x2F;dist[S] &#x3D; 0</span><br><span class="line">&#x2F;&#x2F;path[W] &#x3D; S到W的路上经过的某顶点（确切说是上个顶点）</span><br><span class="line">void Unweighted(Vertex S)&#123;</span><br><span class="line">	Enqueue(S,Q);</span><br><span class="line">	while(!IsEpmty(Q)))&#123;</span><br><span class="line">		v &#x3D; Dequeue(Q);</span><br><span class="line">		for(V 的每个邻接点 W)&#123;</span><br><span class="line">			if(dist[W] &#x3D;&#x3D; -1)&#123;</span><br><span class="line">				dist[W] &#x3D; dist[V]+1;</span><br><span class="line">				path[W] &#x3D; V;</span><br><span class="line">				enqueue(W,Q);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="有权图的单源最短路算法"><a href="#有权图的单源最短路算法" class="headerlink" title="有权图的单源最短路算法"></a>有权图的单源最短路算法</h1><p><strong><em>Dijkstra算法(按照递增的顺序找到各个顶点的最短路)</em></strong></p>
+<p><strong>前提是不存在负值圈</strong></p>
+<ol>
+<li>令S={源点s + 已经确定了最短路径的顶点vi}</li>
+<li>对不属于集合S的顶点v，定义dist[v]为s到v的最短路径长度，但该路径<em>仅仅经过S中的顶点。</em>即路径{s-&gt;(vi∈S)-&gt;v}的长度</li>
+<li>若路径是按照递增的顺序生成的，则<ol>
+<li>真正的最短路必须只经过S中的顶点（反证法：若存在另外一个结点，那也应该是这一个结点先被收录）</li>
+<li>每次从未收录的顶点中选一个dist最小的收录（贪心）</li>
+<li>增加一个v进入S，可能影响另外一个w的dist值（min{dist[w], dist[v] + &lt;v,w&gt;的权重}）</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">void Dijkstra(Vertex s)&#123;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		V &#x3D; 未收录顶点中dist最小者;</span><br><span class="line">		if(这样v不存在)</span><br><span class="line">			break;</span><br><span class="line">		collected[v] &#x3D; true;</span><br><span class="line">		for(v 的每个邻接点 W)</span><br><span class="line">			if(collected[W] &#x3D;&#x3D; false)&#123;</span><br><span class="line">				if(dist[v]+E&lt;v,w&gt; &lt; dist[W])&#123;</span><br><span class="line">					dist[W] &#x3D; dist[V] + E&lt;v,w&gt;;</span><br><span class="line">					path[W] &#x3D; v;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>若将dist的值存在数组和堆中会产生不同的效果：</p>
+<ol>
+<li>数组中 T=O（V2 + E）适合稠密图</li>
+<li>最小堆中<ol>
+<li>更新dist[w] = O(logv)</li>
+<li>T = O(VlogV + ElogV) = O(Elogv) 适合稀疏图</li>
+</ol>
+</li>
+</ol>
+<h1 id="多源最短路算法"><a href="#多源最短路算法" class="headerlink" title="多源最短路算法"></a>多源最短路算法</h1><ol>
+<li>直接将单元最短路径算法调用V遍 T = O（V3 + E*V）</li>
+<li>Floyd算法 T = O（V3）</li>
+</ol>
+<p>Floyd 算法 </p>
+<ol>
+<li>Dk[i][j] = 路径{i -&gt; {l&lt;=k} -&gt; j}的最小长度</li>
+<li>D0,D1,…,DV-1[i][j]即给出了i到j的真正最短距离</li>
+<li>最初的D-1（如果ij没边，初始化为正无穷）</li>
+<li>Dk-1已经完成，递推到Dk时：<ol>
+<li>或者k不∈最短路径{i-&gt;{l&lt;=k}-&gt;j},则Dk = Dk-1</li>
+<li>或者k∈最短路径,则该路径由两端最短路径组成：Dk[i][j] = Dk-1[i][k] + Dk-1[k][j]</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void Floyd()&#123;</span><br><span class="line">	for(i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">	 	for(j &#x3D; 0;j&lt;N;j++)&#123;</span><br><span class="line">	 		D[i][j] &#x3D; G[i][j];</span><br><span class="line">	 		path[i][j] &#x3D; -1;	&#x2F;&#x2F;用来打印路径用</span><br><span class="line">	 	&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	for(k &#x3D; 0;k&lt;N;k++)&#123;</span><br><span class="line">		for(i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">			for(j &#x3D; 0;j&lt;N;j++)&#123;</span><br><span class="line">				if(D[i][k]+ D[k][j] &lt; D[i][j])&#123;</span><br><span class="line">					D[i][j] &#x3D; D[i][k] + D[k][j];</span><br><span class="line">					path[i][j] &#x3D; k;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/09/2020-7-9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1307,116 +1461,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/06/19/%E9%9B%86%E5%90%88%E5%8F%8A%E8%BF%90%E7%AE%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/19/%E9%9B%86%E5%90%88%E5%8F%8A%E8%BF%90%E7%AE%97/" class="post-title-link" itemprop="url">集合及运算</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-06-19 15:33:27 / 修改时间：17:03:14" itemprop="dateCreated datePublished" datetime="2020-06-19T15:33:27+08:00">2020-06-19</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/06/19/%E9%9B%86%E5%90%88%E5%8F%8A%E8%BF%90%E7%AE%97/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/19/%E9%9B%86%E5%90%88%E5%8F%8A%E8%BF%90%E7%AE%97/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>668</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h1><p>定义：集合<strong><em>并，查</em></strong>某元素属于什么集合</p>
-<p><em>双亲表示法：孩子指向双亲(与普通树的指针刚好相反)</em></p>
-<h1 id="并查集存储"><a href="#并查集存储" class="headerlink" title="并查集存储"></a>并查集存储</h1><p>typedef struct{</p>
-<p>​    ElementType Data;</p>
-<p>​    int parent;</p>
-<p>} SetType;</p>
-<h1 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h1><h2 id="查找某个元素所在集合"><a href="#查找某个元素所在集合" class="headerlink" title="查找某个元素所在集合"></a>查找某个元素所在集合</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int Find(SetType S[],ElementType X)&#123;</span><br><span class="line">	int i;</span><br><span class="line">	for(i &#x3D; 0;i&lt;MaxSize &amp;&amp; S[i].data !&#x3D; X; i++);</span><br><span class="line">	if(i &gt;&#x3D; MaxSize) return -1; 	&#x2F;&#x2F;未找到X，返回-1</span><br><span class="line">	for(;S[i].parent &gt;&#x3D; 0; i &#x3D; S[i].Parent);</span><br><span class="line">	return i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="集合的并运算"><a href="#集合的并运算" class="headerlink" title="集合的并运算"></a>集合的并运算</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void Union(SetType S[], ElementType X1, ElementType X2)&#123;</span><br><span class="line">	int root1, root2;</span><br><span class="line">	root1 &#x3D; Find(S,X1);</span><br><span class="line">	root2 &#x3D; Find(S,X2);</span><br><span class="line">	if(root1!&#x3D;root2) S[root2].parent &#x3D; Root1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="路径压缩"><a href="#路径压缩" class="headerlink" title="路径压缩"></a>路径压缩</h2><p>改写Find方法。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int Find(SetType S[], ElementType X)&#123;</span><br><span class="line">	if(S[X]&lt;0)</span><br><span class="line">		return x;</span><br><span class="line">	else return S[X] &#x3D; Find(S,S[X]);	&#x2F;&#x2F;尾递归不用担心爆内存，编译器编译时会优化成循环</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1467,7 +1511,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1539,12 +1583,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">98k</span>
+    <span title="站点总字数">100k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:29</span>
+    <span title="站点阅读时长">1:31</span>
 </div>
 
         
