@@ -148,10 +148,32 @@
 </ul>
 <p>SEQ的实现包括组合逻辑和两种存储器设备：时钟寄存器（程序寄存器和条件码寄存器），随机访问存储器(寄存器文件、指令内存和数据内存)。</p>
 <p>所有涉及写数据的存储器就需要对时序进行明确控制。为了精准控制，遵循以下原则组织计算。</p>
-<p>原则：从不回读：<strong>处理器从来不需要为了完成一条指令的执行而去读由该指令更新了的状态</strong></p>
+<p>原则：从不回读。<strong>处理器从来不需要为了完成一条指令的执行而去读由该指令更新了的状态</strong></p>
 <p>例如有些指令会读取条件码，但没有指令必须既设置又读取条件码。通过寄存器和内存的时钟控制，这么做能保证即使所有状态同时更新，也能等价于顺序执行各个阶段，也保证了能在一个周期中完成一条指令。</p>
 <p>图</p>
-]]></content>
+<h2 id="SEQ阶段的实现"><a href="#SEQ阶段的实现" class="headerlink" title="SEQ阶段的实现"></a>SEQ阶段的实现</h2><p>图</p>
+<p>这里还包括了多nop和halt指令的处理。nop指令只是简单地经过各个阶段，除了pc加1，不进行任何处理。halt指令使得处理器状态设置为HLT，导致处理器停止运行。</p>
+<h3 id="取指阶段"><a href="#取指阶段" class="headerlink" title="取指阶段"></a>取指阶段</h3><p>图</p>
+<p>其中标号为“icode”和“ifun”的控制逻辑块计算指令和功能码，或者当指令地址不合法时（imem_error信号指明），使这些值对应于nop指令。根据icode值，可以计算三个一位的信号（用虚线表示）：</p>
+<ul>
+<li>instr_valid:这个字节对于的是合法指令吗？这个信号用来发现不合法的指令。</li>
+<li>need_valc:这个指令包括一个寄存器指示符字节吗</li>
+<li>instr_valid和imem_error在访存阶段被用来产生状态码。</li>
+</ul>
+<p>need_regids的HCL描述只是确定了icode的值是否为一条带有寄存器指示值字节的指令。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bool need_regids &#x3D; icode in &#123;IRRMOVQ,...&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当计算出的信号need_regids为1时，字节1会被分开装入寄存器指示符rA和rB中。否则，这两个字段会被设为0xF，这表明这条指令没有寄存器。根据need_regids的值，要么根据字节1<del>8来产生valC，要么根据字节2</del>9来产生。</p>
+<p>PC增加器硬件单元根据当前pc及两个信号，产生信号valp。值为p+1+r+8i。</p>
+<h3 id="译码和写回阶段"><a href="#译码和写回阶段" class="headerlink" title="译码和写回阶段"></a>译码和写回阶段</h3><p>图</p>
+<p>scrA 和 srcB是两个读端口的地址输入</p>
+<p>dstE和dstM是两个写端口的地址输入</p>
+<p>寄存器文件又4个端口，支持同时进行两个读 和 两个写。</p>
+<p>如某个地址端口为特殊标识符0xF（PRONE），表明不需要访问寄存器。</p>
+<p>根据指令代码icode以及寄存器指示符rA和rB，可能还根据执行阶段计算出Cnd条件信号。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">word srcA &#x3D; &#123;</span><br><span class="line">	icode in&#123;IRRMOVQ,...&#125;	: rA;</span><br><span class="line">	icode in&#123;IPOPQ,IRET&#125;	: RRSP;</span><br><span class="line">	1	:	PRONE; # Dont need register</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="执行阶段"><a href="#执行阶段" class="headerlink" title="执行阶段"></a>执行阶段</h3>]]></content>
       <categories>
         <category>《深入理解计算机系统》</category>
       </categories>
@@ -992,6 +1014,7 @@
 <p>2020.7.29    176-216（第3章结束）</p>
 <p>2020.7.30    243-259</p>
 <p>2020.8.1    259-277</p>
+<p>2020.8.2    277-280</p>
 ]]></content>
       <categories>
         <category>计划</category>
