@@ -173,7 +173,57 @@
 <p>根据指令代码icode以及寄存器指示符rA和rB，可能还根据执行阶段计算出Cnd条件信号。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">word srcA &#x3D; &#123;</span><br><span class="line">	icode in&#123;IRRMOVQ,...&#125;	: rA;</span><br><span class="line">	icode in&#123;IPOPQ,IRET&#125;	: RRSP;</span><br><span class="line">	1	:	PRONE; # Dont need register</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="执行阶段"><a href="#执行阶段" class="headerlink" title="执行阶段"></a>执行阶段</h3>]]></content>
+<h3 id="执行阶段"><a href="#执行阶段" class="headerlink" title="执行阶段"></a>执行阶段</h3><p>图</p>
+<p>根据alufun信号的设置，对输入aluA和aluB进行操作。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">word aluA &#x3D; [</span><br><span class="line">	icode in &#123;IRRMOVQ,IOPQ&#125; : valA;</span><br><span class="line">	icode in &#123;IIRMOVQ,..&#125;	: valC;</span><br><span class="line">	icode in &#123;ICALL,IPUSHQ&#125;	: -8;</span><br><span class="line">	icode in &#123;IRET,IPOPQ&#125;	: 8;</span><br><span class="line">	# other instructions dont need ALU;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>ALU在执行阶段，通常它作为加法器。对于OPq指令，我们希望它使用ifun字段中编码的操作。因此:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">word alfun &#x3D; [</span><br><span class="line">	icode &#x3D;&#x3D; IOPQ	:	ifun;</span><br><span class="line">	1	:	ALUADD;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>每次运行，ALU都会产生三个与条件码相关的信号——零、符号和溢出。不过只希望在执行OPq指令才设置条件码。。因此产生一个信号set_cc来控制是否更新条件码寄存器</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bool set_cc &#x3D; icode in &#123;IOPQ&#125;</span><br></pre></td></tr></table></figure>
+
+<p>”cond“硬件单元会根据条件码和功能码来确定是否进行条件分支或条件数据传送。Cnd信号用于设置条件传送的dstE，也用在条件分支的下一个PC逻辑中。</p>
+<h3 id="访存阶段"><a href="#访存阶段" class="headerlink" title="访存阶段"></a>访存阶段</h3><p>图</p>
+<p>该阶段就是读或写程序数据。</p>
+<p>访存阶段最后的功能时根据取值阶段产生的icode、imem_error、instr_valid值以及数据内存产生的dmem_error信号，从指令执行的结果来计算状态码Stat。</p>
+<h2 id="更新PC阶段"><a href="#更新PC阶段" class="headerlink" title="更新PC阶段"></a>更新PC阶段</h2><p>图</p>
+<p>根据指令类型和是否选择分支，HCL如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">word new_pc &#x3D; [</span><br><span class="line">	#Call.	Use instruction constant</span><br><span class="line">	icode &#x3D;&#x3D; ICALL	:	valC;</span><br><span class="line">	#Taken branch. Use instruction constant</span><br><span class="line">	icode &#x3D;&#x3D; IJXX &amp;&amp; Cnd : valC;</span><br><span class="line">	# Completion of RET instruction. Use value from stack</span><br><span class="line">	icode &#x3D;&#x3D; IRET	:	valM;</span><br><span class="line">	# Default : Use incremented PC</span><br><span class="line">	1	:	valP;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="SEQ小结"><a href="#SEQ小结" class="headerlink" title="SEQ小结"></a>SEQ小结</h3><p>SEQ太慢，时钟必须非常慢，以使信号能在一个周期内传播所有的阶段。</p>
+<p>这种实现方法不能充分利用硬件单元。每个单元只能在整个时钟周期的一部分时间内才被使用。</p>
+<h1 id="流水线的通用原理"><a href="#流水线的通用原理" class="headerlink" title="流水线的通用原理"></a>流水线的通用原理</h1><p>流水线化的一个重要特性就是提高了系统的吞吐量(throughput),也就是单位时间内服务的顾客总数，不过也会略微增加延迟(latency)，也就是服务一个用户所需要的时间。例如，自主餐厅里的一个只需要甜点的顾客，能很快通过一个非流水线化的系统，只在甜点阶段停留。但流水线系统中，如果直接取甜点阶段，会影响其他顾客的愤怒。</p>
+<h2 id="计算流水线"><a href="#计算流水线" class="headerlink" title="计算流水线"></a>计算流水线</h2><p>图</p>
+<p>对于非流水系统。CD播放器的译码器就是这样一个系统。出入信号是CD表面读出的位，逻辑电路对这些位进行译码，产生音频信号。</p>
+<p>图</p>
+<p>延迟为320ps，也就是吞吐量的倒数。</p>
+<p>图</p>
+<p>时钟周期缩为了120ps。代价是增了一些硬件，延迟增加到了360，这主要是因为流水线寄存器的时间开销</p>
+<h2 id="流水线操作的详细说明"><a href="#流水线操作的详细说明" class="headerlink" title="流水线操作的详细说明"></a>流水线操作的详细说明</h2><p>图 P285</p>
+<p>减缓时钟不会影响流水线的行为。若时钟运行过快，值可能来不及通过组合逻辑，因此时钟上升时，寄存器的输入还不是合法值。</p>
+<h2 id="流水线的局限性"><a href="#流水线的局限性" class="headerlink" title="流水线的局限性"></a>流水线的局限性</h2><p>这是一种理想化的方案，但会出现一些因素，降低流水线的效率</p>
+<h3 id="不一致的划分"><a href="#不一致的划分" class="headerlink" title="不一致的划分"></a>不一致的划分</h3><p>若每个阶段的时间不等，那么时钟周期的速率就由最慢阶段的延迟限制的。</p>
+<p>通常某些硬件单元如ALU和内存，是不能被划分成多个延迟较小的单元的。</p>
+<h3 id="流水线过深，收益反而下降"><a href="#流水线过深，收益反而下降" class="headerlink" title="流水线过深，收益反而下降"></a>流水线过深，收益反而下降</h3><p>若划分过多，流水寄存器也会多，导致无法有很好的优化。</p>
+<p>为了提高时钟频率，现代处理器采用很深的（15或更多的阶段）流水线。处理器架构师将指令的执行划分成很多简单的步骤，这样每个阶段延迟就很小。电路设计者小心设计流水线寄存器，，使其延迟尽可能小。芯片设计者也必须小心地设计时钟传播网络，以保证时钟在整个芯片同时改变。</p>
+<h2 id="带反馈地流水线系统"><a href="#带反馈地流水线系统" class="headerlink" title="带反馈地流水线系统"></a>带反馈地流水线系统</h2><p>相邻指令可能存在数据相关（data dependency），也有可能存在指令控制流造成地顺序相关（control dependency）。</p>
+<h1 id="Y86-64的流水线实现"><a href="#Y86-64的流水线实现" class="headerlink" title="Y86-64的流水线实现"></a>Y86-64的流水线实现</h1><p>改动:将PC的计算挪到取指阶段。然后，在各个阶段之间加上流水线寄存器。</p>
+<h2 id="SEQ-重新安排计算阶段"><a href="#SEQ-重新安排计算阶段" class="headerlink" title="SEQ+:重新安排计算阶段"></a>SEQ+:重新安排计算阶段</h2><p>图片2</p>
+<h2 id="插入流水线寄存器"><a href="#插入流水线寄存器" class="headerlink" title="插入流水线寄存器"></a>插入流水线寄存器</h2><p>在SEQ+的各个阶段之间插入流水线寄存器，并对信号重新排列，得到PIPE-处理器。</p>
+<p>流水线寄存器用黑色方框表示，每个寄存器包含不同的字段，用白色方框表示。</p>
+<p>图片</p>
+<p>可以看到 PIPE-使用了与顺序设计SEQ几乎一样的硬件单元，但是有流水线寄存器分隔开这些阶段</p>
+<h2 id="对信号进行重新排列和标号"><a href="#对信号进行重新排列和标号" class="headerlink" title="对信号进行重新排列和标号"></a>对信号进行重新排列和标号</h2><p>顺序是先SEQ和SEQ+在一个时刻只处理一条指令，因此诸如valC，srcA，valE这样的信号值有唯一的值</p>
+<p>在流水线化的设计中，与各个指令相关的这些值由多个版本，会随着指令一起流过系统</p>
+<p>采用命名机制，存储在流水线寄存器中的信号可以唯一地被标识</p>
+<h2 id="预测下一个PC"><a href="#预测下一个PC" class="headerlink" title="预测下一个PC"></a>预测下一个PC</h2><p>流水线化是为了增大吞吐量，在一个时钟周期内，都有一条指令完成。但要做到这点，必须在取出当前指令之后，马上确定下一条指令位置。但对于条件分支指令，要在执行阶段之后，才能确定是否分支。对于ret，要通过访存阶段，才能确定返回地址。所以要采用分支预测技术。</p>
+<p>ret指令的新pc值无法预测，因为返回地址使栈顶的字，其内容是任意的。</p>
+<h2 id="流水线冒险"><a href="#流水线冒险" class="headerlink" title="流水线冒险"></a>流水线冒险</h2><p>因为数据相关和控制相关，这些相关导致流水线产生计算错误，称为冒险（hazard）。冒险也可以分为数据冒险和控制冒险。</p>
+<p>图</p>
+<h3 id="用暂停（stalling）来避免数据冒险"><a href="#用暂停（stalling）来避免数据冒险" class="headerlink" title="用暂停（stalling）来避免数据冒险"></a>用暂停（stalling）来避免数据冒险</h3><p>暂停技术就是让一组指令阻塞在它们所处的阶段，而允许其他指令继续通过流水线。比如每次要把一条指令阻塞在译码阶段，就在执行阶段插入一个气泡。气泡就行一个自动产生的nop指令——不改变寄存器、内存、条件码或程序状态。</p>
+<p>这种机制实现容易，但性能不好，会严重降低整体的吞吐量。</p>
+<h3 id="用转发来避免数据冒险"><a href="#用转发来避免数据冒险" class="headerlink" title="用转发来避免数据冒险"></a>用转发来避免数据冒险</h3>]]></content>
       <categories>
         <category>《深入理解计算机系统》</category>
       </categories>
@@ -1015,6 +1065,7 @@
 <p>2020.7.30    243-259</p>
 <p>2020.8.1    259-277</p>
 <p>2020.8.2    277-280</p>
+<p>2020.8.3    280-300（流水线部分看得我难受）</p>
 ]]></content>
       <categories>
         <category>计划</category>
