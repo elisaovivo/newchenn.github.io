@@ -60,7 +60,7 @@
 <meta property="og:description" content="存储技术随机访问存储器随机访问存储器（Random-Access Memory,RAM）分为两类：  静态（SRAM） 动态（DRAM）  SRAM更快，通常用来作为高速缓存存储器，既可以在CPU芯片上，也可以在片下。 DRAM用来作为主存以及图形系统的帧缓冲区。 静态RAM将每个位存储在一个双稳态的（bistable）存储器单元里。每个单元是用一个六晶体管电路来实现的。它可以无限期得保持在两个不">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-08-04T08:03:29.000Z">
-<meta property="article:modified_time" content="2020-08-04T13:04:23.832Z">
+<meta property="article:modified_time" content="2020-08-05T15:10:41.009Z">
 <meta property="article:author" content="CJ">
 <meta property="article:tag" content="csapp,视频课程">
 <meta name="twitter:card" content="summary">
@@ -250,10 +250,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-08-04 16:03:29 / 修改时间：21:04:23" itemprop="dateCreated datePublished" datetime="2020-08-04T16:03:29+08:00">2020-08-04</time>
+              <time title="创建时间：2020-08-04 16:03:29" itemprop="dateCreated datePublished" datetime="2020-08-04T16:03:29+08:00">2020-08-04</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-05 23:10:41" itemprop="dateModified" datetime="2020-08-05T23:10:41+08:00">2020-08-05</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -293,14 +299,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>3.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -366,7 +372,48 @@
 <h3 id="逻辑磁盘块"><a href="#逻辑磁盘块" class="headerlink" title="逻辑磁盘块"></a>逻辑磁盘块</h3><p>磁盘封装中有一个小的硬件/固件设备，称为磁盘控制器，维护磁盘块号和实际磁盘扇区之间的映射关系。</p>
 <p>当一个命令发送到磁盘控制器。控制器上的固件执行一个快速表查找，讲逻辑块号翻译成（盘面，磁道，扇区）的三元组，这个三元组唯一地标识了对应的物理扇区。</p>
 <p>磁盘控制器必须对磁盘进行格式化，然后才能存储数据。格式化包括用标识扇区的信息填写扇区之间的空隙，标识出表面有故障的柱面并且不使用它们，预留一组柱面作为备用，所以格式化容量比最大容量要小。</p>
-
+<h3 id="连接I-O设备"><a href="#连接I-O设备" class="headerlink" title="连接I/O设备"></a>连接I/O设备</h3><p>I/O设备都需要通过I/O总线。例如Intel的外围设备互联(Peripheral Component Interconnect, PCI)总线连接到CPU和主存的。</p>
+<p>图</p>
+<ul>
+<li>通用串行总线(Universal Serial Bus,USB)控制器是一个连接到USB总线的设备的中转机构。</li>
+<li>图形卡（或设备其）包含硬件和软件逻辑，代表CPU在显示器上画像素。</li>
+<li>主机总线适配器讲一个或多个磁盘连接到I/O总线。最常见的磁盘接口是SCSI和SATA。SCSI通常比SATA驱动器更快但是也更贵。SCSI适配器可以支持多个磁盘驱动器，SATA只能支持一个。</li>
+</ul>
+<p>其他设备可以通过适配器插入到主板上的扩展槽中，从而连接到I/O总线。</p>
+<h3 id="访问磁盘"><a href="#访问磁盘" class="headerlink" title="访问磁盘"></a>访问磁盘</h3><p>CPUs使用一种称为内存映射I/O（memory-mapped I/O）的技术来向I/O设备发射命令。地址空间为于I/O设备通信保留。这样的地址称为一个I/O端口（I/O port）。当一个设备连接到总线时，它于一个或多个端口相关联。</p>
+<p>图</p>
+<p>CPU可能执行三个命令：</p>
+<ol>
+<li>发送以一个命令字，告诉磁盘发起一个读，同时还发送其他参数，例如当完成时，是否中断CPU。</li>
+<li>指明应该读的逻辑块号</li>
+<li>指明存储磁盘扇区内容的主存地址。</li>
+</ol>
+<p>在磁盘控制器收到来自CPU的读命令之后，它将逻辑块号翻译成一个扇区地址，读该扇区内容，然后将这些内容直接传送到主存，不需要CPU干涉。设备可以自己执行读或写总线事务而不需要CPU干涉的过程，称为直接内存访问（Direct Memory Access,DMA）。这种数据传送称为DMA传送（DMA transfer）。</p>
+<p>当传送完成，磁盘控制器通过给CPU发送一个中断信号来通知CPU。基本思想是中断会发信号到CPU芯片的一个外部引脚上，导致CPU暂停当前工作，跳转到一个操作系统例程。这个程序会记录下I/O已经完成，然后将控制返回到CPU被中断的地方。</p>
+<h2 id="固态硬盘"><a href="#固态硬盘" class="headerlink" title="固态硬盘"></a>固态硬盘</h2><p>一种基于闪存的存储技术。</p>
+<p>图</p>
+<p>SSD封装插到I/O总线上标准硬盘插槽（USB或SATA）中。</p>
+<p>SSD由一个或多个闪存芯片和闪存翻译层（flash translation layer）组成，闪存翻译层代替磁盘中的机械驱动器，这是一种硬件设备，扮演与磁盘控制器相同的角色，对逻辑块的请求翻译成对底层物理设备的访问。</p>
+<p>读SSD比写快。这是由底层闪存基本属性决定的。</p>
+<p>闪存由B个块序列组成，每个块由P页组成。数据以页为单位读写的。只有在一页所属的块整个被擦除后，才能写这一页（指的是这个块每一位都设置为1）。一旦一个块被擦除，块里每一页不需要擦除可以写一次。</p>
+<p>重复写，块就会坏，坏了之后就不能用了。</p>
+<p>随机写慢，有两个原因：</p>
+<ul>
+<li>擦除块需要相对较长的时间，1ms级，比访问页所需时间高一个数量级。</li>
+<li>若要改写其中一页，需要先将这个块所有数据先复制到一个新块，再写。</li>
+</ul>
+<h1 id="局部性"><a href="#局部性" class="headerlink" title="局部性"></a>局部性</h1><p>一个好的计算机程序常常具有良好的局部性（locality）。倾向于引用邻近于最近引用过的数据项的数据项，或者最近引用过的数据本身。这种倾向性称为局部性原理(principle of locality)。</p>
+<p>局部性通常有两种形式：时间局部性（temporal locality）和空间局部性（spatial locality）。</p>
+<p>时间局部性：被引用过一次的内存位置很可能在不远的将来被引用</p>
+<p>空间局部性：一个内存位置被引用，不远的将来附近位置也会被引用</p>
+<p>在硬件层面，局部性原理允许计算机设计者通过高速缓存存储器来保存最近被引用的指令和数据项。在操作系统级，局部性原理允许系统使用主存作为虚拟地址空间最近被引用块的高速缓存。操作系统用主存来缓存磁盘文件系统最近使用的磁盘块。在应用层，Web服务器将最近被请求的文档放在前端磁盘高速缓存中。</p>
+<h2 id="对程序数据引用的局部性"><a href="#对程序数据引用的局部性" class="headerlink" title="对程序数据引用的局部性"></a>对程序数据引用的局部性</h2><p>图</p>
+<p>对于sum来说有好的时间局部性，没有空间局部性。</p>
+<p>对于v来说有好的空间局部性，没有好的时间局部性。</p>
+<p>顺序访问一个向量每个元素的函数，具有步长为1的引用模式（stride-1 reference pattern）。步长为1的引用模式为顺序引用模式(sequential reference pattern)。随着步长增长，空间局部性下降。</p>
+<p>对于二维数组，行优先访问和列优先访问差别很大。</p>
+<h2 id="取指令的局部性"><a href="#取指令的局部性" class="headerlink" title="取指令的局部性"></a>取指令的局部性</h2><p>对于上图，循环体里的指令有良好的空间局部性，循环体有好的时间局部性。</p>
+<h1 id="存储器层次结构"><a href="#存储器层次结构" class="headerlink" title="存储器层次结构"></a>存储器层次结构</h1>
     </div>
 
     
@@ -447,7 +494,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#存储技术"><span class="nav-number">1.</span> <span class="nav-text">存储技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#随机访问存储器"><span class="nav-number">1.1.</span> <span class="nav-text">随机访问存储器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态RAM"><span class="nav-number">1.1.1.</span> <span class="nav-text">静态RAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态RAM"><span class="nav-number">1.1.2.</span> <span class="nav-text">动态RAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传统的DRAM"><span class="nav-number">1.1.3.</span> <span class="nav-text">传统的DRAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存模块"><span class="nav-number">1.1.4.</span> <span class="nav-text">内存模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非易失性存储器"><span class="nav-number">1.1.5.</span> <span class="nav-text">非易失性存储器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问主存"><span class="nav-number">1.1.6.</span> <span class="nav-text">访问主存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#磁盘存储"><span class="nav-number">1.2.</span> <span class="nav-text">磁盘存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘构造"><span class="nav-number">1.2.1.</span> <span class="nav-text">磁盘构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘容量"><span class="nav-number">1.2.2.</span> <span class="nav-text">磁盘容量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘操作"><span class="nav-number">1.2.3.</span> <span class="nav-text">磁盘操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逻辑磁盘块"><span class="nav-number">1.2.4.</span> <span class="nav-text">逻辑磁盘块</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#存储技术"><span class="nav-number">1.</span> <span class="nav-text">存储技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#随机访问存储器"><span class="nav-number">1.1.</span> <span class="nav-text">随机访问存储器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态RAM"><span class="nav-number">1.1.1.</span> <span class="nav-text">静态RAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态RAM"><span class="nav-number">1.1.2.</span> <span class="nav-text">动态RAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传统的DRAM"><span class="nav-number">1.1.3.</span> <span class="nav-text">传统的DRAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存模块"><span class="nav-number">1.1.4.</span> <span class="nav-text">内存模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非易失性存储器"><span class="nav-number">1.1.5.</span> <span class="nav-text">非易失性存储器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问主存"><span class="nav-number">1.1.6.</span> <span class="nav-text">访问主存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#磁盘存储"><span class="nav-number">1.2.</span> <span class="nav-text">磁盘存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘构造"><span class="nav-number">1.2.1.</span> <span class="nav-text">磁盘构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘容量"><span class="nav-number">1.2.2.</span> <span class="nav-text">磁盘容量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘操作"><span class="nav-number">1.2.3.</span> <span class="nav-text">磁盘操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逻辑磁盘块"><span class="nav-number">1.2.4.</span> <span class="nav-text">逻辑磁盘块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连接I-O设备"><span class="nav-number">1.2.5.</span> <span class="nav-text">连接I&#x2F;O设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问磁盘"><span class="nav-number">1.2.6.</span> <span class="nav-text">访问磁盘</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#固态硬盘"><span class="nav-number">1.3.</span> <span class="nav-text">固态硬盘</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#局部性"><span class="nav-number">2.</span> <span class="nav-text">局部性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对程序数据引用的局部性"><span class="nav-number">2.1.</span> <span class="nav-text">对程序数据引用的局部性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取指令的局部性"><span class="nav-number">2.2.</span> <span class="nav-text">取指令的局部性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#存储器层次结构"><span class="nav-number">3.</span> <span class="nav-text">存储器层次结构</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -535,12 +582,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">109k</span>
+    <span title="站点总字数">110k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:39</span>
+    <span title="站点阅读时长">1:40</span>
 </div>
 
         
