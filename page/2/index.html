@@ -248,6 +248,365 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/18/csapp%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%A4%84%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/18/csapp%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">csapp第二章:信息的表示和处理</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-18 22:46:15" itemprop="dateCreated datePublished" datetime="2020-07-18T22:46:15+08:00">2020-07-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-29 23:04:08" itemprop="dateModified" datetime="2020-07-29T23:04:08+08:00">2020-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E3%80%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">《深入理解计算机系统》</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/18/csapp%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%A4%84%E7%90%86/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/18/csapp%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%A4%84%E7%90%86/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <a id="more"></a>
+
+<h1 id="信息存储"><a href="#信息存储" class="headerlink" title="信息存储"></a>信息存储</h1><p>机器级程序将内存视为字节数组，每一个字节都有一个数字来标识，称它为地址（address）。在机器级程序的视角里，内存被抽象成了一个概念，名为虚拟内存(virtual address space)。而所有地址的集合被称为虚拟地址空间（virtual address space）。</p>
+<h2 id="十六进制表示法"><a href="#十六进制表示法" class="headerlink" title="十六进制表示法"></a>十六进制表示法</h2><p>以16为基数，叫做十六进制（hexadecimal）数。在C语言中，以0x或0X开头的数字常量被认为是十六进制的值。</p>
+<p><strong>十六进制转二进制的一个窍门是记住A,C和F对应的十进制的值。（10，12，15）</strong></p>
+<h2 id="字数据大小"><a href="#字数据大小" class="headerlink" title="字数据大小"></a>字数据大小</h2><p>每台计算机都有字长（word size），虚拟地址都是用一个字来编码,因此对于字长为w位的机器，虚拟地址范围为0~2的w次-1；程序最多访问2的w次 的字节。</p>
+<p>大多数64位机器也可以运行32位机器编译的程序，这是一种向后兼容。</p>
+<h2 id="寻址和字节顺序"><a href="#寻址和字节顺序" class="headerlink" title="寻址和字节顺序"></a>寻址和字节顺序</h2><p>对于跨越多字节的数据对象，必须建立两个规则：</p>
+<ul>
+<li>对象的地址是什么</li>
+<li>内存中如何排列这些字节</li>
+</ul>
+<p>对象的地址为所使用字节中最小的地址</p>
+<p>对于排列方式有两种：</p>
+<ul>
+<li>小端法(little endian)：最低有效字节在最前面</li>
+<li>大端法(big endian)：最高有效字节在最前面</li>
+</ul>
+<p>看下面这段代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">typedef unsigned char *byte_pointer;</span><br><span class="line"></span><br><span class="line">void show_bytes(byte_pointer start,size_t len)&#123;</span><br><span class="line">	size_t i;</span><br><span class="line">	for(i &#x3D; 0;i&lt;len;i++)</span><br><span class="line">		printf(&quot;%.2x&quot;,start[i]);</span><br><span class="line">	printf(&quot;\n&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="表示字符串"><a href="#表示字符串" class="headerlink" title="表示字符串"></a>表示字符串</h2><p>C语言中字符串被编码为一个以null（其值为0）字符结尾的字符数组。每个字符都是以某个标准编码来表示，最常见的是ASCII字符码。注意：<strong>strlen()不计算字符结尾，且在使用ASCII码作为字符码的任何系统都得到相同的结果，与字节顺序和字大小规则无关。</strong></p>
+<h2 id="表示代码"><a href="#表示代码" class="headerlink" title="表示代码"></a>表示代码</h2><p>对于指令的编码，因为机器类型、不同的操作系统等因素，会有不同编码规则，因此二进制代码不兼容。</p>
+<h2 id="布尔代数简介"><a href="#布尔代数简介" class="headerlink" title="布尔代数简介"></a>布尔代数简介</h2><p>布尔代数是二元集合{0，1}基础上的定义。用来表示这些运算的符号是与C语言位级运算使用的符号相匹配的。</p>
+<p>布尔运算 ~ 对应逻辑运算NOT</p>
+<p>​                &amp; 对应逻辑运算AND</p>
+<p>​                | 对应逻辑运算OR</p>
+<p>​                ^ 对应逻辑运算异或</p>
+<p>上面四个运算可以扩展到位向量的运算，位向量就是固定长度w，由0和1组成的串。</p>
+<p>&amp;和|互相之间有分配律：a&amp;(b|c) = (a&amp;b)|(a&amp;c)，反之亦然。</p>
+<p>位向量一个很有用的应用就是表示有限集合。布尔代数|和&amp;分别对应于集合的并和交哦，而~对应于集合的补。</p>
+<h2 id="C语言中的位级运算"><a href="#C语言中的位级运算" class="headerlink" title="C语言中的位级运算"></a>C语言中的位级运算</h2><p>C语言中： ~ 对应逻辑运算NOT</p>
+<p>​                &amp; 对应逻辑运算AND</p>
+<p>​                | 对应逻辑运算OR</p>
+<p>​                ^ 对应逻辑运算异或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">一个有意思的交换函数，运用a^a &#x3D; 0 这一性质</span><br><span class="line">void inplace_swap(int *x,int *y)&#123;</span><br><span class="line">	*y &#x3D; *x^*y;</span><br><span class="line">	*x &#x3D; *x^*y;</span><br><span class="line">	*y &#x3D; *x^*y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>位级运算一个常见用法就是实现掩码运算，例如：</p>
+<p>x&amp;0xFF生成一个由x的最低有效字节组成的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">例题：</span><br><span class="line">除了x的最低有效字节外，其他的位都取补，最低有效字节保持不变</span><br><span class="line">x^0xFF(这样写就可以忽略字长)</span><br><span class="line">x的最低有效字节设置全1，其他字节保持不变</span><br><span class="line">x|0xFF</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-1-8-C语言中的逻辑运算"><a href="#2-1-8-C语言中的逻辑运算" class="headerlink" title="2.1.8 C语言中的逻辑运算"></a>2.1.8 C语言中的逻辑运算</h2><p>C语言还提供了一组逻辑运算符||、&amp;&amp;和！。<strong>这与位级运算是不同的</strong></p>
+<h2 id="C语言中的移位运算"><a href="#C语言中的移位运算" class="headerlink" title="C语言中的移位运算"></a>C语言中的移位运算</h2><p>左移只有逻辑左移对应x&lt;&lt;k。</p>
+<p>右移分为逻辑右移和算术右移x&gt;&gt;k。在C语言中没有明确表示，但大多数编译器都是算术右移，在java中，x&gt;&gt;k会将x算术右移k个位置，而x&gt;&gt;&gt;k做逻辑右移。</p>
+<p><strong>若移动k≥w位时，实际移动位数为k mod w</strong></p>
+<p><strong>C语言中加减法的优先级比移位运算要高。1&lt;&lt;2+3&lt;&lt;4，其实时（1&lt;&lt;(2+3)）&lt;&lt;4</strong></p>
+<h1 id="整数表示"><a href="#整数表示" class="headerlink" title="整数表示"></a>整数表示</h1><p>编码整数的两种不同的方式：一种只能表示非负数，而另一种能表示负数、零和正数。</p>
+<p><img src="https://i.loli.net/2020/07/22/J9qTAOSXkBMFxPL.png" alt="img"></p>
+<h2 id="整型数据类型"><a href="#整型数据类型" class="headerlink" title="整型数据类型"></a>整型数据类型</h2><p>很明显，对于相同的数据类型根据程序编译为32位还是64位而有所不同。</p>
+<p><strong>C和C++都支持有符号和无符号数。java只支持有符号数</strong></p>
+<h2 id="无符号数的编码"><a href="#无符号数的编码" class="headerlink" title="无符号数的编码"></a>无符号数的编码</h2><p>无符号数编码，定义一个 函数名为B2U(Binary to Unsigned)来表示。</p>
+<p><img src="https://i.loli.net/2020/07/22/kDIMsYiCQdNbFma.png" alt="img"></p>
+<p>B2U是一个双射，是唯一的。</p>
+<h2 id="补码编码"><a href="#补码编码" class="headerlink" title="补码编码"></a>补码编码</h2><p>最常见的有符号数的计算机表示方式就是补码（two’s-complement）形式。</p>
+<p>将字的最高有效位解释为负权（negative weight）。我们用函数B2T来表示</p>
+<p><img src="https://i.loli.net/2020/07/22/982nGHZEBgDN15x.png" alt="img"></p>
+<p>补码编码的唯一性</p>
+<p>B2T是一个双射。</p>
+<p>|TMin| = |TMax| + 1,之所以不对称，因为一半的位模式表示负数，而另一半（符号设置为0）表示非负数，也就意味能表示的整数比负数少一个。第二：UMAX = 2TMAX+1</p>
+<p>为了一些程序也能够在大量的机器和编译器移植，C库中的&lt;limits.h&gt;定义了一组常量(消除了可变性)，INT_MAX,INT_MIN等等。</p>
+<p>而数据类型的取值范围，java标准是非常明确的。</p>
+<h2 id="有符号数和无符号数之间的转换"><a href="#有符号数和无符号数之间的转换" class="headerlink" title="有符号数和无符号数之间的转换"></a>有符号数和无符号数之间的转换</h2><p>C语言允许不同数字类型之间进行强制类型转换。</p>
+<p>强制类型转换的本质是，位值不变，只是改变了解释这些位的方式。</p>
+<h3 id="原理：补码转化位无符号数"><a href="#原理：补码转化位无符号数" class="headerlink" title="原理：补码转化位无符号数"></a>原理：补码转化位无符号数</h3><p><strong>若满足 Tmin≤x≤Tmax的x有</strong></p>
+<p>​                        </p>
+<p><strong>T2U（x） =   x+2的w次,     x&lt;0</strong></p>
+<p>​                       <strong>x,                    x≥0</strong></p>
+<p><img src="https://i.loli.net/2020/07/22/SNJO8wZUC5ugMdG.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/H1SgAlRJ4cM2OVz.png" alt="img"></p>
+<h3 id="无符号数转化为补码"><a href="#无符号数转化为补码" class="headerlink" title="无符号数转化为补码"></a>无符号数转化为补码</h3><p><strong>若满足 0≤u≤Umax的u有</strong></p>
+<p>​                        </p>
+<p><strong>U2T（x） =  u,                            u≤Tmax</strong></p>
+<p>​                       <strong>u-2的w次,                   u&gt;Tmax</strong></p>
+<p><img src="https://i.loli.net/2020/07/22/qSPZxaJyVi3cmCk.png" alt="img"></p>
+<h2 id="C语言中的有符号数与无符号数"><a href="#C语言中的有符号数与无符号数" class="headerlink" title="C语言中的有符号数与无符号数"></a>C语言中的有符号数与无符号数</h2><p>C语言标准没有指定有符号数采用哪种表示，但几乎所有机器都使用补码。</p>
+<p>当申明一个常量默认被当作有符号，要创建一个无符号数常量，必须加上后缀字符U</p>
+<h2 id="拓展一个数字的位表示"><a href="#拓展一个数字的位表示" class="headerlink" title="拓展一个数字的位表示"></a>拓展一个数字的位表示</h2><ul>
+<li>无符号数的零扩展（zero extension）：高位填0就行了</li>
+<li>符号宽展（sign extension)：<img src="https://i.loli.net/2020/07/22/IK2Tw5Ee1AJrmcO.png" alt="img"></li>
+</ul>
+<p>当short转换成unsigned时，首先要改变大小，再完成从有符号到无符号之间的转换。也就是说(unsigned)sx等价于(unsigned)(int)sx。这个规则是C语言标准要求的。</p>
+<p>对于C语言而言，无符号数移位是逻辑移位，有符号数移位是算术移位。 </p>
+<h2 id="截断数字"><a href="#截断数字" class="headerlink" title="截断数字"></a>截断数字</h2><ul>
+<li>截断无符号数：x’ = x mod 2的k次（截断为k位的结果）</li>
+<li>截断补码数值：具有相似的属性，只不过要将最高位转换为符号位。</li>
+</ul>
+<h1 id="整数运算"><a href="#整数运算" class="headerlink" title="整数运算"></a>整数运算</h1><h2 id="无符号加法"><a href="#无符号加法" class="headerlink" title="无符号加法"></a>无符号加法</h2><p><img src="https://i.loli.net/2020/07/22/yv7sYBCVqb65W1L.png" alt="img"></p>
+<p>对于两个非负整数，满足0≤x,y≤2的w次。每个数都表示为w位无符号数字，然而计算和，可能范围为0≤x+y≤2的（w+1）次-2。</p>
+<p>一般来说，如果x+y＜2的w次，和的w+1位表示中的最高位会等于0，因此不会改变。相反另一种情况会等于1，因此丢弃它相当于从和中减去2的w次。</p>
+<p><img src="https://i.loli.net/2020/07/22/hRTqSjyYUQPf1Ni.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/eonkqLh6mjz8GTD.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/YDNaCt5d6y2on9l.png" alt="img"></p>
+<p>当执行C程序时，不会将溢出作为错误而发信号。所以需要另外检测。</p>
+<p>对在范围0≤x,y≤umax中的x和y，令s = x+y，当s&lt;x或s&lt;y时，发生了溢出。另一方面，如果s确实溢出了，我们就有 s = x+y-2的w次。假设 y&lt;2的w次，我们就有 y-2的w次＜0，因此s&lt;x。</p>
+<h3 id="无符号数取反"><a href="#无符号数取反" class="headerlink" title="无符号数取反"></a>无符号数取反</h3><p><img src="https://i.loli.net/2020/07/22/UvECyAiYpIgMDbJ.png" alt="img"></p>
+<h2 id="补码加法"><a href="#补码加法" class="headerlink" title="补码加法"></a>补码加法</h2><p><img src="https://i.loli.net/2020/07/22/NJMkY8ew3WszdDu.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/TwpNJS372iqrCUV.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/4KkTBxauCGRtdJj.png" alt="img"></p>
+<p>检测补码加法中的溢出：当x&lt;0,y&lt;0,但s≥0,计算s发生了负溢出。负溢出也是同样道理。</p>
+<h2 id="补码的非"><a href="#补码的非" class="headerlink" title="补码的非"></a>补码的非</h2><p><img src="https://i.loli.net/2020/07/22/IgLaNrQ8MKezFG4.png" alt="img"></p>
+<p><strong>补码非得位级表示：在C语言中，对于任意整数x,计算-x和~x+1结果一样。</strong></p>
+<h2 id="无符号数乘法"><a href="#无符号数乘法" class="headerlink" title="无符号数乘法"></a>无符号数乘法</h2><p>范围在0&lt;=x,y&lt;=2w-1内的整数x和y可以被表示为w位的无符号数，但是它们的乘积的取值范围为0到2的2w次-2的（w+1）次+1。这可能需要2w位来表示。不过，C语言中的无符号乘法被定义为产生w位的值，就是2w位的整数乘积的低w位表示的值。</p>
+<p><img src="https://i.loli.net/2020/07/22/kA7ZIKoeCUTSmYp.png" alt="img"></p>
+<h2 id="补码乘法"><a href="#补码乘法" class="headerlink" title="补码乘法"></a>补码乘法</h2><p><strong>补码乘法和无符号数乘法具有位级等价性。</strong></p>
+<p><img src="https://i.loli.net/2020/07/22/lLXw4xIu7HPR2bF.png" alt="img"></p>
+<h2 id="乘以常数"><a href="#乘以常数" class="headerlink" title="乘以常数"></a>乘以常数</h2><p>大多数机器，整数乘法指令相当慢，需要10个或者更多的时钟周期，然后其他整数运算只需要1个时钟周期，所以试着用移位和加法运算的组合来代替乘以常数因子的乘法</p>
+<h3 id="乘以2的幂"><a href="#乘以2的幂" class="headerlink" title="乘以2的幂"></a>乘以2的幂</h3><p>需要C语言编译器试图以移位，加法和减法的组合来消除很多整数乘以常数的情况。例如：x*14，编译器将乘法重写为(x&lt;&lt;3)+(x&lt;&lt;2)+(x&lt;&lt;1)</p>
+<h3 id="除以2的幂"><a href="#除以2的幂" class="headerlink" title="除以2的幂"></a>除以2的幂</h3><p>整数除法比乘法更慢，需要30个或更多时钟周期。才用右移来实现，无符号数和补码数分别使用逻辑移位和算术移位来达到目的。</p>
+<p>整数除法总是舍入到0。对于负数向上，对于正数向下。</p>
+<p>对于无符号数。采用逻辑移位。设x’为w-k位[x的w-1,…,w的k]的无符号数，而x’’为k位表示[x的k-1,…,x的0]的无符号数,x = 2的k次*x’+x’’,而0≤x’’&lt;2的k次。因此x’自然向下取整。</p>
+<p>对于补码来说。移位执行的是算术移位。对于正数来说，与无符号数一样的。对于负数，普通的算术移位，会导致向下舍入，所以需要配调整。</p>
+<p>对于，负数想要向上舍入，如何调整？</p>
+<p>在移位之前，“偏置（biasing）”这个值，来修正不适合的舍入。C变量x和k分别有补码值x和无符号数值k，且0≤k&lt;w,则当执行算术移位时，C表达式(x+(1&lt;&lt;k)-1)&gt;&gt;K。</p>
+<p>根本原理：x/y向上取整 = （x+y-1）/y向下取整。</p>
+<p>假设x=qy+r，其中0≤r&lt;y,得到(x+y-1)/y=q+(r+y-1)/y，因此。当r=0时，后面一项等于0，而当r&gt;0时，等于1。也就是说，通过给x增加一个偏量y-1，然后再用除法向下舍入，当y整数x时，我们得到q，否则，就得到q+1。回到y=2k的情况，C表达式X+(1&lt;&lt;K)-1得到数值x+2的k次-1。</p>
+<h1 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h1><h2 id="二进制小数"><a href="#二进制小数" class="headerlink" title="二进制小数"></a>二进制小数</h2><p>二进制小数点往左移动一位相当于这个数被2除。往右移动一位，相当于将该数乘2。假定我们仅考虑有限从长度的编码，有些小数是不能被精确表示(只能表示: x*2的y次)，只能通过长度不断逼近。</p>
+<h2 id="IEEE浮点表示"><a href="#IEEE浮点表示" class="headerlink" title="IEEE浮点表示"></a>IEEE浮点表示</h2><p>IEEE浮点标准用<img src="https://i.loli.net/2020/07/22/olTFs5RBNMtiqvy.png" alt="img">的形式来表示一个数：</p>
+<ul>
+<li>符号（sign）s决定是负数（s=1）还是正数（s=0），而对于数值0的符号位解释作为特殊情况处理。</li>
+<li>尾数（significand）M是一个二进制小数，它的范围是1<del>2-ε，或者是0</del>1-ε。</li>
+<li>阶码（exponent）E的作用是对浮点数加权，这个权重是2的E次幂（可能是负数）。</li>
+</ul>
+<p>在单精度浮点数中，s、exp、frac分别1、8、23。双精度1,11,52。</p>
+<p>根据exp的值，被编码的值可以分成三种不同的情况（最后的情况有两个变种）。</p>
+<p><img src="https://i.loli.net/2020/07/22/EfHFSGqmxK9oVBN.png" alt="img"></p>
+<ul>
+<li>情况1（规格化数）：阶码的值E = e-bias。e为无符号数。尾数具有隐含的1开头（implied leading 1）表示。</li>
+<li>情况2 （非规格化数）:E = 1-bias。尾数不包含隐含位1开头。（这里设置1-bias是为了平滑过度到规格化值，具体看下图）</li>
+<li>情况3（特殊值）：阶码全为1的时候出现的，当小数域全为0时，根据符号位，得到正负无穷。小数域非0时，结果值称为“NAN”(Not a Number)。例如计算根号-1。</li>
+</ul>
+<h2 id="数字示例"><a href="#数字示例" class="headerlink" title="数字示例"></a>数字示例</h2><p><img src="https://i.loli.net/2020/07/22/JUIsNwlijmrqC68.png" alt="img"></p>
+<p><img src="https://i.loli.net/2020/07/22/xYSnNpm7fCOu12j.png" alt="img"></p>
+<p>可以观察到最大非规格化数和最小规格化数之间的平滑转变。这是一个有趣的属性，当这些表达式解释为无符号整数时，它们就是按升序排列的。</p>
+<h2 id="舍入（rounding）"><a href="#舍入（rounding）" class="headerlink" title="舍入（rounding）"></a>舍入（rounding）</h2><p>向偶数舍入（round-to-even），也被称为向最接近的值舍入（round-to-nearest），是默认的方式。</p>
+<p><img src="https://i.loli.net/2020/07/22/hl1zEIGjO5Hn4gt.png" alt="img"></p>
+<h2 id="浮点运算"><a href="#浮点运算" class="headerlink" title="浮点运算"></a>浮点运算</h2><p>浮点运算具有交换律，但不具备结合律。对于表达式（3.14+1e10）-1e10求得0，是因为3.14由于太小，被舍入丢失了。另外两个特例（正无穷加负无穷=NAN，x+NAN=NAN）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/18/%E5%A0%86%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cjay.png">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="午夜狂奔">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CJ'S BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/18/%E5%A0%86%E6%8E%92%E5%BA%8F/" class="post-title-link" itemprop="url">堆排序</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-18 18:29:54" itemprop="dateCreated datePublished" datetime="2020-07-18T18:29:54+08:00">2020-07-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-29 23:04:57" itemprop="dateModified" datetime="2020-07-29T23:04:57+08:00">2020-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/18/%E5%A0%86%E6%8E%92%E5%BA%8F/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/18/%E5%A0%86%E6%8E%92%E5%BA%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <a id="more"></a>
+
+<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void Selection_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	for(i &#x3D; 0;i&lt;N;i++)&#123;</span><br><span class="line">		MinPostion &#x3D; ScanForMin(A,i,N-1);&#x2F;&#x2F;找最小元O（N）</span><br><span class="line">		Swap(A[i],A[MinPostion]);&#x2F;&#x2F;将未排序部分的最小元换到有序部分的最后位置</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里看出，虽然元素交换次数变为N-1次，但是寻找最小元的次数固定为N2。</p>
+<p>无论如何： T = O（N2）；</p>
+<p>这里想提高效率，只能从寻找最小元找突破口。</p>
+<h1 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h1><h2 id="算法1"><a href="#算法1" class="headerlink" title="算法1"></a>算法1</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">void Heap_Sort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	BuildHeap(A);	&#x2F;&#x2F;O(N);</span><br><span class="line">	for(i &#x3D; 0;i&lt;N;i++)</span><br><span class="line">		TmpA[i] &#x3D; DeleteMin(A);	&#x2F;&#x2F;O(logN)</span><br><span class="line">	for(i &#x3D; 0;i&lt;N;i++)</span><br><span class="line">		A[i] &#x3D; TmpA[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>T(N) = O(NlogN)</p>
+<p>需要额外O（N）空间，并且复制元素需要时间。</p>
+<h2 id="算法2"><a href="#算法2" class="headerlink" title="算法2"></a>算法2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">void Heap_Sort(ElemtType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	BuildHeap(A);</span><br><span class="line">	for(i &#x3D; N-1;i&gt;0;i--)&#123;</span><br><span class="line">		Swap(&amp;A[0],&amp;A[i]);&#x2F;&#x2F; DeleteMax</span><br><span class="line">		PercDown(A,0,i);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定理：堆排序处理N个不同元素的随机排列的平均比较次数是2NlogN-O(NloglogN);</p>
+<p>虽然堆排序给出最佳平均时间复杂度，但实际效果不如用Sedgewick增量序列的希尔排序。</p>
+<h1 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">void Swap(ElementType *a,ElementType *b)</span><br><span class="line">&#123;</span><br><span class="line">	ElementType t &#x3D; *a;*a &#x3D; *b;*b &#x3D; t;</span><br><span class="line">&#125;</span><br><span class="line">void PercDown(ElementType A[],int p,int N)&#x2F;&#x2F;将N个元素的数组中以A[p]为根的子堆调为最大堆</span><br><span class="line">&#123;</span><br><span class="line">	int Parent,Child;</span><br><span class="line">	ElementType X;</span><br><span class="line">	X &#x3D; A[p];</span><br><span class="line">	for(Parent &#x3D; p;(Parent*2+1)&lt;N;Parent &#x3D; Child)&#123;</span><br><span class="line">		Child &#x3D; Parent*2+1;</span><br><span class="line">		if((Child!&#x3D;N-1)&amp;&amp;(A[Child]&lt;A[Child+1]))</span><br><span class="line">			Child++;&#x2F;&#x2F;取左右子节点中的最大者;</span><br><span class="line">		if(X&gt;&#x3D;A[Child]) break;</span><br><span class="line">		else</span><br><span class="line">			A[parent] &#x3D; A[Child];</span><br><span class="line">	&#125;</span><br><span class="line">	A[Parent] &#x3D; X;</span><br><span class="line">&#125;</span><br><span class="line">void HeapSort(ElementType A[],int N)</span><br><span class="line">&#123;</span><br><span class="line">	int i;</span><br><span class="line">	for(i &#x3D; N&#x2F;2-1;i&gt;&#x3D;0;i--)</span><br><span class="line">		PercDown(A,i,N);</span><br><span class="line">	for(i &#x3D; N-1;i&gt;0;i--)&#123;</span><br><span class="line">		Swap(&amp;A[0],&amp;A[i]);</span><br><span class="line">		PercDown(A,0,i);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/18/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -509,7 +868,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-05 23:10:32" itemprop="dateModified" datetime="2020-08-05T23:10:32+08:00">2020-08-05</time>
+                <time title="修改时间：2020-08-07 23:10:00" itemprop="dateModified" datetime="2020-08-07T23:10:00+08:00">2020-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -543,7 +902,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>364</span>
+              <span>394</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1141,236 +1500,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/13/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/13/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" class="post-title-link" itemprop="url">拓扑排序</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-13 18:58:20 / 修改时间：22:46:40" itemprop="dateCreated datePublished" datetime="2020-07-13T18:58:20+08:00">2020-07-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/07/13/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/13/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>680</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="拓扑序定义"><a href="#拓扑序定义" class="headerlink" title="拓扑序定义"></a>拓扑序定义</h1><p>如果图中从v到w有一条有向途径,则v一定排在w之前。满足此条件的顶点序列称为一个拓扑序。</p>
-<p>获得一个拓扑序的过程就是拓扑排序</p>
-<p>Activity On Vertex (AOV) 网络如果有合理的拓扑序，则必定是有向无环图（Directed Acylic Grapg,DAG）</p>
-<h1 id="算法伪代码"><a href="#算法伪代码" class="headerlink" title="算法伪代码"></a>算法伪代码</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void TopSort()&#123;</span><br><span class="line">	for(cnt &#x3D; 0;cnt&lt;v;cnt++)&#123;</span><br><span class="line">		v &#x3D; 未输出的入度为0的顶点；&#x2F;&#x2F;O(V)</span><br><span class="line">		if(这样的v不存在)&#123;</span><br><span class="line">			Error(“图中有回路”);</span><br><span class="line">			break;</span><br><span class="line">		&#125;</span><br><span class="line">		输出v，或者记录v的输出序号;</span><br><span class="line">		for(v的每个邻接点)</span><br><span class="line">			Indegree[w]--;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;T &#x3D; O(V2)</span><br></pre></td></tr></table></figure>
-
-<h1 id="聪明的算法"><a href="#聪明的算法" class="headerlink" title="聪明的算法"></a>聪明的算法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;随时将入度变为0的顶点放到一个容器里</span><br><span class="line">void TopSort()&#123;</span><br><span class="line">	for(图中每个顶点 v)</span><br><span class="line">		if(Indegree[v] &#x3D;&#x3D; 0)</span><br><span class="line">			enqueue(v,q);</span><br><span class="line">	while(!isempty(q))&#123;</span><br><span class="line">		v &#x3D; dequeue(q);</span><br><span class="line">		输出v,或者记录v的输出序号;cnt++</span><br><span class="line">		for(v 的每个邻接点 w)</span><br><span class="line">			if(--Indegree[W] &#x3D;&#x3D; 0)</span><br><span class="line">				enqueue(W,Q);</span><br><span class="line">	&#125;</span><br><span class="line">	if( cnt !&#x3D; v)</span><br><span class="line">		error(“图中有回路”);</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; T &#x3D; O(V+E)</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cjay.life/2020/07/13/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cjay.png">
-      <meta itemprop="name" content="CJ">
-      <meta itemprop="description" content="午夜狂奔">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CJ'S BLOG">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/13/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">最小生成树问题(Minimum Spanning Tree)</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-13 17:48:18 / 修改时间：21:16:13" itemprop="dateCreated datePublished" datetime="2020-07-13T17:48:18+08:00">2020-07-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index">
-                    <span itemprop="name">算法与数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/07/13/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91%E9%97%AE%E9%A2%98/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/13/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>7.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>最小生成树首先是一棵树</p>
-<ol>
-<li>无回路</li>
-<li>V个顶点一定有V-1条边</li>
-</ol>
-<p>是生成树</p>
-<ol>
-<li>包含全部顶点</li>
-<li>V-1条边都在图里</li>
-</ol>
-<p>边的权重和最小</p>
-<h1 id="生成最小生成树的算法思想（贪心思想）"><a href="#生成最小生成树的算法思想（贪心思想）" class="headerlink" title="生成最小生成树的算法思想（贪心思想）"></a>生成最小生成树的算法思想（贪心思想）</h1><p>每一步都是选最好的（权重最小的边）</p>
-<p>选择过程中的约束：</p>
-<ol>
-<li>只能用图里的边</li>
-<li>只能一种选择v-1条边</li>
-<li>不能有回路</li>
-</ol>
-<h2 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h2><p>类似Dijikastra算法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void Dijkstra(Vertex s)&#123;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		v &#x3D; 未收录顶点中dist最小值;</span><br><span class="line">		if(这样的v不存在)</span><br><span class="line">			break;</span><br><span class="line">		collected[v] &#x3D; true;</span><br><span class="line">		for(v 的每个邻接点 w)&#123;</span><br><span class="line">			if((collected[w] &#x3D;&#x3D; false) &amp;&amp; (dist[v] + E&lt;v,w&gt; &lt; dist[w]))&#123;</span><br><span class="line">				dist[w] &#x3D; dist[v] + E[v,w]l</span><br><span class="line">				path[w] &#x3D; v;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">void Prim()&#123;</span><br><span class="line">	MST &#x3D; &#123;s&#125;;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		v &#x3D; 未收录顶点中dist最小者;</span><br><span class="line">		if(这样v不存在)</span><br><span class="line">			break;</span><br><span class="line">		将v收录进MST: dist[v] &#x3D; 0;</span><br><span class="line">		for(v 的每个邻接点 w)&#123;</span><br><span class="line">			if(dist[w] !&#x3D; 0)&#123;</span><br><span class="line">				if(E&lt;v,w&gt; &lt;dist[w])&#123;</span><br><span class="line">					dist[w] &#x3D; E&lt;v,w&gt;;</span><br><span class="line">					parent[W] &#x3D; v;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	if(MST中收的顶点不到V个)</span><br><span class="line">		Error(“生成树不存在”);</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;dist[v] &#x3D; E&lt;s,v&gt; 或 正无穷</span><br><span class="line">&#x2F;&#x2F;parent[s] &#x3D; -1</span><br><span class="line">&#x2F;&#x2F;T &#x3D; O(v2) 稠密图合算</span><br></pre></td></tr></table></figure>
-
-<h2 id="Kruskal算法（将森林合并成树）"><a href="#Kruskal算法（将森林合并成树）" class="headerlink" title="Kruskal算法（将森林合并成树）"></a>Kruskal算法（将森林合并成树）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">void Kruskal (Graph G)&#123;</span><br><span class="line">	MST &#x3D; &#123;&#125;;</span><br><span class="line">	while(MST中不到|V|-1条边 &amp;&amp; E中还有边)&#123;</span><br><span class="line">		从E中取一条权重最小边 &#x2F;*最小堆*&#x2F;</span><br><span class="line">		将E&lt;v,w&gt;从E中删除；</span><br><span class="line">		if(E&lt;v,w&gt;不在MST中构成回路) &#x2F;*并查集*&#x2F;</span><br><span class="line">			 E(V,W) 加入 MST;</span><br><span class="line">		else</span><br><span class="line">			彻底无视 E(V,W);</span><br><span class="line">		&#125;</span><br><span class="line">		if ( MST 中不到 |V|-1 条边 )</span><br><span class="line">			Error ( “生成树不存在” );</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; T &#x3D; O(ElogE)</span><br></pre></td></tr></table></figure>
-
-<h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 邻接矩阵存储 - Prim最小生成树算法 *&#x2F;</span><br><span class="line"> </span><br><span class="line">Vertex FindMinDist( MGraph Graph, WeightType dist[] )</span><br><span class="line">&#123; &#x2F;* 返回未被收录顶点中dist最小者 *&#x2F;</span><br><span class="line">    Vertex MinV, V;</span><br><span class="line">    WeightType MinDist &#x3D; INFINITY;</span><br><span class="line"> </span><br><span class="line">    for (V&#x3D;0; V&lt;Graph-&gt;Nv; V++) &#123;</span><br><span class="line">        if ( dist[V]!&#x3D;0 &amp;&amp; dist[V]&lt;MinDist) &#123;</span><br><span class="line">            &#x2F;* 若V未被收录，且dist[V]更小 *&#x2F;</span><br><span class="line">            MinDist &#x3D; dist[V]; &#x2F;* 更新最小距离 *&#x2F;</span><br><span class="line">            MinV &#x3D; V; &#x2F;* 更新对应顶点 *&#x2F;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (MinDist &lt; INFINITY) &#x2F;* 若找到最小dist *&#x2F;</span><br><span class="line">        return MinV; &#x2F;* 返回对应的顶点下标 *&#x2F;</span><br><span class="line">    else return ERROR;  &#x2F;* 若这样的顶点不存在，返回-1作为标记 *&#x2F;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">int Prim( MGraph Graph, LGraph MST )</span><br><span class="line">&#123; &#x2F;* 将最小生成树保存为邻接表存储的图MST，返回最小权重和 *&#x2F;</span><br><span class="line">    WeightType dist[MaxVertexNum], TotalWeight;</span><br><span class="line">    Vertex parent[MaxVertexNum], V, W;</span><br><span class="line">    int VCount;</span><br><span class="line">    Edge E;</span><br><span class="line">     </span><br><span class="line">    &#x2F;* 初始化。默认初始点下标是0 *&#x2F;</span><br><span class="line">       for (V&#x3D;0; V&lt;Graph-&gt;Nv; V++) &#123;</span><br><span class="line">        &#x2F;* 这里假设若V到W没有直接的边，则Graph-&gt;G[V][W]定义为INFINITY *&#x2F;</span><br><span class="line">           dist[V] &#x3D; Graph-&gt;G[0][V];</span><br><span class="line">           parent[V] &#x3D; 0; &#x2F;* 暂且定义所有顶点的父结点都是初始点0 *&#x2F; </span><br><span class="line">    &#125;</span><br><span class="line">    TotalWeight &#x3D; 0; &#x2F;* 初始化权重和     *&#x2F;</span><br><span class="line">    VCount &#x3D; 0;      &#x2F;* 初始化收录的顶点数 *&#x2F;</span><br><span class="line">    &#x2F;* 创建包含所有顶点但没有边的图。注意用邻接表版本 *&#x2F;</span><br><span class="line">    MST &#x3D; CreateGraph(Graph-&gt;Nv);</span><br><span class="line">    E &#x3D; (Edge)malloc( sizeof(struct ENode) ); &#x2F;* 建立空的边结点 *&#x2F;</span><br><span class="line">            </span><br><span class="line">    &#x2F;* 将初始点0收录进MST *&#x2F;</span><br><span class="line">    dist[0] &#x3D; 0;</span><br><span class="line">    VCount ++;</span><br><span class="line">    parent[0] &#x3D; -1; &#x2F;* 当前树根是0 *&#x2F;</span><br><span class="line"> </span><br><span class="line">    while (1) &#123;</span><br><span class="line">        V &#x3D; FindMinDist( Graph, dist );</span><br><span class="line">        &#x2F;* V &#x3D; 未被收录顶点中dist最小者 *&#x2F;</span><br><span class="line">        if ( V&#x3D;&#x3D;ERROR ) &#x2F;* 若这样的V不存在 *&#x2F;</span><br><span class="line">            break;   &#x2F;* 算法结束 *&#x2F;</span><br><span class="line">             </span><br><span class="line">        &#x2F;* 将V及相应的边&lt;parent[V], V&gt;收录进MST *&#x2F;</span><br><span class="line">        E-&gt;V1 &#x3D; parent[V];</span><br><span class="line">        E-&gt;V2 &#x3D; V;</span><br><span class="line">        E-&gt;Weight &#x3D; dist[V];</span><br><span class="line">        InsertEdge( MST, E );</span><br><span class="line">        TotalWeight +&#x3D; dist[V];</span><br><span class="line">        dist[V] &#x3D; 0;</span><br><span class="line">        VCount++;</span><br><span class="line">         </span><br><span class="line">        for( W&#x3D;0; W&lt;Graph-&gt;Nv; W++ ) &#x2F;* 对图中的每个顶点W *&#x2F;</span><br><span class="line">            if ( dist[W]!&#x3D;0 &amp;&amp; Graph-&gt;G[V][W]&lt;INFINITY ) &#123;</span><br><span class="line">            &#x2F;* 若W是V的邻接点并且未被收录 *&#x2F;</span><br><span class="line">                if ( Graph-&gt;G[V][W] &lt; dist[W] ) &#123;</span><br><span class="line">                &#x2F;* 若收录V使得dist[W]变小 *&#x2F;</span><br><span class="line">                    dist[W] &#x3D; Graph-&gt;G[V][W]; &#x2F;* 更新dist[W] *&#x2F;</span><br><span class="line">                    parent[W] &#x3D; V; &#x2F;* 更新树 *&#x2F;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125; &#x2F;* while结束*&#x2F;</span><br><span class="line">    if ( VCount &lt; Graph-&gt;Nv ) &#x2F;* MST中收的顶点不到|V|个 *&#x2F;</span><br><span class="line">       TotalWeight &#x3D; ERROR;</span><br><span class="line">    return TotalWeight;   &#x2F;* 算法执行完毕，返回最小权重和或错误标记 *&#x2F;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 邻接表存储 - Kruskal最小生成树算法 *&#x2F;</span><br><span class="line"> </span><br><span class="line">&#x2F;*-------------------- 顶点并查集定义 --------------------*&#x2F;</span><br><span class="line">typedef Vertex ElementType; &#x2F;* 默认元素可以用非负整数表示 *&#x2F;</span><br><span class="line">typedef Vertex SetName;     &#x2F;* 默认用根结点的下标作为集合名称 *&#x2F;</span><br><span class="line">typedef ElementType SetType[MaxVertexNum]; &#x2F;* 假设集合元素下标从0开始 *&#x2F;</span><br><span class="line"> </span><br><span class="line">void InitializeVSet( SetType S, int N )</span><br><span class="line">&#123; &#x2F;* 初始化并查集 *&#x2F;</span><br><span class="line">    ElementType X;</span><br><span class="line"> </span><br><span class="line">    for ( X&#x3D;0; X&lt;N; X++ ) S[X] &#x3D; -1;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">void Union( SetType S, SetName Root1, SetName Root2 )</span><br><span class="line">&#123; &#x2F;* 这里默认Root1和Root2是不同集合的根结点 *&#x2F;</span><br><span class="line">    &#x2F;* 保证小集合并入大集合 *&#x2F;</span><br><span class="line">    if ( S[Root2] &lt; S[Root1] ) &#123; &#x2F;* 如果集合2比较大 *&#x2F;</span><br><span class="line">        S[Root2] +&#x3D; S[Root1];     &#x2F;* 集合1并入集合2  *&#x2F;</span><br><span class="line">        S[Root1] &#x3D; Root2;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;                         &#x2F;* 如果集合1比较大 *&#x2F;</span><br><span class="line">        S[Root1] +&#x3D; S[Root2];     &#x2F;* 集合2并入集合1  *&#x2F;</span><br><span class="line">        S[Root2] &#x3D; Root1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">SetName Find( SetType S, ElementType X )</span><br><span class="line">&#123; &#x2F;* 默认集合元素全部初始化为-1 *&#x2F;</span><br><span class="line">    if ( S[X] &lt; 0 ) &#x2F;* 找到集合的根 *&#x2F;</span><br><span class="line">        return X;</span><br><span class="line">    else</span><br><span class="line">        return S[X] &#x3D; Find( S, S[X] ); &#x2F;* 路径压缩 *&#x2F;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">bool CheckCycle( SetType VSet, Vertex V1, Vertex V2 )</span><br><span class="line">&#123; &#x2F;* 检查连接V1和V2的边是否在现有的最小生成树子集中构成回路 *&#x2F;</span><br><span class="line">    Vertex Root1, Root2;</span><br><span class="line"> </span><br><span class="line">    Root1 &#x3D; Find( VSet, V1 ); &#x2F;* 得到V1所属的连通集名称 *&#x2F;</span><br><span class="line">    Root2 &#x3D; Find( VSet, V2 ); &#x2F;* 得到V2所属的连通集名称 *&#x2F;</span><br><span class="line"> </span><br><span class="line">    if( Root1&#x3D;&#x3D;Root2 ) &#x2F;* 若V1和V2已经连通，则该边不能要 *&#x2F;</span><br><span class="line">        return false;</span><br><span class="line">    else &#123; &#x2F;* 否则该边可以被收集，同时将V1和V2并入同一连通集 *&#x2F;</span><br><span class="line">        Union( VSet, Root1, Root2 );</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;*-------------------- 并查集定义结束 --------------------*&#x2F;</span><br><span class="line"> </span><br><span class="line">&#x2F;*-------------------- 边的最小堆定义 --------------------*&#x2F;</span><br><span class="line">void PercDown( Edge ESet, int p, int N )</span><br><span class="line">&#123; &#x2F;* 改编代码4.24的PercDown( MaxHeap H, int p )    *&#x2F;</span><br><span class="line">  &#x2F;* 将N个元素的边数组中以ESet[p]为根的子堆调整为关于Weight的最小堆 *&#x2F;</span><br><span class="line">    int Parent, Child;</span><br><span class="line">    struct ENode X;</span><br><span class="line"> </span><br><span class="line">    X &#x3D; ESet[p]; &#x2F;* 取出根结点存放的值 *&#x2F;</span><br><span class="line">    for( Parent&#x3D;p; (Parent*2+1)&lt;N; Parent&#x3D;Child ) &#123;</span><br><span class="line">        Child &#x3D; Parent * 2 + 1;</span><br><span class="line">        if( (Child!&#x3D;N-1) &amp;&amp; (ESet[Child].Weight&gt;ESet[Child+1].Weight) )</span><br><span class="line">            Child++;  &#x2F;* Child指向左右子结点的较小者 *&#x2F;</span><br><span class="line">        if( X.Weight &lt;&#x3D; ESet[Child].Weight ) break; &#x2F;* 找到了合适位置 *&#x2F;</span><br><span class="line">        else  &#x2F;* 下滤X *&#x2F;</span><br><span class="line">            ESet[Parent] &#x3D; ESet[Child];</span><br><span class="line">    &#125;</span><br><span class="line">    ESet[Parent] &#x3D; X;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">void InitializeESet( LGraph Graph, Edge ESet )</span><br><span class="line">&#123; &#x2F;* 将图的边存入数组ESet，并且初始化为最小堆 *&#x2F;</span><br><span class="line">    Vertex V;</span><br><span class="line">    PtrToAdjVNode W;</span><br><span class="line">    int ECount;</span><br><span class="line"> </span><br><span class="line">    &#x2F;* 将图的边存入数组ESet *&#x2F;</span><br><span class="line">    ECount &#x3D; 0;</span><br><span class="line">    for ( V&#x3D;0; V&lt;Graph-&gt;Nv; V++ )</span><br><span class="line">        for ( W&#x3D;Graph-&gt;G[V].FirstEdge; W; W&#x3D;W-&gt;Next )</span><br><span class="line">            if ( V &lt; W-&gt;AdjV ) &#123; &#x2F;* 避免重复录入无向图的边，只收V1&lt;V2的边 *&#x2F;</span><br><span class="line">                ESet[ECount].V1 &#x3D; V;</span><br><span class="line">                ESet[ECount].V2 &#x3D; W-&gt;AdjV;</span><br><span class="line">                ESet[ECount++].Weight &#x3D; W-&gt;Weight;</span><br><span class="line">            &#125;</span><br><span class="line">    &#x2F;* 初始化为最小堆 *&#x2F;</span><br><span class="line">    for ( ECount&#x3D;Graph-&gt;Ne&#x2F;2; ECount&gt;&#x3D;0; ECount-- )</span><br><span class="line">        PercDown( ESet, ECount, Graph-&gt;Ne );</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">int GetEdge( Edge ESet, int CurrentSize )</span><br><span class="line">&#123; &#x2F;* 给定当前堆的大小CurrentSize，将当前最小边位置弹出并调整堆 *&#x2F;</span><br><span class="line"> </span><br><span class="line">    &#x2F;* 将最小边与当前堆的最后一个位置的边交换 *&#x2F;</span><br><span class="line">    Swap( &amp;ESet[0], &amp;ESet[CurrentSize-1]);</span><br><span class="line">    &#x2F;* 将剩下的边继续调整成最小堆 *&#x2F;</span><br><span class="line">    PercDown( ESet, 0, CurrentSize-1 );</span><br><span class="line"> </span><br><span class="line">    return CurrentSize-1; &#x2F;* 返回最小边所在位置 *&#x2F;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;*-------------------- 最小堆定义结束 --------------------*&#x2F;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">int Kruskal( LGraph Graph, LGraph MST )</span><br><span class="line">&#123; &#x2F;* 将最小生成树保存为邻接表存储的图MST，返回最小权重和 *&#x2F;</span><br><span class="line">    WeightType TotalWeight;</span><br><span class="line">    int ECount, NextEdge;</span><br><span class="line">    SetType VSet; &#x2F;* 顶点数组 *&#x2F;</span><br><span class="line">    Edge ESet;    &#x2F;* 边数组 *&#x2F;</span><br><span class="line"> </span><br><span class="line">    InitializeVSet( VSet, Graph-&gt;Nv ); &#x2F;* 初始化顶点并查集 *&#x2F;</span><br><span class="line">    ESet &#x3D; (Edge)malloc( sizeof(struct ENode)*Graph-&gt;Ne );</span><br><span class="line">    InitializeESet( Graph, ESet ); &#x2F;* 初始化边的最小堆 *&#x2F;</span><br><span class="line">    &#x2F;* 创建包含所有顶点但没有边的图。注意用邻接表版本 *&#x2F;</span><br><span class="line">    MST &#x3D; CreateGraph(Graph-&gt;Nv);</span><br><span class="line">    TotalWeight &#x3D; 0; &#x2F;* 初始化权重和     *&#x2F;</span><br><span class="line">    ECount &#x3D; 0;      &#x2F;* 初始化收录的边数 *&#x2F;</span><br><span class="line"> </span><br><span class="line">    NextEdge &#x3D; Graph-&gt;Ne; &#x2F;* 原始边集的规模 *&#x2F;</span><br><span class="line">    while ( ECount &lt; Graph-&gt;Nv-1 ) &#123;  &#x2F;* 当收集的边不足以构成树时 *&#x2F;</span><br><span class="line">        NextEdge &#x3D; GetEdge( ESet, NextEdge ); &#x2F;* 从边集中得到最小边的位置 *&#x2F;</span><br><span class="line">        if (NextEdge &lt; 0) &#x2F;* 边集已空 *&#x2F;</span><br><span class="line">            break;</span><br><span class="line">        &#x2F;* 如果该边的加入不构成回路，即两端结点不属于同一连通集 *&#x2F;</span><br><span class="line">        if ( CheckCycle( VSet, ESet[NextEdge].V1, ESet[NextEdge].V2 )&#x3D;&#x3D;true ) &#123;</span><br><span class="line">            &#x2F;* 将该边插入MST *&#x2F;</span><br><span class="line">            InsertEdge( MST, ESet+NextEdge );</span><br><span class="line">            TotalWeight +&#x3D; ESet[NextEdge].Weight; &#x2F;* 累计权重 *&#x2F;</span><br><span class="line">            ECount++; &#x2F;* 生成树中边数加1 *&#x2F;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if ( ECount &lt; Graph-&gt;Nv-1 )</span><br><span class="line">        TotalWeight &#x3D; -1; &#x2F;* 设置错误标记，表示生成树不存在 *&#x2F;</span><br><span class="line"> </span><br><span class="line">    return TotalWeight;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1421,20 +1550,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1493,12 +1622,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">110k</span>
+    <span title="站点总字数">114k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:40</span>
+    <span title="站点阅读时长">1:44</span>
 </div>
 
         
